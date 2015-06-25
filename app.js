@@ -44,7 +44,7 @@ GMail.fetchMail = function(q, opt_callback) {
         // Set entire thread data at once, when it's all been processed.
         template.debounce('addthreads', function() {
           this.threads = threads;
-          opt_callback && opt_callback(threads);
+          return opt_callback && opt_callback(threads);
         }, 100);
 
       });
@@ -169,6 +169,38 @@ template.undoAll = function(e, detail, sender) {
 
   this.$.toast.hide();
   this.onToastOpenClose();
+};
+
+template.handleLogin = function(a, b) {
+  this.isAuthenticated = true;
+
+  // Cached data? We're already using it. Bomb out before making unnecessary requests.
+  if (DEBUG || (template.threads && template.users)) return;
+
+  var ajax = document.createElement('iron-ajax');
+  ajax.auto = true;
+  ajax.url = '/data/patients.json';
+  ajax.addEventListener('response', function(e) {
+    template.patientspast = e.detail.response;
+  });
+
+  var ajax1 = document.createElement('iron-ajax');
+  ajax1.auto = true;
+  ajax1.url = 'http://localhost:5000/api/patients';
+  ajax1.addEventListener('response', function(e) {
+    template.patientstoday = e.detail.response.patients;
+  });
+
+  var ajax2 = document.createElement('iron-ajax');
+  ajax2.auto = true;
+  ajax2.url = '/data/threads.json';
+  ajax2.addEventListener('response', function(e) {
+    var threads = e.detail.response;
+    // for (var i = 0, thread; thread = threads[i]; ++i) {
+    //   thread.archived = false;
+    // }
+    template.threads = threads;
+  });
 };
 
 template.refreshInbox = function(opt_callback) {
@@ -334,7 +366,7 @@ template.onThreadArchive = function(e) {
   if (!this._scrollArchiveSetup) {
     // When user scrolls page, remove visibly archived threads.
     this.listenOnce(this.$.scrollheader, 'content-scroll', function(e) {
-console.log(this.selectedThreads)
+      console.log(this.selectedThreads);
       for (var i = 0, threadEl; threadEl = this.$.threadlist.items[i]; ++i) {
         if (threadEl.archived) {
           threadEl.classList.add('shrink');
@@ -419,7 +451,7 @@ template.onSigninSuccess = function(e) {
 };
 
 template.onSignOutAttempt = function(e) {
-  console.log('onSignOutAttempt')
+  console.log('onSignOutAttempt');
 };
 
 template.onSigninFailure = function(e) {
@@ -443,7 +475,7 @@ template.onSignOut = function(e) {
 
 template.DEBUG = DEBUG;
 template.LABEL_COLORS = ['pink', 'orange', 'green', 'yellow', 'teal', 'purple'];
-template.isAuthenticated = true; // Presume user is logged in when app loads (better UX).
+template.isAuthenticated = false;
 template.threads = [];
 template.selectedThreads = [];
 template.headerTitle = 'Inbox';
@@ -505,13 +537,6 @@ template.addEventListener('dom-change', function(e) {
 if (!navigator.onLine || DEBUG) {
 
   document.addEventListener('WebComponentsReady', function(e) {
-    var ajax = document.createElement('iron-ajax');
-    ajax.auto = true;
-    ajax.url = '/data/users.json';
-    ajax.addEventListener('response', function(e) {
-      template.users = e.detail.response;
-    });
-
     var ajax2 = document.createElement('iron-ajax');
     ajax2.auto = true;
     ajax2.url = '/data/threads.json';
@@ -528,4 +553,3 @@ if (!navigator.onLine || DEBUG) {
 // window.Polymer.dom = 'shadow';
 
 })();
-

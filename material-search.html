@@ -5,6 +5,7 @@
 <link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/iron-icons/av-icons.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
 
 <dom-module id="material-search">
 <style>
@@ -51,9 +52,10 @@
 <template>
   <paper-header-panel mode="standard" class="fit">
     <paper-toolbar class="{{ {'core-narrow' : narrow} | tokenList}}">
-      <paper-icon-button icon="arrow-back" on-tap="toggle"></paper-icon-button>
-      <input id="searchbox" placeholder="Search mail" class="flex">
-      <paper-icon-button icon="av:mic"></paper-icon-button>
+      <paper-icon-button icon="search" style="color:#555"></paper-icon-button>
+      <!--<paper-icon-button icon="arrow-back" on-tap="toggle"></paper-icon-button>-->
+      <input id="searchbox" placeholder="Search" class="flex">
+      <!--<paper-icon-button icon="av:mic"></paper-icon-button>-->
     </paper-toolbar>
     <paper-menu on-paper-select="onSelect">
       <template is="dom-repeat" items="{{previousSearches}}">

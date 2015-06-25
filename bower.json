@@ -23,6 +23,9 @@
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.0",
-    "google-signin": "GoogleWebComponents/google-signin#^1.0.1"
+    "google-signin": "GoogleWebComponents/google-signin#^1.0.1",
+    "gold-email-input": "PolymerElements/gold-email-input#^1.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#1.0.0",
+    "login-polyform": "hourliert/login-polyform#~0.0.6"
   }
 }

@@ -1,5 +1,5 @@
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: sans-serif;
   -webkit-tap-highlight-color: transparent;
   tap-highlight-color: transparent;
   background-color: #fafafa;
@@ -7,7 +7,7 @@ body {
 }
 
 #loginscreen {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 1);
   z-index: 1;
   visibility: hidden;
   transition: all 300ms ease-in-out;
@@ -53,13 +53,13 @@ body {
 }
 
 #drawerPanel paper-scroll-header-panel::shadow #headerBg {
- background: url(images/gmail.png) no-repeat 115% 56px;
+ background: url(images/headericons1.png) no-repeat 115% 56px;
  background-size: 200px;
- background-color: #e51c23;
+ background-color: #e32d43;
 }
 
 #drawerPanel paper-scroll-header-panel::shadow #condensedHeaderBg {
-  background-color: #e51c23;
+  background-color: #e32d43;
   opacity: 1 !important; /* Prevents the background color from dissolving. */
 }
 
