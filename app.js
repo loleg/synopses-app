@@ -186,7 +186,7 @@ template.handleLogin = function(event, data) {
 
   var ajax1 = document.createElement('iron-ajax');
   ajax1.auto = true;
-  ajax1.url = 'http://localhost:5000/api/patients';
+  ajax1.url = '/api/patients';
   ajax1.addEventListener('response', function(e) {
     template.patientstoday = e.detail.response.patients;
   });

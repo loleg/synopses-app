@@ -16,7 +16,7 @@
   <paper-dialog id="patient-dialog">
     <h2>Patient details</h2>
     <paper-dialog-scrollable>
-      <form is="iron-form" id="patient-details" method="post" action="/patient/save">
+      <form is="iron-form" id="patient-details" method="post" action="/api/patient/save">
         <paper-input name="first_name" label="First name"></paper-input>
         <paper-input name="last_name" label="Last name"></paper-input>
         <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
@@ -31,7 +31,7 @@
     </paper-dialog-scrollable>
     <div class="buttons">
       <paper-button dialog-dismiss>Cancel</paper-button>
-      <paper-button dialog-confirm autofocus>Save</paper-button>
+      <paper-button on-tap="saveDialog" dialog-confirm autofocus>Save</paper-button>
     </div>
   </paper-dialog>
 </template>
@@ -57,6 +57,10 @@
       if (dialog) {
         dialog.open();
       }
+    },
+
+    saveDialog: function(e) {
+      document.getElementById('patient-details').submit();
     }
 
   });
