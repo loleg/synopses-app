@@ -60,7 +60,8 @@
     <paper-toolbar id="navheader" class="narrow">
       <material-search id="search" narrow="[[narrow]]" class="fit" active></material-search>
     </paper-toolbar>
-    <paper-menu selectable="paper-icon-item" on-iron-select="menuSelect" style="padding-top: 30px;">
+    <paper-menu selectable="paper-icon-item" on-iron-select="menuSelect">
+      <div class="separator" style="border-top:none">Today</div>
       <template is="dom-repeat" items="{{patientstoday}}">
         <paper-icon-item>
           <profile-img id="profileimage" item-icon
@@ -76,6 +77,7 @@
           <span>{{item.name}}</span>
         </paper-icon-item>
       </template>
+      <div class="separator">Last week</div>
       <!--
       <paper-icon-item role="menuitem">
         <iron-icon icon="social:people" item-icon></iron-icon>Social
@@ -119,8 +121,10 @@
 
       <paper-icon-button id="navicon" icon="menu" paper-drawer-toggle></paper-icon-button>
       <div class="flex"></div>
-      <!--span class="top indent title">{{headerTitle}}</span-->
-      <img src="images/headericons1.png">
+
+      <span class="top indent title">{{headerTitle}}</span>
+
+      <patient-form id="add-patient"></patient-form>
 
       <paper-icon-button icon="archive" class="selected-item" on-tap="archiveAll"></paper-icon-button>
       <paper-icon-button icon="delete" class="selected-item"></paper-icon-button>

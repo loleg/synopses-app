@@ -137,7 +137,7 @@ template._computeMainHeaderClass = function(narrow, numSelectedThreads) {
 };
 
 template._computeHeaderTitle = function(numSelectedThreads) {
-  return numSelectedThreads ? numSelectedThreads : 'Inbox';
+  return numSelectedThreads ? numSelectedThreads : 'Timeline';
 };
 
 // TODO: iron-selector bug where subscribers are not notified of changes
@@ -171,11 +171,11 @@ template.undoAll = function(e, detail, sender) {
   this.onToastOpenClose();
 };
 
-template.handleLogin = function(a, b) {
+template.handleLogin = function(event, data) {
   this.isAuthenticated = true;
 
   // Cached data? We're already using it. Bomb out before making unnecessary requests.
-  if (DEBUG || (template.threads && template.users)) return;
+  if (template.threads && template.patientstoday) return;
 
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
@@ -535,19 +535,19 @@ template.addEventListener('dom-change', function(e) {
 // };
 
 if (!navigator.onLine || DEBUG) {
-
-  document.addEventListener('WebComponentsReady', function(e) {
-    var ajax2 = document.createElement('iron-ajax');
-    ajax2.auto = true;
-    ajax2.url = '/data/threads.json';
-    ajax2.addEventListener('response', function(e) {
-      var threads = e.detail.response;
-      // for (var i = 0, thread; thread = threads[i]; ++i) {
-      //   thread.archived = false;
-      // }
-      template.threads = threads;
-    });
-  });
+  template.handleLogin();
+  // document.addEventListener('WebComponentsReady', function(e) {
+  //   var ajax2 = document.createElement('iron-ajax');
+  //   ajax2.auto = true;
+  //   ajax2.url = '/data/threads.json';
+  //   ajax2.addEventListener('response', function(e) {
+  //     var threads = e.detail.response;
+  //     // for (var i = 0, thread; thread = threads[i]; ++i) {
+  //     //   thread.archived = false;
+  //     // }
+  //     template.threads = threads;
+  //   });
+  // });
 }
 
 // window.Polymer.dom = 'shadow';

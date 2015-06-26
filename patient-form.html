@@ -1,0 +1,64 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/gold-email-input/gold-email-input.html">
+
+<dom-module id="patient-form">
+<style>
+:host paper-dialog {
+  padding: 0 20px;
+}
+</style>
+<template>
+  <paper-icon-button on-tap="openDialog" data-dialog="patient-dialog" icon="add"></paper-icon-button>
+
+  <paper-dialog id="patient-dialog">
+    <h2>Patient details</h2>
+    <paper-dialog-scrollable>
+      <form is="iron-form" id="patient-details" method="post" action="/patient/save">
+        <paper-input name="first_name" label="First name"></paper-input>
+        <paper-input name="last_name" label="Last name"></paper-input>
+        <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
+        <paper-input name="phone" label="Phone number"></paper-input>
+        <paper-input name="address" label="Address"></paper-input>
+        <paper-input name="address2" label="Address 2"></paper-input>
+        <paper-input name="city" label="City"></paper-input>
+        <paper-input name="phone" label="Phone number"></paper-input>
+        <paper-input name="postal" label="Postal code" value="CH-"></paper-input>
+        <paper-input name="country" label="Country" value="Switzerland"></paper-input>
+      </form>
+    </paper-dialog-scrollable>
+    <div class="buttons">
+      <paper-button dialog-dismiss>Cancel</paper-button>
+      <paper-button dialog-confirm autofocus>Save</paper-button>
+    </div>
+  </paper-dialog>
+</template>
+<script>
+  Polymer({
+    is: 'patient-form',
+
+    properties: {
+
+    },
+
+    openDialog: function(e) {
+      var button = e.target;
+      while (!button.hasAttribute('data-dialog') && button !== document.body) {
+        button = button.parentElement;
+      }
+      if (!button.hasAttribute('data-dialog')) {
+        return;
+      }
+
+      var id = button.getAttribute('data-dialog');
+      var dialog = document.getElementById(id);
+      if (dialog) {
+        dialog.open();
+      }
+    }
+
+  });
+</script>
+</dom-module>

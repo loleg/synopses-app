@@ -96,7 +96,7 @@ paper-icon-item.iron-selected iron-icon {
 }
 
 #mainheader {
-  color: #fff;
+  color: #555;
   background-color: transparent;
   box-shadow: 0 1px 5px rgba(0,0,0,0.3);
 }
@@ -113,7 +113,7 @@ paper-icon-item.iron-selected iron-icon {
 }
 
 #mainheader.selected-threads {
-  background-color: #757575;
+
 }
 
 #mainheader .selected-item {
