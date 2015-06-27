@@ -1,10 +1,10 @@
 {
-  "name": "PolymerMail",
+  "name": "Synopses App",
   "version": "0.1.0",
   "authors": [
-    "Eric Bidelman <ebidel@gmail.com>"
+    "Oleg Lavrovsky <oleg@datalets.ch>"
   ],
-  "description": "Polymer version of Gmail app",
+  "description": "Polymer version of Synopses app",
   "main": "index.html",
   "keywords": [
     "webcomponents",
@@ -21,11 +21,11 @@
     "tests"
   ],
   "dependencies": {
-    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
-    "paper-elements": "PolymerElements/paper-elements#^1.0.0",
-    "google-signin": "GoogleWebComponents/google-signin#^1.0.1",
-    "gold-email-input": "PolymerElements/gold-email-input#^1.0.0",
-    "iron-ajax": "PolymerElements/iron-ajax#1.0.0",
-    "login-polyform": "hourliert/login-polyform#~0.0.6"
+    "iron-elements": "PolymerElements/iron-elements",
+    "paper-elements": "PolymerElements/paper-elements",
+    "google-signin": "GoogleWebComponents/google-signin",
+    "gold-email-input": "PolymerElements/gold-email-input",
+    "iron-ajax": "PolymerElements/iron-ajax",
+    "login-polyform": "hourliert/login-polyform"
   }
 }

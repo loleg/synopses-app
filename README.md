@@ -10,6 +10,10 @@ Install [Vulcanize](https://github.com/polymer/vulcanize) (`npm install -g vulca
 
 This will create vulcanized.html, which is used in index.html.
 
+You can also npm install `gulp` and `browser-sync` for live-reload development using:
+
+    gulp server
+
 #### Deploying
 
 You will need to proxy /api to the **synopses-base** project /api - e.g. using nginx:

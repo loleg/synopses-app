@@ -9,24 +9,38 @@
 :host paper-dialog {
   padding: 0 20px;
 }
+
+:host .inline paper-input {
+  float:left;
+}
 </style>
 <template>
   <paper-icon-button on-tap="openDialog" data-dialog="patient-dialog" icon="add"></paper-icon-button>
 
   <paper-dialog id="patient-dialog">
-    <h2>Patient details</h2>
+    <h2>{{ title }}</h2>
     <paper-dialog-scrollable>
       <form is="iron-form" id="patient-details" method="post" action="/api/patient/save">
-        <paper-input name="first_name" label="First name"></paper-input>
-        <paper-input name="last_name" label="Last name"></paper-input>
-        <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
-        <paper-input name="phone" label="Phone number"></paper-input>
-        <paper-input name="address" label="Address"></paper-input>
-        <paper-input name="address2" label="Address 2"></paper-input>
-        <paper-input name="city" label="City"></paper-input>
-        <paper-input name="phone" label="Phone number"></paper-input>
-        <paper-input name="postal" label="Postal code" value="CH-"></paper-input>
-        <paper-input name="country" label="Country" value="Switzerland"></paper-input>
+        <table>
+        <tr><td>
+          <paper-input name="first_name" label="First name"></paper-input>
+          <paper-input name="last_name" label="Last name"></paper-input>
+          <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
+          <paper-input name="phone1" label="Phone number"></paper-input>
+          <paper-input name="phone2" label="Mobile number"></paper-input>
+        </td><td>
+          <paper-input name="address1" label="Address"></paper-input>
+          <paper-input name="address2" label="Address 2"></paper-input>
+          <paper-input name="city" label="City"></paper-input>
+          <paper-input name="postal" label="Postal code" value="CH-"></paper-input>
+          <paper-input name="country" label="Country" value="Switzerland"></paper-input>
+        </td></tr><tr><td>
+          <paper-input name="date_birth" label="Date of birth" value="00.00.1900"></paper-input>
+        </td><td class="inline">
+          <paper-input name="sex_code" label="Male" type="radio" value="1"></paper-input>
+          <paper-input name="sex_code" label="Female" type="radio" value="2"></paper-input>
+        </td></tr>
+        </table>
       </form>
     </paper-dialog-scrollable>
     <div class="buttons">
@@ -40,7 +54,10 @@
     is: 'patient-form',
 
     properties: {
-
+      title: {
+        value: "Patient details",
+        reflectToAttribute: true
+      }
     },
 
     openDialog: function(e) {
