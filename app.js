@@ -150,23 +150,6 @@ template._onThreadTap = function(e) {
   this.$.threadlist.select(idx);
 };
 
-template.openDialog = function(e) {
-  var button = e.target;
-  while (!button.hasAttribute('data-dialog') && button !== document.body) {
-    button = button.parentElement;
-  }
-  if (!button.hasAttribute('data-dialog')) {
-    return;
-  }
-
-  var id = button.getAttribute('data-dialog');
-  var dialog = document.getElementById(id);
-
-  if (dialog) {
-    dialog.open();
-  }
-};
-
 template.toggleSearch = function() {
   this.$.search.toggle();
 };
@@ -182,53 +165,6 @@ template.undoAll = function(e, detail, sender) {
 
   this.$.toast.hide();
   this.onToastOpenClose();
-};
-
-var assignPhotos = function(patientlist) {
-  patientlist.forEach(function (p, index) {
-    p.photo = "https://randomuser.me/api/portraits/med/" +
-      (p.sex == "Female" ? "women" : "men") +
-      "/" + p.id + ".jpg";
-  });
-};
-
-template.loadPatients = function() {
-  var ajax = document.createElement('iron-ajax');
-  ajax.auto = true;
-  ajax.url = '/data/patients.json';
-  ajax.addEventListener('response', function(e) {
-    template.patientspast = e.detail.response;
-    assignPhotos(template.patientspast);
-  });
-
-  var ajax1 = document.createElement('iron-ajax');
-  ajax1.auto = true;
-  ajax1.url = '/api/patients';
-  ajax1.addEventListener('response', function(e) {
-    template.patientstoday = e.detail.response.patients;
-    assignPhotos(template.patientstoday);
-  });
-};
-
-template.loadThreads = function() {
-  var ajax2 = document.createElement('iron-ajax');
-  ajax2.auto = true;
-  ajax2.url = '/data/threads.json';
-  ajax2.addEventListener('response', function(e) {
-    var threads = e.detail.response;
-    template.loadedThreads = threads;
-    template.threads = threads;
-  });
-};
-
-template.handleLogin = function(event, data) {
-  this.isAuthenticated = true;
-
-  // Cached data? We're already using it. Bomb out before making unnecessary requests.
-  if (template.threads && template.patientstoday) return;
-
-  this.loadPatients();
-  this.loadThreads();
 };
 
 template.refreshInbox = function(opt_callback) {
@@ -337,38 +273,12 @@ template.onRefreshTransitionEnd = function(e, detail, sender) {
   });
 };
 
-template.newMail = function(e) {
-  console.warn('Not implemented: Create new mail');
-};
+// template.newMail = function(e) {
+//   console.warn('Not implemented: Create new mail');
+// };
 
 template.menuSelect = function(e) {
   this.$.drawerPanel.togglePanel();
-};
-
-template.inboxSelect = function(e) {
-  this.selectedPatient = false;
-  this.headerTitle = this._computeHeaderTitle(0);
-  this.headerClass = this._computeMainHeaderClass();
-  this.threads = this.loadedThreads;
-};
-
-template.patientSelect = function(e) {
-  this.selectedPatient = e.model.item;
-  this.headerTitle = e.model.item.name;
-  this.headerClass = this._computeMainHeaderClass();
-  var filtered_threads = [];
-  this.loadedThreads.forEach(function(thread) {
-    var has_thread = false;
-    thread.messages.forEach(function(message) {
-      if (has_thread) return;
-      if (message.from.name == e.model.item.name) {
-        filtered_threads.push(thread);
-        has_thread = true;
-      }
-    });
-  });
-  console.log(filtered_threads);
-  this.threads = filtered_threads;
 };
 
 template.deselectAll = function(e) {
@@ -527,6 +437,113 @@ template.onSignOut = function(e) {
   this.isAuthenticated = false;
 };
 
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+
+var assignPhotos = function(patientlist) {
+  patientlist.forEach(function (p, index) {
+    p.photo = "https://randomuser.me/api/portraits/med/" +
+      (p.sex == "Female" ? "women" : "men") +
+      "/" + p.id + ".jpg";
+  });
+};
+
+template.loadPatients = function() {
+  var ajax = document.createElement('iron-ajax');
+  ajax.auto = true;
+  ajax.url = '/data/patients.json';
+  ajax.addEventListener('response', function(e) {
+    template.patientspast = e.detail.response;
+    assignPhotos(template.patientspast);
+  });
+
+  var ajax1 = document.createElement('iron-ajax');
+  ajax1.auto = true;
+  ajax1.url = '/api/patients';
+  ajax1.addEventListener('response', function(e) {
+    template.patientstoday = e.detail.response.patients;
+    assignPhotos(template.patientstoday);
+  });
+};
+
+template.loadThreads = function() {
+  var ajax2 = document.createElement('iron-ajax');
+  ajax2.auto = true;
+  ajax2.url = '/data/threads.json';
+  ajax2.addEventListener('response', function(e) {
+    var threads = e.detail.response;
+    template.loadedThreads = threads;
+    template.threads = threads;
+  });
+};
+
+template.handleLogin = function(event, data) {
+  this.isAuthenticated = true;
+
+  // Cached data? We're already using it. Bomb out before making unnecessary requests.
+  if (template.threads && template.patientstoday) return;
+
+  this.loadPatients();
+  this.loadThreads();
+};
+
+template.openDialog = function(e) {
+  var button = e.target;
+  while (!button.hasAttribute('data-dialog') && button !== document.body) {
+    button = button.parentElement;
+  }
+  if (!button.hasAttribute('data-dialog')) {
+    return;
+  }
+
+  var id = button.getAttribute('data-dialog');
+  var dialog = document.getElementById(id);
+
+  if (dialog) {
+    dialog.open();
+  }
+};
+
+template.inboxSelect = function(e) {
+  this.selectedPatient = false;
+  this.headerTitle = this._computeHeaderTitle(0);
+  this.headerClass = this._computeMainHeaderClass();
+  this.threads = this.loadedThreads;
+};
+
+template.patientSelect = function(e) {
+  this.selectedPatient = e.model.item;
+  this.headerTitle = e.model.item.name;
+  this.headerClass = this._computeMainHeaderClass();
+  var filtered_threads = [];
+  this.loadedThreads.forEach(function(thread) {
+    var has_thread = false;
+    thread.messages.forEach(function(message) {
+      if (has_thread) return;
+      if (message.from.name == e.model.item.name) {
+        filtered_threads.push(thread);
+        has_thread = true;
+      }
+    });
+  });
+  this.threads = filtered_threads;
+};
+
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+//////////////////
+
 template.DEBUG = DEBUG;
 template.LABEL_COLORS = ['pink', 'orange', 'green', 'yellow', 'teal', 'purple'];
 template.isAuthenticated = false;
@@ -588,7 +605,7 @@ template.addEventListener('dom-change', function(e) {
 //   return false;
 // };
 
-if (DEBUG) { // !navigator.onLine || 
+if (DEBUG) { // !navigator.onLine ||
   template.handleLogin();
 }
 
