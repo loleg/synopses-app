@@ -1,8 +1,11 @@
 [{
-  "name": "Melissa Meyer", "id": 27, "sex": "Female"
+  "name": "Melissa Meyer", "id": 27, "sex": "Female",
+  "date_birth": "5.2.1984", "updated": "1.5.2015"
 },{
-  "name": "Susie Sandberg", "id": 26, "sex": "Female"
+  "name": "Susie Sandberg", "id": 26, "sex": "Female",
+  "date_birth": "11.3.1979", "updated": "10.10.2014"
 },{
-  "name": "Tracy Tamberg", "id": 25, "sex": "Female"
+  "name": "Tracy Tamberg", "id": 25, "sex": "Female",
+  "date_birth": "20.11.1989", "updated": "7.12.2014"
 }
 ]

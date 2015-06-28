@@ -127,8 +127,6 @@
 
       <span class="top indent title">{{headerTitle}}</span>
 
-      <patient-form id="addpatient" title="Add patient" on-patient-saved="loadPatients"></patient-form>
-
       <paper-icon-button icon="archive" class="selected-item" on-tap="archiveAll"></paper-icon-button>
       <paper-icon-button icon="delete" class="selected-item"></paper-icon-button>
       <paper-icon-button icon="mail" class="selected-item"></paper-icon-button>
@@ -145,6 +143,19 @@
           <paper-item>Report phishing</paper-item>
         </paper-dropdown>
       </paper-menu-button> -->
+
+      <paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
+        <span class="layout vertical flex">
+          <span class="layout horizontal center justified">
+            <span class="label">Born:</span>
+            <span><time class="birth">{{selectedPatient.date_birth}}</time></span>
+            <span class="label">Last visit:</span>
+            <span><time>{{selectedPatient.updated}}</time></span>
+          </span>
+        </span>
+      </paper-item>
+
+      <patient-form id="addpatient" title="Add patient" on-patient-saved="loadPatients"></patient-form>
 
       <div id="refresh" class="bottom fit layout horizontal center-center"
            on-transitionend="onRefreshTransitionEnd">

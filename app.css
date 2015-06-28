@@ -108,7 +108,7 @@ paper-icon-item.iron-selected iron-icon {
 #mainheader .title {
   font-size: 20px;
   transform-origin: 0px 50%;
-  margin-left: 70px;
+  margin-left: 0px;
 }
 
 #mainheader.tall .title {
@@ -221,4 +221,12 @@ paper-scroll-header-panel [content] {
 
 iframe[src^="https://apis.google.com"] {
   display: none;
+}
+
+#patientdetails .justified span {
+  margin:0 0 0 1em;
+}
+
+#patientdetails .justified .label {
+  color: #999;
 }

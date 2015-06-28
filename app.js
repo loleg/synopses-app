@@ -124,8 +124,10 @@ template._computeShowSpinner = function(threads, isAuthenticated) {
   return !threads.length && isAuthenticated;
 };
 
-template._computeMainHeaderClass = function(narrow, numSelectedThreads) {
-  return (narrow ? 'core-narrow' : 'tall') + ' ' +
+template._computeMainHeaderClass = function() {
+  var numSelectedThreads = this.selectedThreads.length;
+  var renderTall = this.narrow || !this.selectedPatient;
+  return (renderTall ? 'core-narrow' : 'tall') + ' ' +
          (numSelectedThreads ? 'selected-threads' : '');
 };
 
@@ -137,8 +139,9 @@ template._computeHeaderTitle = function(numSelectedThreads) {
 // after the first selection. For now, use events instead to update title.
 // See github.com/PolymerElements/iron-selector/issues/33
 template._onThreadSelectChange = function(e) {
+  this.selectedPatient = false;
   this.headerTitle = this._computeHeaderTitle(this.selectedThreads.length);
-  this.headerClass = this._computeMainHeaderClass(this.narrow, this.selectedThreads.length);
+  this.headerClass = this._computeMainHeaderClass();
 };
 
 template._onThreadTap = function(e) {
@@ -328,11 +331,15 @@ template.menuSelect = function(e) {
 };
 
 template.inboxSelect = function(e) {
+  this.selectedPatient = false;
   this.headerTitle = this._computeHeaderTitle(0);
+  this.headerClass = this._computeMainHeaderClass();
 };
 
 template.patientSelect = function(e) {
-  this.headerTitle = e.model.item.sex;
+  this.selectedPatient = e.model.item;
+  this.headerTitle = e.model.item.name;
+  this.headerClass = this._computeMainHeaderClass();
 };
 
 template.deselectAll = function(e) {
@@ -496,8 +503,9 @@ template.LABEL_COLORS = ['pink', 'orange', 'green', 'yellow', 'teal', 'purple'];
 template.isAuthenticated = false;
 template.threads = [];
 template.selectedThreads = [];
+template.selectedPatient = false;
 template.headerTitle = 'Inbox';
-template.headerClass = template._computeMainHeaderClass(template.narrow, 0);
+template.headerClass = template._computeMainHeaderClass();
 template._scrollArchiveSetup = false; // True if the user has attempted to archive a thread.
 // template.touchAction = 'none'; // Allow track events from x/y directions.
 
@@ -514,7 +522,7 @@ template.previousSearches = [
 
 template.addEventListener('dom-change', function(e) {
   // Force binding updated when narrow has been calculated via binding.
-  this.headerClass = this._computeMainHeaderClass(this.narrow, this.selectedThreads.length);
+  this.headerClass = this._computeMainHeaderClass();
 
   var headerEl = document.querySelector('#mainheader');
   var title = document.querySelector('.title');
