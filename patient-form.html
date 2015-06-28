@@ -15,16 +15,14 @@
 }
 </style>
 <template>
-  <paper-icon-button on-tap="openDialog" data-dialog="patient-dialog" icon="add"></paper-icon-button>
-
-  <paper-dialog id="patient-dialog">
+  <paper-dialog id="{{ ident }}" modal>
     <h2>{{ title }}</h2>
-    <paper-dialog-scrollable>
-      <form is="iron-form" id="patient-details" method="post" action="/api/patient/save">
+    <form is="iron-form" id="patientform" method="post" action="/api/patient/save">
+      <paper-dialog-scrollable>
         <table>
         <tr><td>
-          <paper-input name="first_name" label="First name"></paper-input>
-          <paper-input name="last_name" label="Last name"></paper-input>
+          <paper-input name="first_name" label="First name" required autofocus></paper-input>
+          <paper-input name="last_name" label="Last name" required></paper-input>
           <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
           <paper-input name="phone1" label="Phone number"></paper-input>
           <paper-input name="phone2" label="Mobile number"></paper-input>
@@ -41,18 +39,17 @@
           <input name="sex_code" label="Male" type="radio" value="1">Male
         </td></tr>
         </table>
-      </form>
-    </paper-dialog-scrollable>
-    <div class="buttons">
-      <paper-button dialog-dismiss>Cancel</paper-button>
-      <paper-button on-tap="saveDialog" dialog-confirm autofocus>Save</paper-button>
-    </div>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button raised on-tap="saveDialog">Save</paper-button>
+      </div>
+    </form>
   </paper-dialog>
 </template>
 <script>
   Polymer({
     is: 'patient-form',
-    obj: null,
 
     properties: {
       title: {
@@ -61,30 +58,16 @@
       }
     },
 
-    openDialog: function(e) {
-      var button = e.target;
-      while (!button.hasAttribute('data-dialog') && button !== document.body) {
-        button = button.parentElement;
-      }
-      if (!button.hasAttribute('data-dialog')) {
-        return;
-      }
-
-      var id = button.getAttribute('data-dialog');
-      this.dialog = document.getElementById(id);
-
-      if (this.dialog) {
-        this.dialog.open();
-      }
-    },
-
     saveDialog: function(e) {
-      var self = this.dialog;
-      setTimeout(function() {
-        self.open();
-      }, 50);
-      //document.getElementById('patient-details').submit();
-      //this.fire('patient-saved');
+      if (this.$.patientform.checkValidity()) {
+        this.$.patientform.submit();
+        this.$.patientform.reset();
+        document.getElementById(this.ident).close();
+        this.fire('patient-saved');
+        return true;
+      } else {
+        return false;
+      }
     }
 
   });

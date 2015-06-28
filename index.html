@@ -54,6 +54,8 @@
       signed-in="{{signedIn}}"></google-signin-->
 </div>
 
+<patient-form ident="addpatient" class="top" title="Add patient" on-patient-saved="loadPatients"></patient-form>
+
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
   <paper-header-panel mode="scroll" drawer>
@@ -144,6 +146,8 @@
         </paper-dropdown>
       </paper-menu-button> -->
 
+      <paper-icon-button on-tap="openDialog" data-dialog="addpatient" icon="add"></paper-icon-button>
+
       <paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
         <span class="layout vertical flex">
           <span class="layout horizontal center justified">
@@ -154,8 +158,6 @@
           </span>
         </span>
       </paper-item>
-
-      <patient-form id="addpatient" title="Add patient" on-patient-saved="loadPatients"></patient-form>
 
       <div id="refresh" class="bottom fit layout horizontal center-center"
            on-transitionend="onRefreshTransitionEnd">
