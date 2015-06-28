@@ -56,6 +56,10 @@
 
 <patient-form ident="addpatient" title="Add patient" on-patient-saved="loadPatients"></patient-form>
 
+<record-form ident="addrecord" title="New record"
+  patientid="{{selectedPatient.id}}"
+  on-record-saved="loadRecords"></record-form>
+
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
   <paper-header-panel mode="scroll" drawer>
@@ -169,10 +173,6 @@
 
     </paper-toolbar>
 
-    <record-form ident="addrecord" title="Write a note"
-      patientid="{{selectedPatient.id}}"
-      on-record-saved="loadRecords"></patient-form>
-
     <div content on-thread-archive="onThreadArchive">
 
       <template is="dom-if" if="{{_computeShowSpinner(threads, signedIn)}}">
@@ -207,7 +207,7 @@
   <div on-tap="undoAll" class="undo">Undo</div>
 </paper-toast>
 
-<paper-fab id="fab" icon="create" on-tap="newMail"></paper-fab>
+<paper-fab id="fab" icon="create" on-tap="openDialog" data-dialog="addrecord"></paper-fab>
 
 <!-- Cache data requests. -->
 <!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->

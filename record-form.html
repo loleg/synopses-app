@@ -2,26 +2,45 @@
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-input/paper-input.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="record-form">
 <style>
+:host {
+  --paper-toolbar-background: #00bcd4;
+}
+
+:host paper-tabs, :host paper-toolbar {
+  background-color: #00bcd4;
+  color: #fff;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+:host paper-toolbar paper-tabs {
+  box-shadow: none;
+}
+
+:host paper-tabs[noink][no-bar] paper-tab.iron-selected {
+  color: #ffff8d;
+}
 </style>
 <template>
-  <paper-dialog id="{{ ident }}" modal>
+  <paper-dialog id="{{ ident }}">
     <h2>{{ title }}</h2>
     <paper-tabs selected="{{recordType}}">
       <paper-tab>Data Entry</paper-tab>
-      <paper-tab>Doctor's Notes</paper-tab>
+      <paper-tab>Doctor Note</paper-tab>
       <paper-tab>Medication</paper-tab>
       <paper-tab>Test Results</paper-tab>
     </paper-tabs>
 
-    <iron-pages selected="{{recordType}}">
+    <iron-pages selected="{{recordType}}" id="recordform">
 
       <div class="record-DATA">
-        <form is="iron-form" id="recordform" method="post"
+        <form is="iron-form" method="post"
               action="/api/patient/{{ patient_id }}/record/0/save">
-          <div class="vertical layout">
+          <div class="horizontal layout">
             <paper-input name="date_birth" label="Date of birth" value="01.01.1900"></paper-input>
             <input name="sex_code" label="Female" type="radio" value="2" checked>Female
             <input name="sex_code" label="Male" type="radio" value="1">Male
@@ -30,11 +49,11 @@
       </div>
 
       <div class="record-NOTE">
-        <form is="iron-form" id="recordform" method="post"
+        <form is="iron-form" method="post"
               action="/api/patient/{{ patient_id }}/record/1/save">
           <div class="vertical layout">
             <paper-input name="subject" label="Summary" required autofocus></paper-input>
-            <textarea name="note" label="Note" required rows="3"></textarea>
+            <textarea name="note" label="Note" required rows="6"></textarea>
           </div>
         </form>
       </div>
@@ -54,25 +73,23 @@
 </template>
 <script>
   Polymer({
-    is: 'patient-form',
+    is: 'record-form',
 
     properties: {
       title: {
         value: "New record",
         reflectToAttribute: true
+      },
+      recordType: {
+        value: 1
       }
     },
 
     saveDialog: function(e) {
-      // if (this.$.patientform.checkValidity()) {
-      //   this.$.patientform.submit();
-      //   this.$.patientform.reset();
-      //   document.getElementById(this.ident).close();
-      //   this.fire('patient-saved');
-      //   return true;
-      // } else {
-      //   return false;
-      // }
+      this.$.recordform.selectedItem.firstElementChild.submit();
+      this.$.recordform.selectedItem.firstElementChild.reset();
+      this.fire('record-saved');
+      document.getElementById(this.ident).close();
     }
 
   });
