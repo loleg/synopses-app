@@ -78,6 +78,7 @@
 
     saveDialog: function(e) {
       document.getElementById('patient-details').submit();
+      this.fire('patient-saved');
     }
 
   });

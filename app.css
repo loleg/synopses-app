@@ -52,6 +52,10 @@ body {
   margin: 16px 0 0 0;
 }
 
+#drawerPanel paper-header-panel paper-menu paper-icon-item {
+  cursor: pointer;
+}
+
 #drawerPanel paper-scroll-header-panel::shadow #headerBg {
  background: url(images/headericons1.png) no-repeat 115% 56px;
  background-size: 200px;

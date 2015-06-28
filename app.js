@@ -1,15 +1,9 @@
 (function() {
 
-// var firstPaintRaf;
-// requestAnimationFrame(function() {
-//   firstPaintRaf = performance.now();
-// });
-
 if (window.PolymerMetrics) {
   var polyMetrics = new PolymerMetrics(template);
   window.addEventListener('load', polyMetrics.printPageMetrics);
 }
-
 
 var DEBUG = location.search.indexOf('debug') != -1;
 var FROM_HEADER_REGEX = new RegExp(/"?(.*?)"?\s?<(.*)>/);
@@ -20,7 +14,6 @@ var Labels = {
 };
 
 var previouslySelected = [];
-
 
 var GMail = window.GMail || {};
 
@@ -137,7 +130,7 @@ template._computeMainHeaderClass = function(narrow, numSelectedThreads) {
 };
 
 template._computeHeaderTitle = function(numSelectedThreads) {
-  return numSelectedThreads ? numSelectedThreads : 'Timeline';
+  return numSelectedThreads ? numSelectedThreads : 'Inbox';
 };
 
 // TODO: iron-selector bug where subscribers are not notified of changes
@@ -146,7 +139,7 @@ template._computeHeaderTitle = function(numSelectedThreads) {
 template._onThreadSelectChange = function(e) {
   this.headerTitle = this._computeHeaderTitle(this.selectedThreads.length);
   this.headerClass = this._computeMainHeaderClass(this.narrow, this.selectedThreads.length);
-}
+};
 
 template._onThreadTap = function(e) {
   e.stopPropagation();
@@ -171,12 +164,7 @@ template.undoAll = function(e, detail, sender) {
   this.onToastOpenClose();
 };
 
-template.handleLogin = function(event, data) {
-  this.isAuthenticated = true;
-
-  // Cached data? We're already using it. Bomb out before making unnecessary requests.
-  if (template.threads && template.patientstoday) return;
-
+template.loadPatients = function() {
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
   ajax.url = '/data/patients.json';
@@ -190,7 +178,9 @@ template.handleLogin = function(event, data) {
   ajax1.addEventListener('response', function(e) {
     template.patientstoday = e.detail.response.patients;
   });
+};
 
+template.loadThreads = function() {
   var ajax2 = document.createElement('iron-ajax');
   ajax2.auto = true;
   ajax2.url = '/data/threads.json';
@@ -201,6 +191,16 @@ template.handleLogin = function(event, data) {
     // }
     template.threads = threads;
   });
+};
+
+template.handleLogin = function(event, data) {
+  this.isAuthenticated = true;
+
+  // Cached data? We're already using it. Bomb out before making unnecessary requests.
+  if (template.threads && template.patientstoday) return;
+
+  this.loadPatients();
+  this.loadThreads();
 };
 
 template.refreshInbox = function(opt_callback) {
@@ -315,6 +315,14 @@ template.newMail = function(e) {
 
 template.menuSelect = function(e) {
   this.$.drawerPanel.togglePanel();
+};
+
+template.inboxSelect = function(e) {
+  this.headerTitle = this._computeHeaderTitle(0);
+};
+
+template.patientSelect = function(e) {
+  this.headerTitle = e.model.item.name;
 };
 
 template.deselectAll = function(e) {

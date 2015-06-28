@@ -61,9 +61,12 @@
       <material-search id="search" narrow="[[narrow]]" class="fit" active></material-search>
     </paper-toolbar>
     <paper-menu selectable="paper-icon-item" on-iron-select="menuSelect">
+      <paper-icon-item role="menuitem" on-tap="inboxSelect">
+        <iron-icon icon="mail" item-icon></iron-icon>Inbox
+      </paper-icon-item>
       <div class="separator" style="border-top:none">Today</div>
       <template is="dom-repeat" items="{{patientstoday}}">
-        <paper-icon-item>
+        <paper-icon-item class="patient" on-tap="patientSelect">
           <profile-img id="profileimage" item-icon
                        src="{{item.photo}}"></profile-img>
           <span>{{item.name}}</span>
@@ -71,7 +74,7 @@
       </template>
       <div class="separator">Yesterday</div>
       <template is="dom-repeat" items="{{patientspast}}">
-        <paper-icon-item>
+        <paper-icon-item class="patient" on-tap="patientSelect">
           <profile-img id="profileimage" item-icon
                        src="{{item.photo}}"></profile-img>
           <span>{{item.name}}</span>
@@ -124,7 +127,7 @@
 
       <span class="top indent title">{{headerTitle}}</span>
 
-      <patient-form id="add-patient" title="Add patient"></patient-form>
+      <patient-form id="addpatient" title="Add patient" on-patient-saved="loadPatients"></patient-form>
 
       <paper-icon-button icon="archive" class="selected-item" on-tap="archiveAll"></paper-icon-button>
       <paper-icon-button icon="delete" class="selected-item"></paper-icon-button>
