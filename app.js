@@ -164,12 +164,21 @@ template.undoAll = function(e, detail, sender) {
   this.onToastOpenClose();
 };
 
+var assignPhotos = function(patientlist) {
+  patientlist.forEach(function (p, index) {
+    p.photo = "https://randomuser.me/api/portraits/med/" +
+      (p.sex == "Female" ? "women" : "men") +
+      "/" + p.id + ".jpg";
+  });
+};
+
 template.loadPatients = function() {
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
   ajax.url = '/data/patients.json';
   ajax.addEventListener('response', function(e) {
     template.patientspast = e.detail.response;
+    assignPhotos(template.patientspast);
   });
 
   var ajax1 = document.createElement('iron-ajax');
@@ -177,6 +186,7 @@ template.loadPatients = function() {
   ajax1.url = '/api/patients';
   ajax1.addEventListener('response', function(e) {
     template.patientstoday = e.detail.response.patients;
+    assignPhotos(template.patientstoday);
   });
 };
 
@@ -322,7 +332,7 @@ template.inboxSelect = function(e) {
 };
 
 template.patientSelect = function(e) {
-  this.headerTitle = e.model.item.name;
+  this.headerTitle = e.model.item.sex;
 };
 
 template.deselectAll = function(e) {
@@ -497,11 +507,9 @@ template.refreshStarted = false; // True if the pull to refresh has been enabled
 
 // TODO: save this from users past searches using iron-localstorage.
 template.previousSearches = [
-  "something fun",
-  "tax forms",
   'to: me',
-  'airline tickets',
-  'party on saturday'
+  'alpha',
+  'beta'
 ];
 
 template.addEventListener('dom-change', function(e) {

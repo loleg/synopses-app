@@ -1,11 +1,8 @@
 [{
-  "name": "Melissa Meyer", "id": 123,
-  "photo": "https://randomuser.me/api/portraits/med/women/27.jpg"
+  "name": "Melissa Meyer", "id": 27, "sex": "Female"
 },{
-  "name": "Susie Sandberg", "id": 123,
-  "photo": "https://randomuser.me/api/portraits/med/women/26.jpg"
+  "name": "Susie Sandberg", "id": 26, "sex": "Female"
 },{
-  "name": "Tracy Tamberg", "id": 123,
-  "photo": "https://randomuser.me/api/portraits/med/women/25.jpg"
+  "name": "Tracy Tamberg", "id": 25, "sex": "Female"
 }
 ]
