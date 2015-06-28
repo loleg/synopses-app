@@ -77,7 +77,7 @@ gulp.task('dist:html', function() {
 	return gulp.src('dist/index.html')
 		.pipe(minifyHTML({
 			comments: true
-		}))
+		}));
 });
 
 gulp.task('dist:clean', function(callback) {
@@ -134,7 +134,7 @@ gulp.task('chrome', function() {
 
 gulp.task('chrome:copy', function() {
 	return gulp.src('app/index.html')
-		.pipe(gulp.dest('build'))
+		.pipe(gulp.dest('build'));
 });
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -147,10 +147,10 @@ gulp.task('server', function() {
 	// Initiate BrowserSync server.
 	browserSync({
 		server: {
-			baseDir: 'app'
+			baseDir: '.'
 		},
 		port: 8000,
-		browser: 'google chrome', // Automatically open up chrome...yay!
+		browser: 'google-chrome', // Automatically open up chrome...yay!
 		notify: false, // Disable the on-page notice BrowserSync is running.
 		logConnections: true // Log all devices that are connected.
 	});
