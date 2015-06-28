@@ -126,7 +126,7 @@ template._computeShowSpinner = function(threads, isAuthenticated) {
 
 template._computeMainHeaderClass = function() {
   var numSelectedThreads = this.selectedThreads.length;
-  var renderTall = this.narrow || !this.selectedPatient;
+  var renderTall = this.narrow;
   return (renderTall ? 'core-narrow' : 'tall') + ' ' +
          (numSelectedThreads ? 'selected-threads' : '');
 };
@@ -216,9 +216,7 @@ template.loadThreads = function() {
   ajax2.url = '/data/threads.json';
   ajax2.addEventListener('response', function(e) {
     var threads = e.detail.response;
-    // for (var i = 0, thread; thread = threads[i]; ++i) {
-    //   thread.archived = false;
-    // }
+    template.loadedThreads = threads;
     template.threads = threads;
   });
 };
@@ -351,12 +349,26 @@ template.inboxSelect = function(e) {
   this.selectedPatient = false;
   this.headerTitle = this._computeHeaderTitle(0);
   this.headerClass = this._computeMainHeaderClass();
+  this.threads = this.loadedThreads;
 };
 
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
   this.headerTitle = e.model.item.name;
   this.headerClass = this._computeMainHeaderClass();
+  var filtered_threads = [];
+  this.loadedThreads.forEach(function(thread) {
+    var has_thread = false;
+    thread.messages.forEach(function(message) {
+      if (has_thread) return;
+      if (message.from.name == e.model.item.name) {
+        filtered_threads.push(thread);
+        has_thread = true;
+      }
+    });
+  });
+  console.log(filtered_threads);
+  this.threads = filtered_threads;
 };
 
 template.deselectAll = function(e) {
@@ -519,6 +531,7 @@ template.DEBUG = DEBUG;
 template.LABEL_COLORS = ['pink', 'orange', 'green', 'yellow', 'teal', 'purple'];
 template.isAuthenticated = false;
 template.threads = [];
+template.loadedThreads = [];
 template.selectedThreads = [];
 template.selectedPatient = false;
 template.headerTitle = 'Inbox';
@@ -577,18 +590,6 @@ template.addEventListener('dom-change', function(e) {
 
 if (!navigator.onLine || DEBUG) {
   template.handleLogin();
-  // document.addEventListener('WebComponentsReady', function(e) {
-  //   var ajax2 = document.createElement('iron-ajax');
-  //   ajax2.auto = true;
-  //   ajax2.url = '/data/threads.json';
-  //   ajax2.addEventListener('response', function(e) {
-  //     var threads = e.detail.response;
-  //     // for (var i = 0, thread; thread = threads[i]; ++i) {
-  //     //   thread.archived = false;
-  //     // }
-  //     template.threads = threads;
-  //   });
-  // });
 }
 
 // window.Polymer.dom = 'shadow';

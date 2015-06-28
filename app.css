@@ -223,6 +223,10 @@ iframe[src^="https://apis.google.com"] {
   display: none;
 }
 
+.narrow-layout #patientdetails {
+  display: none;
+}
+
 #patientdetails .justified span {
   margin:0 0 0 1em;
 }

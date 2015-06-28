@@ -19,26 +19,26 @@
     <h2>{{ title }}</h2>
     <form is="iron-form" id="patientform" method="post" action="/api/patient/save">
       <paper-dialog-scrollable>
-        <table>
-        <tr><td>
-          <paper-input name="first_name" label="First name" required autofocus></paper-input>
-          <paper-input name="last_name" label="Last name" required></paper-input>
-          <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
-          <paper-input name="phone1" label="Phone number"></paper-input>
-          <paper-input name="phone2" label="Mobile number"></paper-input>
-        </td><td>
-          <paper-input name="address1" label="Address"></paper-input>
-          <paper-input name="address2" label="Address 2"></paper-input>
-          <paper-input name="city" label="City"></paper-input>
-          <paper-input name="postal" label="Postal code" value="CH-"></paper-input>
-          <paper-input name="country" label="Country" value="Switzerland"></paper-input>
-        </td></tr><tr><td>
+        <div class="horizontal layout">
+          <div>
+            <paper-input name="first_name" label="First name" required autofocus></paper-input>
+            <paper-input name="last_name" label="Last name" required></paper-input>
+            <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
+            <paper-input name="phone1" label="Phone number"></paper-input>
+            <paper-input name="phone2" label="Mobile number"></paper-input>
+          </div><div>
+            <paper-input name="address1" label="Address"></paper-input>
+            <paper-input name="address2" label="Address 2"></paper-input>
+            <paper-input name="city" label="City"></paper-input>
+            <paper-input name="postal" label="Postal code" value="CH-"></paper-input>
+            <paper-input name="country" label="Country" value="Switzerland"></paper-input>
+          </div>
+        </div>
+        <div class="horizontal layout">
           <paper-input name="date_birth" label="Date of birth" value="01.01.1900"></paper-input>
-        </td><td class="inline">
           <input name="sex_code" label="Female" type="radio" value="2" checked>Female
           <input name="sex_code" label="Male" type="radio" value="1">Male
-        </td></tr>
-        </table>
+        </div>
       </paper-dialog-scrollable>
       <div class="buttons">
         <paper-button dialog-dismiss>Cancel</paper-button>
