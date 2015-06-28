@@ -168,6 +168,11 @@
       </div>
 
     </paper-toolbar>
+
+    <record-form ident="addrecord" title="Write a note"
+      patientid="{{selectedPatient.id}}"
+      on-record-saved="loadRecords"></patient-form>
+
     <div content on-thread-archive="onThreadArchive">
 
       <template is="dom-if" if="{{_computeShowSpinner(threads, signedIn)}}">
