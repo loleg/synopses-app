@@ -588,7 +588,7 @@ template.addEventListener('dom-change', function(e) {
 //   return false;
 // };
 
-if (!navigator.onLine || DEBUG) {
+if (DEBUG) { // !navigator.onLine || 
   template.handleLogin();
 }
 
