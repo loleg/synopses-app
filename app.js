@@ -483,6 +483,17 @@ template.loadThreads = function() {
   });
 };
 
+template.loadRecords = function() {
+  var ajax2 = document.createElement('iron-ajax');
+  ajax2.auto = true;
+  ajax2.url = '/api/records';
+  ajax2.addEventListener('response', function(e) {
+    var threads = e.detail.response.records;
+    template.loadedThreads = threads;
+    template.threads = threads;
+  });
+};
+
 template.handleLogin = function(event, data) {
   this.isAuthenticated = true;
 
@@ -490,7 +501,7 @@ template.handleLogin = function(event, data) {
   if (template.threads && template.patientstoday) return;
 
   this.loadPatients();
-  this.loadThreads();
+  this.loadRecords();
 };
 
 template.openDialog = function(e) {
