@@ -478,7 +478,6 @@ template.loadThreads = function() {
   ajax2.url = '/data/threads.json';
   ajax2.addEventListener('response', function(e) {
     var threads = e.detail.response;
-    template.loadedThreads = threads;
     template.threads = threads;
   });
 };
@@ -486,10 +485,13 @@ template.loadThreads = function() {
 template.loadRecords = function() {
   var ajax2 = document.createElement('iron-ajax');
   ajax2.auto = true;
-  ajax2.url = '/api/records';
+  if (!template.selectedPatient) {
+    ajax2.url = '/api/records';
+  } else {
+    ajax2.url = '/api/' + template.selectedPatient.id + '/records';
+  }
   ajax2.addEventListener('response', function(e) {
     var threads = e.detail.response.records;
-    template.loadedThreads = threads;
     template.threads = threads;
   });
 };
@@ -536,25 +538,14 @@ template.inboxSelect = function(e) {
   this.selectedPatient = false;
   this.headerTitle = this._computeHeaderTitle(0);
   this.headerClass = this._computeMainHeaderClass();
-  this.threads = this.loadedThreads;
+  this.loadRecords();
 };
 
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
   this.headerTitle = e.model.item.name;
   this.headerClass = this._computeMainHeaderClass();
-  var filtered_threads = [];
-  this.loadedThreads.forEach(function(thread) {
-    var has_thread = false;
-    thread.messages.forEach(function(message) {
-      if (has_thread) return;
-      if (message.from.name == e.model.item.name) {
-        filtered_threads.push(thread);
-        has_thread = true;
-      }
-    });
-  });
-  this.threads = filtered_threads;
+  this.loadRecords();
 };
 
 //////////////////
@@ -570,7 +561,6 @@ template.DEBUG = DEBUG;
 template.LABEL_COLORS = ['pink', 'orange', 'green', 'yellow', 'teal', 'purple'];
 template.isAuthenticated = false;
 template.threads = [];
-template.loadedThreads = [];
 template.selectedThreads = [];
 template.selectedPatient = false;
 template.headerTitle = 'Inbox';
