@@ -4,6 +4,7 @@
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 
 <dom-module id="record-form">
 <style>
@@ -24,11 +25,17 @@
 :host paper-tabs[noink][no-bar] paper-tab.iron-selected {
   color: #ffff8d;
 }
+
+:host form paper-icon-button {
+  color: #333333;
+}
+
+:host label { margin-right:1em; }
 </style>
 <template>
   <paper-dialog id="{{ ident }}">
     <h2>{{ title }}</h2>
-    <paper-tabs selected="{{recordType}}">
+    <paper-tabs selected="{{recordType}}" autofocus>
       <paper-tab>Data Entry</paper-tab>
       <paper-tab>Doctor Note</paper-tab>
       <paper-tab>Medication</paper-tab>
@@ -40,10 +47,33 @@
       <div class="record-DATA">
         <form is="iron-form" method="post"
               action="/api/patient/{{ patient_id }}/record/0/save">
-          <div class="horizontal layout">
+          <div class="vertical layout">
+            <span class="horizontal layout">
+              <label><input name="sex_code" type="radio" value="2" checked>Female</label>
+              <label><input name="sex_code" type="radio" value="1">Male</label>
+              <label style="position: absolute; right: 0px;">Blood group:
+              <select name="blood_group" label="Blood group">
+                <option></option>
+                <option>A Positive</option>
+                <option>A Negative</option>
+                <option>A Unknown</option>
+                <option>B Positive</option>
+                <option>B Negative</option>
+                <option>B Unknown</option>
+                <option>AB Positive</option>
+                <option>AB Negative</option>
+                <option>AB Unknown</option>
+                <option>O Positive</option>
+                <option>O Negative</option>
+                <option>O Unknown</option>
+                <option>Unknown</option>
+              </select></label>
+            </span>
             <paper-input name="date_birth" label="Date of birth" value="01.01.1900"></paper-input>
-            <input name="sex_code" label="Female" type="radio" value="2" checked>Female
-            <input name="sex_code" label="Male" type="radio" value="1">Male
+            <span class="horizontal layout">
+              <paper-input name="weight" label="Weight (kg)"></paper-input>
+              <paper-input name="height" label="Height (cm)"></paper-input>
+            </span>
           </div>
         </form>
       </div>
@@ -52,16 +82,38 @@
         <form is="iron-form" method="post"
               action="/api/patient/{{ patient_id }}/record/1/save">
           <div class="vertical layout">
-            <paper-input name="subject" label="Summary" required autofocus></paper-input>
-            <textarea name="note" label="Note" required rows="6"></textarea>
+            <paper-input name="subject" label="Summary" required></paper-input>
+            <iron-autogrow-textarea id="ta1" label="Note" required maxRows="16" rows="8">
+              <textarea name="note" id="ta1" rows="6"></textarea>
+            </iron-autogrow-textarea>
           </div>
         </form>
       </div>
 
       <div class="record-MED">
+        <form is="iron-form" method="post"
+              action="/api/patient/{{ patient_id }}/record/2/save">
+          <div class="vertical layout">
+            <paper-input name="medication1" label="Medication" required></paper-input>
+            <paper-input name="medication2" label="" required></paper-input>
+            <paper-input name="medication3" label="" required></paper-input>
+            <paper-input name="condition" label="For condition" required></paper-input>
+          </div>
+        </form>
       </div>
 
       <div class="record-LAB">
+        <form is="iron-form" method="post"
+              action="/api/patient/{{ patient_id }}/record/3/save">
+          <div class="vertical layout">
+            <paper-input name="condition" label="Reason for test" required></paper-input>
+            <label>Summary of results:</label>
+            <iron-autogrow-textarea id="ta2" required maxRows="16" rows="6">
+              <textarea name="results" id="ta2" rows="6"></textarea>
+            </iron-autogrow-textarea>
+            <label>Attachment: <input type="file" name="attachment" accept="image/*"></label>
+          </div>
+        </form>
       </div>
 
     </iron-pages>
