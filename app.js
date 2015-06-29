@@ -140,6 +140,7 @@ template._computeHeaderTitle = function(numSelectedThreads) {
 // See github.com/PolymerElements/iron-selector/issues/33
 template._onThreadSelectChange = function(e) {
   this.selectedPatient = false;
+  this.selectedDetails = false;
   this.headerTitle = this._computeHeaderTitle(this.selectedThreads.length);
   this.headerClass = this._computeMainHeaderClass();
 };
@@ -536,6 +537,7 @@ template.openDialog = function(e) {
 
 template.inboxSelect = function(e) {
   this.selectedPatient = false;
+  this.selectedDetails = false;
   this.headerTitle = this._computeHeaderTitle(0);
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
@@ -543,6 +545,10 @@ template.inboxSelect = function(e) {
 
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
+  this.selectedDetails = e.model.item;
+  if (typeof e.model.item.date_birth === 'undefined') {
+    this.selectedDetails = false;
+  }
   this.headerTitle = e.model.item.name;
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
@@ -563,6 +569,7 @@ template.isAuthenticated = false;
 template.threads = [];
 template.selectedThreads = [];
 template.selectedPatient = false;
+template.selectedDetails = false;
 template.headerTitle = 'Inbox';
 template.headerClass = template._computeMainHeaderClass();
 template._scrollArchiveSetup = false; // True if the user has attempted to archive a thread.
