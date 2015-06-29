@@ -46,8 +46,7 @@
 
       <div class="record-DATA">
         <form is="iron-form" method="post"
-              action="/api/patient/record/0/save">
-              <input type="hidden" name="patient_id" value="{{patientid}}">
+              action="/api/$PATIENTID$/record/0/save">
           <div class="vertical layout">
             <span class="horizontal layout">
               <label><input name="sex_code" type="radio" value="2" checked>Female</label>
@@ -81,11 +80,10 @@
 
       <div class="record-NOTE">
         <form is="iron-form" method="post"
-              action="/api/patient/record/1/save">
-              <input type="hidden" name="patient_id" value="{{patientid}}">
+              action="/api/$PATIENTID$/record/1/save">
           <div class="vertical layout">
             <paper-input name="subject" label="Summary" required></paper-input>
-            <iron-autogrow-textarea id="ta1" label="Note" required maxRows="16" rows="8">
+            <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
               <textarea name="note" id="ta1" rows="6"></textarea>
             </iron-autogrow-textarea>
           </div>
@@ -94,8 +92,7 @@
 
       <div class="record-MED">
         <form is="iron-form" method="post"
-              action="/api/patient/record/2/save">
-              <input type="hidden" name="patient_id" value="{{patientid}}">
+              action="/api/$PATIENTID$/record/2/save">
           <div class="vertical layout">
             <paper-input name="medication1" label="Medication" required></paper-input>
             <paper-input name="medication2" label="" required></paper-input>
@@ -107,12 +104,11 @@
 
       <div class="record-LAB">
         <form is="iron-form" method="post"
-              action="/api/patient/record/3/save">
-              <input type="hidden" name="patient_id" value="{{patientid}}">
+              action="/api/$PATIENTID$/record/3/save">
           <div class="vertical layout">
             <paper-input name="condition" label="Reason for test" required></paper-input>
             <label>Summary of results:</label>
-            <iron-autogrow-textarea id="ta2" required maxRows="16" rows="6">
+            <iron-autogrow-textarea name="results" id="ta2" required maxRows="16" rows="6">
               <textarea name="results" id="ta2" rows="6"></textarea>
             </iron-autogrow-textarea>
             <label>Attachment: <input type="file" name="attachment" accept="image/*"></label>
@@ -146,8 +142,10 @@
     },
 
     saveDialog: function(e) {
-      this.$.recordform.selectedItem.firstElementChild.submit();
-      this.$.recordform.selectedItem.firstElementChild.reset();
+      var the_form = this.$.recordform.selectedItem.firstElementChild;
+      the_form.action = the_form.action.replace('$PATIENTID$', this.patientid);
+      the_form.submit();
+      the_form.reset();
       this.fire('record-saved');
       document.getElementById(this.ident).close();
     }

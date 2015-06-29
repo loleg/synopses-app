@@ -207,9 +207,8 @@
   <div on-tap="undoAll" class="undo">Undo</div>
 </paper-toast>
 
-<paper-fab id="fab" icon="create"
-  on-tap="openDialog" data-dialog="addrecord"
-  patientid="{{selectedPatient.id}}"></paper-fab>
+<paper-fab id="fab" icon="create" hidden="{{!selectedPatient}}"
+  on-tap="openDialog" data-dialog="addrecord"></paper-fab>
 
 <!-- Cache data requests. -->
 <!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->
