@@ -46,7 +46,8 @@
 
       <div class="record-DATA">
         <form is="iron-form" method="post"
-              action="/api/patient/{{ patient_id }}/record/0/save">
+              action="/api/patient/record/0/save">
+              <input type="hidden" name="patient_id" value="{{patientid}}">
           <div class="vertical layout">
             <span class="horizontal layout">
               <label><input name="sex_code" type="radio" value="2" checked>Female</label>
@@ -80,7 +81,8 @@
 
       <div class="record-NOTE">
         <form is="iron-form" method="post"
-              action="/api/patient/{{ patient_id }}/record/1/save">
+              action="/api/patient/record/1/save">
+              <input type="hidden" name="patient_id" value="{{patientid}}">
           <div class="vertical layout">
             <paper-input name="subject" label="Summary" required></paper-input>
             <iron-autogrow-textarea id="ta1" label="Note" required maxRows="16" rows="8">
@@ -92,7 +94,8 @@
 
       <div class="record-MED">
         <form is="iron-form" method="post"
-              action="/api/patient/{{ patient_id }}/record/2/save">
+              action="/api/patient/record/2/save">
+              <input type="hidden" name="patient_id" value="{{patientid}}">
           <div class="vertical layout">
             <paper-input name="medication1" label="Medication" required></paper-input>
             <paper-input name="medication2" label="" required></paper-input>
@@ -104,7 +107,8 @@
 
       <div class="record-LAB">
         <form is="iron-form" method="post"
-              action="/api/patient/{{ patient_id }}/record/3/save">
+              action="/api/patient/record/3/save">
+              <input type="hidden" name="patient_id" value="{{patientid}}">
           <div class="vertical layout">
             <paper-input name="condition" label="Reason for test" required></paper-input>
             <label>Summary of results:</label>
@@ -134,6 +138,10 @@
       },
       recordType: {
         value: 1
+      },
+      patientid: {
+        value: null,
+        reflectToAttribute: true
       }
     },
 
