@@ -518,6 +518,17 @@ template.openDialog = function(e) {
 
   if (dialog) {
     dialog.open();
+
+    var skip = button.getAttribute('icon');
+    if (skip == "favorite") {
+      document.querySelector('paper-tabs.record-form').selected = 0;
+    } else if (skip == "done") {
+      document.querySelector('paper-tabs.record-form').selected = 3;
+    } else if (skip == "pill") {
+      document.querySelector('paper-tabs.record-form').selected = 2;
+    } else {
+      document.querySelector('paper-tabs.record-form').selected = 1;
+    }
   }
 };
 

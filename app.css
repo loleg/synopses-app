@@ -166,6 +166,28 @@ paper-scroll-header-panel [content] {
   display: block;
 }
 
+#fab-done {
+  position: fixed;
+  bottom: 95px;
+  right: 24px;
+  background: #4caf50;
+}
+
+#fab-pill {
+  position: fixed;
+  bottom: 68px;
+  right: 74px;
+  background: #fff url(images/pill.png) no-repeat center;
+  background-size: 56%;
+}
+
+#fab-fave {
+  position: fixed;
+  bottom: 16px;
+  right: 95px;
+  background: #ff9800;
+}
+
 #fab {
   position: fixed;
   bottom: 16px;

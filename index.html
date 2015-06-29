@@ -150,7 +150,9 @@
         </paper-dropdown>
       </paper-menu-button> -->
 
-      <paper-icon-button on-tap="openDialog" data-dialog="addpatient" icon="add"></paper-icon-button>
+      <paper-button style="background:white"
+        on-tap="openDialog" data-dialog="addpatient"
+        raised>New patient</paper-button>
 
       <paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
         <span class="layout vertical flex">
@@ -207,8 +209,14 @@
   <div on-tap="undoAll" class="undo">Undo</div>
 </paper-toast>
 
+<paper-fab id="fab-fave" mini icon="favorite" hidden="{{!selectedPatient}}"
+   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
+<paper-fab id="fab-done" mini icon="done" hidden="{{!selectedPatient}}"
+   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
+<paper-fab id="fab-pill" mini icon="pill" hidden="{{!selectedPatient}}"
+   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
 <paper-fab id="fab" icon="create" hidden="{{!selectedPatient}}"
-  on-tap="openDialog" data-dialog="addrecord"></paper-fab>
+   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
 
 <!-- Cache data requests. -->
 <!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->
