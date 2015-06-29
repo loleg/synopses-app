@@ -132,11 +132,15 @@
   <template>
     <div id="container">
       <div id="thread" class="layout horizontal">
-        <profile-img id="profileimage"
+        <profile-img id="profileimage" item-icon
+                     src="{{thread.from.photo}}"
+                     selected="[[selected]]" on-tap="_onSelectThread"
+                     on-transitionend="_onProfileImgTransitionEnd"></profile-img>
+        <!--<profile-img id="profileimage"
                      src="[[profileSrc]]"
                      letter="[[thread.from.name.0]]"
                      selected="[[selected]]" on-tap="_onSelectThread"
-                     on-transitionend="_onProfileImgTransitionEnd"></profile-img>
+                     on-transitionend="_onProfileImgTransitionEnd"></profile-img>-->
         <div class="flex layout horizontal">
           <header class="layout vertical flex" unread$="{{thread.unread}}"
                   on-down="_onDown" on-up="_onUp">

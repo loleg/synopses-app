@@ -179,6 +179,7 @@ template.refreshInbox = function(opt_callback) {
 };
 
 // paper-toast 1.0 doesnt have event: github.com/PolymerElements/paper-toast/issues/10
+/*
 template.onToastOpenClose = function(e) {
 
   var opened = this.$.toast.visible;
@@ -192,6 +193,7 @@ template.onToastOpenClose = function(e) {
     this.$.fab.classList.remove('moveup');
   }
 };
+*/
 
 template.onRefreshStart = function(e, detail, sender) {
   if (this.syncing) {
