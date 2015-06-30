@@ -4,15 +4,19 @@ Based on Polymer framework.
 
 #### Building
 
-Install [Vulcanize](https://github.com/polymer/vulcanize) (`npm install -g vulcanize`) and run:
+(1) Install [Bower](http://bower.io/) (`npm install -g bower`)  and run:
+
+  bower install
+
+(2) Install [Vulcanize](https://github.com/polymer/vulcanize) (`npm install -g vulcanize`) and run:
 
   vulcanize elements.html > vulcanized.html
 
 This will create vulcanized.html, which is used in index.html.
 
-You can also npm install `gulp` and `browser-sync` for live-reload development using:
+(3) Optional: you can also npm install `gulp` and `browser-sync` for live-reload development using:
 
-    gulp server
+  gulp server
 
 After the project is restructured (into app/components) we can use `gulp-vulcanize` as build tool.
 
