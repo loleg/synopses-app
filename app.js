@@ -467,16 +467,19 @@ template.loadPatientsPast = function() {
 };
 
 template.loadRecords = function() {
-  var ajax2 = document.createElement('iron-ajax');
-  ajax2.auto = true;
+  var ajax = document.createElement('iron-ajax');
+  ajax.auto = true;
   if (!template.selectedPatient) {
-    ajax2.url = '/api/threads';
+    ajax.url = '/api/threads';
   } else {
-    ajax2.url = '/api/' + template.selectedPatient.id + '/threads';
+    ajax.url = '/api/' + template.selectedPatient.id + '/threads';
   }
-  ajax2.addEventListener('response', function(e) {
+  ajax.addEventListener('response', function(e) {
     var threads = e.detail.response.threads;
     template.threads = threads;
+  });
+  ajax.addEventListener('error', function(e) {
+    template.threads = [];
   });
 };
 

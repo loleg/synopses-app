@@ -1,6 +1,7 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="bower_components/paper-material/paper-material.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="profile-img.html">
@@ -11,8 +12,8 @@
     :host {
       display: block;
       background-color: #757575;
-      transition: max-height 200ms ease-in-out 200ms;
-      max-height: 120px; /* bigger than thread can ever be. */
+      /*transition: max-height 200ms ease-in-out 200ms;
+      max-height: 120px; */
     }
     :host(.shrink) {
       max-height: 0;
@@ -128,6 +129,14 @@
     label.purple {
       @apply(--label-purple);
     }
+    paper-material {
+      display: block;
+      background: white;
+      box-sizing: border-box;
+      margin: 16px;
+      padding: 16px;
+      border-radius: 2px;
+    }
   </style>
   <template>
     <div id="container">
@@ -146,16 +155,20 @@
                      on-transitionend="_onProfileImgTransitionEnd"></profile-img>-->
         <div class="flex layout horizontal">
           <header class="layout vertical flex" unread$="{{thread.unread}}"
-                  on-down="_onDown" on-up="_onUp">
+                  on-down="_onDown" on-up="_onUp" on-tap="_onThreadTap">
             <span class="layout horizontal center justified">
               <span class="name">
                 <span>{{thread.from.name}}</span>
                 <span class="messagecount" hidden="{{!showMessageCount}}">{{messages.length}}</span>
               </span>
-              <time>{{thread.date}}</time>
+              <span class="right">
+                <iron-icon id="star" icon="[[starredIcon]]"
+                           on-tap="_onHighlightStar" starred$="{{thread.starred}}"></iron-icon>
+                <time>{{thread.date}}</time>
+              </span>
             </span>
             <span class="subject">{{thread.subject}}</span>
-            <span id="lastline" class="layout horizontal center justified">
+            <span id="lastline" class="layout horizontal center justified" hidden="{{showfulltext}}">
               <span class="snippet flex">[[_decodeHTMLEntities(thread.snippet)]]</span>
               <span class="labels">
                 <template is="dom-repeat" items="[[thread.labelIds]]" as="id">
@@ -163,8 +176,6 @@
                          class$="[[_objectItem('labels', id, 'color')]]">[[_objectItem('labels', id, 'name')]]</label>
                 </template>
               </span>
-              <!--<iron-icon id="star" icon="[[starredIcon]]"
-                         on-tap="_onHighlightStar" starred$="{{thread.starred}}"></iron-icon>-->
             </span>
           </header>
           <!--<div id="actionicons" on-down="_onMailAction" class="self-start">
@@ -178,6 +189,13 @@
       <div id="archived" class="layout horizontal center justified fit">
         <span>Archived</span>
         <span class="undo layout horizontal center self-stretch" on-tap="_onUndo">UNDO</span>
+      </div>
+      <div id="fulltext" class="layout horizontal" hidden="{{!showfulltext}}">
+        <section>
+          <paper-material elevation="2">
+            <span class="body">[[_decodeHTMLEntities(thread.payload.body.data)]]</span>
+          </paper-material>
+        </section>
       </div>
     </div>
   </template>
@@ -277,7 +295,16 @@
         type: Number,
         readOnly: true,
         value: false
-      }
+      },
+
+      /**
+       * True if the thread has been tapped by the user.
+       */
+      showfulltext: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
     },
 
     // observers: [
@@ -363,6 +390,16 @@
         e.stopPropagation();
         this.selected = !this.selected;
         this.fire('thread-select', {thread: this});
+      }
+    },
+
+    _onThreadTap: function(e) {
+      if (Polymer.dom(e).localTarget !== this.$.profileimage) {
+        e.stopPropagation();
+        this.showfulltext = !this.showfulltext;
+        this.$.fulltext.animate([
+          {'max-height': 0}, {'max-height': 500}
+        ], { duration: 500 });
       }
     },
 
