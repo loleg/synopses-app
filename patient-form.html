@@ -13,6 +13,10 @@
 :host .inline paper-input {
   float:left;
 }
+
+:host .column {
+  margin-right: 10px;
+}
 </style>
 <template>
   <paper-dialog id="{{ ident }}" modal>
@@ -21,13 +25,13 @@
           method="post" action="/api/patient/save">
       <paper-dialog-scrollable>
         <div class="horizontal layout">
-          <div>
+          <div class="column">
             <paper-input name="first_name" label="First name" required autofocus></paper-input>
             <paper-input name="last_name" label="Last name" required></paper-input>
             <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
             <paper-input name="phone1" label="Phone number"></paper-input>
             <paper-input name="phone2" label="Mobile number"></paper-input>
-          </div><div>
+          </div><div class="column">
             <paper-input name="address1" label="Address"></paper-input>
             <paper-input name="address2" label="Address 2"></paper-input>
             <paper-input name="city" label="City"></paper-input>
