@@ -625,6 +625,10 @@ template.patientSelect = function(e) {
   this.loadRecords();
 };
 
+template.hideCalendar = function() {
+  this.$.googlecalendar.hidden = true;
+}
+
 //////////////////
 //////////////////
 //////////////////

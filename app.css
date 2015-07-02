@@ -273,3 +273,8 @@ iframe[src^="https://apis.google.com"] {
 record-thread paper-fab {
   background-color: #eda !important;
 }
+
+#googlecalendar {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px; margin-bottom: 10px;
+}
