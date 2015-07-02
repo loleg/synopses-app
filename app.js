@@ -471,12 +471,12 @@ template.loadRecords = function() {
   var ajax2 = document.createElement('iron-ajax');
   ajax2.auto = true;
   if (!template.selectedPatient) {
-    ajax2.url = '/api/records';
+    ajax2.url = '/api/threads';
   } else {
-    ajax2.url = '/api/' + template.selectedPatient.id + '/records';
+    ajax2.url = '/api/' + template.selectedPatient.id + '/threads';
   }
   ajax2.addEventListener('response', function(e) {
-    var threads = e.detail.response.records;
+    var threads = e.detail.response.threads;
     template.threads = threads;
   });
 };
