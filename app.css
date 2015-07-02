@@ -113,7 +113,7 @@ paper-icon-item.iron-selected iron-icon {
 
 #mainheader.tall .title {
   font-size: 40px;
-  line-height: 40px;
+  line-height: 50px;
 }
 
 #mainheader.selected-threads {
@@ -170,22 +170,28 @@ paper-scroll-header-panel [content] {
   position: fixed;
   bottom: 95px;
   right: 24px;
-  background: #4caf50;
+}
+.icon-done {
+  background: #4caf50 !important;
 }
 
 #fab-pill {
   position: fixed;
   bottom: 68px;
   right: 74px;
-  background: #fff url(images/pill.png) no-repeat center;
-  background-size: 56%;
+}
+.icon-pill {
+  background: #fff url(images/pill.png) no-repeat center !important;
+  background-size: 56% !important;
 }
 
-#fab-fave {
+#fab-favorite {
   position: fixed;
   bottom: 16px;
   right: 95px;
-  background: #ff9800;
+}
+.icon-favorite {
+  background: #ff9800 !important;
 }
 
 #fab {
@@ -196,6 +202,9 @@ paper-scroll-header-panel [content] {
   will-change: transform;
   -webkit-transition: -webkit-transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
+}
+.icon-create {
+  background: rgb(211, 47, 47) !important;
 }
 
 #fab.moveup {
@@ -255,4 +264,8 @@ iframe[src^="https://apis.google.com"] {
 
 #patientdetails .justified .label {
   color: #999;
+}
+
+record-thread paper-fab {
+  background-color: #eda !important;
 }

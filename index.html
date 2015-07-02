@@ -22,8 +22,8 @@
   <!-- Polyfill webcomponents in browsers that don't support it. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <link rel="import" href="vulcanized.html">
-  <!--<link rel="import" href="elements.html">-->
+  <!-- <link rel="import" href="vulcanized.html"> -->
+  <link rel="import" href="elements.html">
 </head>
 <body class="fullbleed">
 
@@ -68,7 +68,13 @@
       <paper-icon-item role="menuitem" on-tap="inboxSelect">
         <iron-icon icon="mail" item-icon></iron-icon>Inbox
       </paper-icon-item>
+      <paper-icon-item role="menuitem"
+        on-tap="openDialog" data-dialog="addpatient">
+        <iron-icon icon="new" item-icon></iron-icon>New patient
+      </paper-icon-item>
+
       <div class="separator" style="border-top:none">Today</div>
+
       <template is="dom-repeat" items="{{patientstoday}}">
         <paper-icon-item class="patient" on-tap="patientSelect">
           <profile-img id="profileimage" item-icon
@@ -76,6 +82,17 @@
           <span>{{item.name}}</span>
         </paper-icon-item>
       </template>
+
+      <div class="separator">Past</div>
+
+      <template is="dom-repeat" items="{{patientspast}}">
+        <paper-icon-item class="patient" on-tap="patientSelect">
+          <profile-img id="profileimage" item-icon
+                       src="{{item.photo}}"></profile-img>
+          <span>{{item.name}}</span>
+        </paper-icon-item>
+      </template>
+
     </paper-menu>
   </paper-header-panel>
 
@@ -110,10 +127,6 @@
           <paper-item>Report phishing</paper-item>
         </paper-dropdown>
       </paper-menu-button> -->
-
-      <paper-button style="background:white"
-        on-tap="openDialog" data-dialog="addpatient"
-        raised>New patient</paper-button>
 
       <paper-item id="patientdetails" class="bottom" hidden="{{!selectedDetails}}">
         <span class="layout vertical flex">
@@ -170,14 +183,18 @@
   <div on-tap="undoAll" class="undo">Undo</div>
 </paper-toast>
 
-<paper-fab id="fab-fave" mini icon="favorite" hidden="{{!selectedPatient}}"
-   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
-<paper-fab id="fab-done" mini icon="done" hidden="{{!selectedPatient}}"
-   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
-<paper-fab id="fab-pill" mini icon="pill" hidden="{{!selectedPatient}}"
-   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
-<paper-fab id="fab" icon="create" hidden="{{!selectedPatient}}"
-   on-tap="openDialog" data-dialog="addrecord"></paper-fab>
+<paper-fab id="fab-favorite" mini icon="favorite" class="icon-favorite"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="0" data-tabname="DATA"></paper-fab>
+<paper-fab id="fab-done" mini icon="done" class="icon-done"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="3" data-tabname="LAB"></paper-fab>
+<paper-fab id="fab-pill" mini icon="pill" class="icon-pill"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="2" data-tabname="MED"></paper-fab>
+<paper-fab id="fab" icon="create" class="icon-create"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="1" data-tabname="NOTE"></paper-fab>
 
 <!-- Cache data requests. -->
 <!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->

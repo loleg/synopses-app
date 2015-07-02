@@ -496,15 +496,7 @@ function populateRecord(profile, button, dialog) {
   // Switch to appropriate tab
   var skip = button.getAttribute('icon');
   var record_form = document.querySelector('paper-tabs.record-form');
-  if (skip == "favorite") {
-    record_form.selected = 0;
-  } else if (skip == "done") {
-    record_form.selected = 3;
-  } else if (skip == "pill") {
-    record_form.selected = 2;
-  } else {
-    record_form.selected = 1;
-  }
+  record_form.selected = parseInt(button.dataset.tab);
 
   var the_form = dialog.querySelector('form[data-type="DATA"]');
   if (profile.record) {

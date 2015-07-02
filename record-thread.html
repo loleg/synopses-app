@@ -132,10 +132,13 @@
   <template>
     <div id="container">
       <div id="thread" class="layout horizontal">
-        <profile-img id="profileimage" item-icon
+        <paper-fab id="profileimage" mini icon="{{thread.icon}}"
+                    selected="[[selected]]" on-tap="_onSelectThread"
+                    on-transitionend="_onProfileImgTransitionEnd"></paper-fab>
+        <!--<profile-img id="profileimage" item-icon
                      src="{{thread.from.photo}}"
                      selected="[[selected]]" on-tap="_onSelectThread"
-                     on-transitionend="_onProfileImgTransitionEnd"></profile-img>
+                     on-transitionend="_onProfileImgTransitionEnd"></profile-img>-->
         <!--<profile-img id="profileimage"
                      src="[[profileSrc]]"
                      letter="[[thread.from.name.0]]"
