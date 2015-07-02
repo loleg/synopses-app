@@ -499,23 +499,56 @@ template.openDialog = function(e) {
   if (!button.hasAttribute('data-dialog')) {
     return;
   }
-
   var id = button.getAttribute('data-dialog');
   var dialog = document.getElementById(id);
 
   if (dialog) {
-    dialog.open();
 
-    var skip = button.getAttribute('icon');
-    if (skip == "favorite") {
-      document.querySelector('paper-tabs.record-form').selected = 0;
-    } else if (skip == "done") {
-      document.querySelector('paper-tabs.record-form').selected = 3;
-    } else if (skip == "pill") {
-      document.querySelector('paper-tabs.record-form').selected = 2;
-    } else {
-      document.querySelector('paper-tabs.record-form').selected = 1;
-    }
+    // Obtain latest record
+    var ajax = document.createElement('iron-ajax');
+    ajax.auto = true;
+    ajax.url = '/api/' + template.selectedPatient.id + '/profile';
+    ajax.addEventListener('error', function(e) {
+      alert(e);
+    });
+    ajax.addEventListener('response', function(e) {
+      var profile = e.detail.response;
+      var record = JSON.parse(profile.record);
+      console.log(record);
+
+      // Populate forms
+      the_form = dialog.querySelector('.record-DATA');
+      for (var key in record) {
+        the_input = the_form.querySelector('input[name="' + key + '"]');
+        if (the_input === null) {
+          the_input = the_form.querySelector('select[name="' + key + '"]');
+          if (the_input === null) {
+            console.warn(key + ' not found in record form');
+          } else {
+            the_input.value = record[key];
+          }
+        } else if (the_input.type === 'radio') {
+          the_input = the_form.querySelector('input[name="' + key + '"][value="' + record[key] + '"]');
+          the_input.checked = true;
+        } else {
+          the_input.value = record[key];
+        }
+      }
+
+      // Switch to appropriate tab
+      var skip = button.getAttribute('icon');
+      if (skip == "favorite") {
+        document.querySelector('paper-tabs.record-form').selected = 0;
+      } else if (skip == "done") {
+        document.querySelector('paper-tabs.record-form').selected = 3;
+      } else if (skip == "pill") {
+        document.querySelector('paper-tabs.record-form').selected = 2;
+      } else {
+        document.querySelector('paper-tabs.record-form').selected = 1;
+      }
+
+      dialog.open();
+    });
   }
 };
 
