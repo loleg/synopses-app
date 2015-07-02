@@ -3,6 +3,7 @@
 <link rel="import" href="bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="bower_components/paper-material/paper-material.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/iron-image/iron-image.html">
 
 <link rel="import" href="profile-img.html">
 <link rel="import" href="swipeable-item.html">
@@ -193,7 +194,11 @@
       <div id="fulltext" class="layout horizontal" hidden="{{!showfulltext}}">
         <section>
           <paper-material elevation="2">
-            <span class="body">[[_decodeHTMLEntities(thread.payload.body.data)]]</span>
+            <span class="layout vertical">
+              <iron-image class="attachment"
+                src="{{thread.imageurl}}"></iron-image>
+              <span class="body">[[_decodeHTMLEntities(thread.payload.body.data)]]</span>
+            </span>
           </paper-material>
         </section>
       </div>
@@ -398,8 +403,8 @@
         e.stopPropagation();
         this.showfulltext = !this.showfulltext;
         this.$.fulltext.animate([
-          {'max-height': 0}, {'max-height': 500}
-        ], { duration: 500 });
+          {'max-height': 0}, {'max-height': 200}
+        ], { duration: 250 });
       }
     },
 

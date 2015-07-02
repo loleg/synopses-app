@@ -114,11 +114,10 @@
 
       <span class="top indent title">{{headerTitle}}</span>
 
-      <!--
       <paper-icon-button icon="archive" class="selected-item" on-tap="archiveAll"></paper-icon-button>
+      <!--
         <paper-icon-button icon="delete" class="selected-item"></paper-icon-button>
-        <paper-icon-button icon="mail" class="selected-item"></paper-icon-button>
-      -->
+        <paper-icon-button icon="mail" class="selected-item"></paper-icon-button> -->
       <!-- <paper-menu-button class="selected-item" class="layout horizontal">
         <paper-icon-button icon="more-vert"></paper-icon-button>
         <paper-dropdown class="dropdown" halign="right">
@@ -132,8 +131,9 @@
         </paper-dropdown>
       </paper-menu-button> -->
 
-      <paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
+      <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
         <span class="layout vertical flex">
+          <h2><span>{{selectedPatient.name}}</span></h2>
           <span class="layout horizontal center justified">
             <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
               Born:

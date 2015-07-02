@@ -573,7 +573,7 @@ template.inboxSelect = function(e) {
 
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
-  this.headerTitle = e.model.item.name;
+  this.headerTitle = "Patient file";
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
 };
