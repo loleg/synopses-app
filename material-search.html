@@ -44,7 +44,9 @@
       margin: 0 auto;
     }
   }
-
+  paper-icon-button {
+    color: #555;
+  }
   paper-item iron-icon {
     margin-right: 24px !important;
   }
@@ -52,12 +54,14 @@
 <template>
   <paper-header-panel mode="standard" class="fit">
     <paper-toolbar class="{{ {'core-narrow' : narrow} | tokenList}}">
-      <paper-icon-button icon="search" style="color:#555"></paper-icon-button>
+      <paper-icon-button icon="search"></paper-icon-button>
       <!--<paper-icon-button icon="arrow-back" on-tap="toggle"></paper-icon-button>-->
-      <input id="searchbox" placeholder="Search" class="flex">
+      <input id="searchbox" placeholder="Search" class="flex"
+             on-keyup="_onKeyUp" value="">
+      <paper-icon-button id="clearbtn" icon="clear" on-tap="_clearSearch" disabled></paper-icon-button>
       <!--<paper-icon-button icon="av:mic"></paper-icon-button>-->
     </paper-toolbar>
-    <!--paper-menu on-paper-select="onSelect">
+    <!--paper-menu on-paper-select="_onSelect">
       <template is="dom-repeat" items="{{previousSearches}}">
         <paper-item><iron-icon icon="history"></iron-icon>{{item}}</paper-item>
       </template>
@@ -65,6 +69,14 @@
   </paper-header-panel>
 </template>
 <script>
+  var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
+
   Polymer({
     is: 'material-search',
 
@@ -85,10 +97,34 @@
         value: false,
         reflectToAttribute: true,
         //notify: true
+        //notify: true
+      },
+
+      query: {
+        value: '',
+        reflectToAttribute: true,
+        notify: true
       }
     },
 
-    onSelect: function(e, detail, sender) {
+    _onKeyUp: function(e) {
+      var self = this;
+      var q = e.target.value;
+      this.$.clearbtn.disabled = (q.length < 3);
+      delay(function() {
+        self.query = q;
+        self.fire('run-search');
+      }, 200);
+    },
+
+    _clearSearch: function() {
+      this.query = "";
+      this.$.clearbtn.disabled = true;
+      this.$.searchbox.value = "";
+      this.fire('run-search');
+    },
+
+    _onSelect: function(e, detail, sender) {
       if (detail.isSelected) {
         this.async(function() {
           this.toggle();

@@ -66,10 +66,11 @@
 
   <paper-header-panel mode="scroll" drawer>
     <paper-toolbar id="navheader" class="narrow">
-      <material-search id="search" narrow="[[narrow]]" class="fit" active></material-search>
+      <material-search id="search" narrow="[[narrow]]" class="fit"
+        active on-run-search="runSearch" query="{{query}}"></material-search>
     </paper-toolbar>
     <paper-menu selectable="paper-icon-item" on-iron-select="menuSelect">
-      <paper-icon-item role="menuitem" on-tap="inboxSelect">
+      <paper-icon-item id="gotoinbox" role="menuitem" on-tap="inboxSelect">
         <iron-icon icon="mail" item-icon></iron-icon>Inbox
       </paper-icon-item>
       <paper-icon-item role="menuitem"

@@ -454,6 +454,7 @@ template.loadPatients = function() {
   ajax1.url = '/api/patients';
   ajax1.addEventListener('response', function(e) {
     template.patientstoday = e.detail.response.patients;
+    template.patientstodayLoaded = e.detail.response.patients;
   });
 };
 
@@ -463,6 +464,7 @@ template.loadPatientsPast = function() {
   ajax1.url = '/data/patients.json';
   ajax1.addEventListener('response', function(e) {
     template.patientspast = e.detail.response.patients;
+    template.patientspastLoaded = e.detail.response.patients;
   });
 };
 
@@ -477,10 +479,55 @@ template.loadRecords = function() {
   ajax.addEventListener('response', function(e) {
     var threads = e.detail.response.threads;
     template.threads = threads;
+    template.threadsLoaded = threads;
   });
   ajax.addEventListener('error', function(e) {
     template.threads = [];
   });
+};
+
+template.runSearch = function() {
+  var q = template.query.toLowerCase();
+  if (template.selectedPatient) {
+    template.inboxSelect();
+  }
+  if (q.length < 3) {
+    template.patientstoday = template.patientstodayLoaded;
+    template.patientspast = template.patientspastLoaded;
+    template.threads = template.threadsLoaded;
+    return;
+  }
+  // Filter people
+  var ppt = [];
+  template.patientstodayLoaded.forEach(function(person) {
+    if (person.name.toLowerCase().indexOf(q) !== -1) {
+      ppt.push(person);
+    }
+  });
+  template.patientstoday = ppt;
+  var ppp = [];
+  template.patientspastLoaded.forEach(function(person) {
+    if (person.name.toLowerCase().indexOf(q) !== -1) {
+      ppp.push(person);
+    }
+  });
+  template.patientspast = ppp;
+  // Filter threads
+  var tt = [];
+  template.threadsLoaded.forEach(function(thread) {
+    has_match = false;
+    thread.messages.forEach(function(message) {
+      if (has_match) { return; }
+      if (message.snippet.toLowerCase().indexOf(q) !== -1 ||
+          message.subject.toLowerCase().indexOf(q) !== -1) {
+        has_match = true;
+      }
+    });
+    if (has_match === true) {
+      tt.push(thread);
+    }
+  });
+  template.threads = tt;
 };
 
 template.handleLogin = function(event, data) {
@@ -591,6 +638,7 @@ template.DEBUG = DEBUG;
 template.LABEL_COLORS = ['pink', 'orange', 'green', 'yellow', 'teal', 'purple'];
 template.isAuthenticated = false;
 template.threads = [];
+template.threadsLoaded = [];
 template.selectedThreads = [];
 template.selectedPatient = false;
 template.headerTitle = 'Inbox';
