@@ -5,6 +5,7 @@
 <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<link rel="import" href="bower_components/pikaday-decorator/pikaday-decorator.html">
 
 <dom-module id="record-form">
 <style>
@@ -71,6 +72,14 @@
 #files:active::before {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
+
+:host input, :host select, :host button {
+  font-size: 16px;
+}
+
+pikaday-decorator {
+  margin-bottom: 2em;
+}
 </style>
 <template>
   <paper-dialog id="{{ ident }}" modal>
@@ -88,6 +97,10 @@
         <form is="iron-form" method="post" data-type="DATA"
               action="/api/$PATIENTID$/record/0/save">
           <div class="vertical layout">
+            <pikaday-decorator format="DD.MM.YYYY">
+              <button type="button" pikaday-decorator-trigger>Date of birth</button>
+              <input name="date_birth" label="Date of birth"></input>
+            </pikaday-decorator>
             <span class="horizontal layout">
               <label><input name="sex_code" type="radio" value="2">Female</label>
               <label><input name="sex_code" type="radio" value="1">Male</label>
@@ -109,8 +122,6 @@
                 <option>Unknown</option>
               </select></label>
             </span>
-            <paper-input name="date_birth" label="Date of birth"
-                         bind-value="{{ p_date_birth }}"></paper-input>
             <span class="horizontal layout">
               <paper-input name="weight" label="Weight (kg)"
                            bind-value="{{ p_weight }}"></paper-input>
@@ -154,6 +165,7 @@
             <iron-autogrow-textarea name="results" id="ta2" required maxRows="16" rows="6">
               <textarea name="results" id="ta2" rows="6"></textarea>
             </iron-autogrow-textarea>
+            <paper-input name="imageurl" label="Link to image file"></paper-input>
             <label>Attachment:
               <div id="dropzone" on-tap="{{tapSelect}}"
                 on-dragover="{{handleDragOver}}"

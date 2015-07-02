@@ -28,6 +28,7 @@
     "iron-ajax": "PolymerElements/iron-ajax",
     "login-polyform": "hourliert/login-polyform",
     "iron-autogrow-textarea": "PolymerElements/iron-autogrow-textarea#^1.0.0",
-    "iron-iconset": "PolymerElements/iron-iconset#^1.0.0"
+    "iron-iconset": "PolymerElements/iron-iconset#^1.0.0",
+    "pikaday-decorator": "*"
   }
 }

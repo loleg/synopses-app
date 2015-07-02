@@ -499,7 +499,9 @@ function populateRecord(record, button, dialog) {
   // Switch to appropriate tab
   var skip = button.getAttribute('icon');
   var record_form = document.querySelector('paper-tabs.record-form');
-  record_form.selected = parseInt(button.dataset.tab);
+  setTimeout(function() {
+    record_form.selected = parseInt(button.dataset.tab);
+  }, 100);
 
   var the_form = dialog.querySelector('form[data-type="DATA"]');
   if (record) {
