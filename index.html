@@ -27,6 +27,10 @@
 </head>
 <body class="fullbleed">
 
+  <iron-iconset name="my-icons" src="images/pill-24.png" width="24" size="24"
+      icons="pill">
+  </iron-iconset>
+
 <template id="t" is="dom-bind">
 
 <div id="loginscreen"
@@ -70,7 +74,7 @@
       </paper-icon-item>
       <paper-icon-item role="menuitem"
         on-tap="openDialog" data-dialog="addpatient">
-        <iron-icon icon="new" item-icon></iron-icon>New patient
+        <iron-icon icon="note-add" item-icon></iron-icon>New patient
       </paper-icon-item>
 
       <div class="separator" style="border-top:none">Today</div>
@@ -189,7 +193,7 @@
 <paper-fab id="fab-done" mini icon="done" class="icon-done"
    hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
    data-tab="3" data-tabname="LAB"></paper-fab>
-<paper-fab id="fab-pill" mini icon="pill" class="icon-pill"
+<paper-fab id="fab-pill" mini icon="my-icons:pill" class="icon-pill"
    hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
    data-tab="2" data-tabname="MED"></paper-fab>
 <paper-fab id="fab" icon="create" class="icon-create"
