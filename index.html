@@ -56,11 +56,14 @@
       signed-in="{{signedIn}}"></google-signin-->
 </div>
 
-<patient-form ident="addpatient" on-patient-saved="loadPatients"></patient-form>
+<patient-form ident="addpatient"
+  on-patient-saved="loadPatients"></patient-form>
 
 <record-form ident="addrecord" title="New record"
   patientid="{{selectedPatient.id}}"
   on-record-saved="patientSaved"></record-form>
+
+<planner-form ident="googlecalendar"></planner-form>
 
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
@@ -72,6 +75,10 @@
     <paper-menu selectable="paper-icon-item" on-iron-select="menuSelect">
       <paper-icon-item id="gotoinbox" role="menuitem" on-tap="inboxSelect">
         <iron-icon icon="mail" item-icon></iron-icon>Inbox
+      </paper-icon-item>
+      <paper-icon-item id="gotocalendar" role="menuitem"
+        on-tap="openDialog" data-dialog="googlecalendar">
+        <iron-icon icon="schedule" item-icon></iron-icon>Schedule
       </paper-icon-item>
       <paper-icon-item role="menuitem"
         on-tap="openDialog" data-dialog="addpatient">
@@ -177,13 +184,6 @@
           <paper-spinner active></paper-spinner>
         </div>
       </template>
-
-      <paper-item id="googlecalendar" hidden="{{selectedPatient}}">
-        <span class="layout horizontal">
-          <iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showNav=0&amp;showPrint=0&amp;showCalendars=0&amp;height=360&amp;wkst=2&amp;bgcolor=%23fafafa&amp;color=%232952A3&amp;src=hn3odj3s81luanv184o4108gg0%40group.calendar.google.com&amp;ctz=Europe/Zurich" style=" border-width:0 " width="800" height="360" frameborder="0" scrolling="no"></iframe>
-          <paper-icon-button id="clearbtn" icon="clear" on-tap="hideCalendar"></paper-icon-button>
-        </span>
-      </paper-item>
 
       <!-- TODO: don't pass all messages, users, labels into mail-thread -->
       <iron-selector id="threadlist" multi activate-event=""

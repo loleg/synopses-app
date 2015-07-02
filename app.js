@@ -640,7 +640,7 @@ template.openDialog = function(e) {
         dialog.open();
       });
 
-    } else {
+    } else if (button.id !== 'gotocalendar') {
 
       the_form = dialog.querySelector('form');
       the_form.reset();
@@ -653,6 +653,9 @@ template.openDialog = function(e) {
           all_fields[i].value = "";
         }
       }
+      dialog.open();
+
+    } else {
       dialog.open();
 
     }
