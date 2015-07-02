@@ -78,44 +78,6 @@
           <span>{{item.name}}</span>
         </paper-icon-item>
       </template>
-      <div class="separator">Yesterday</div>
-      <template is="dom-repeat" items="{{patientspast}}">
-        <paper-icon-item class="patient" on-tap="patientSelect">
-          <profile-img id="profileimage" item-icon
-                       src="{{item.photo}}"></profile-img>
-          <span>{{item.name}}</span>
-        </paper-icon-item>
-      </template>
-      <div class="separator">Last week</div>
-      <!--
-      <paper-icon-item role="menuitem">
-        <iron-icon icon="social:people" item-icon></iron-icon>Social
-      </paper-icon-item>
-      <div class="separator">Shortcuts</div>
-      <paper-icon-item role="menuitem">
-        <iron-icon icon="star" item-icon></iron-icon>Starred
-      </paper-icon-item>
-      <paper-icon-item role="menuitem">
-        <iron-icon icon="send" item-icon></iron-icon>Sent
-      </paper-icon-item>
-      <paper-icon-item role="menuitem">
-        <iron-icon icon="icons:drafts" item-icon></iron-icon>Drafts
-      </paper-icon-item>
-      <paper-icon-item role="menuitem">
-        <iron-icon icon="mail" item-icon></iron-icon>All Mail
-      </paper-icon-item>
-      <paper-icon-item role="menuitem">
-        <iron-icon icon="report" item-icon></iron-icon>Spam
-      </paper-icon-item>
-      <paper-icon-item role="menuitem">
-        <iron-icon icon="delete" item-icon></iron-icon>Trash
-      </paper-icon-item>
-      <template is="dom-repeat" items="{{labels}}">
-        <paper-icon-item class$="{{item.color}}">
-          <iron-icon icon="label" item-icon></iron-icon><span>{{item.name}}</span>
-        </paper-icon-item>
-      </template>
-    -->
     </paper-menu>
   </paper-header-panel>
 
@@ -133,10 +95,11 @@
 
       <span class="top indent title">{{headerTitle}}</span>
 
+      <!--
       <paper-icon-button icon="archive" class="selected-item" on-tap="archiveAll"></paper-icon-button>
-      <paper-icon-button icon="delete" class="selected-item"></paper-icon-button>
-      <paper-icon-button icon="mail" class="selected-item"></paper-icon-button>
-
+        <paper-icon-button icon="delete" class="selected-item"></paper-icon-button>
+        <paper-icon-button icon="mail" class="selected-item"></paper-icon-button>
+      -->
       <!-- <paper-menu-button class="selected-item" class="layout horizontal">
         <paper-icon-button icon="more-vert"></paper-icon-button>
         <paper-dropdown class="dropdown" halign="right">

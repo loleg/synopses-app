@@ -458,30 +458,12 @@ var assignPhotos = function(patientlist) {
 };
 
 template.loadPatients = function() {
-  var ajax = document.createElement('iron-ajax');
-  ajax.auto = true;
-  ajax.url = '/data/patients.json';
-  ajax.addEventListener('response', function(e) {
-    template.patientspast = e.detail.response;
-    assignPhotos(template.patientspast);
-  });
-
   var ajax1 = document.createElement('iron-ajax');
   ajax1.auto = true;
   ajax1.url = '/api/patients';
   ajax1.addEventListener('response', function(e) {
     template.patientstoday = e.detail.response.patients;
     assignPhotos(template.patientstoday);
-  });
-};
-
-template.loadThreads = function() {
-  var ajax2 = document.createElement('iron-ajax');
-  ajax2.auto = true;
-  ajax2.url = '/data/threads.json';
-  ajax2.addEventListener('response', function(e) {
-    var threads = e.detail.response;
-    template.threads = threads;
   });
 };
 
