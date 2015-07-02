@@ -270,6 +270,10 @@ iframe[src^="https://apis.google.com"] {
   font-size: 120%;
 }
 
+#editpatient {
+  background: #ddd !important;
+}
+
 record-thread paper-fab {
   background-color: #eda !important;
 }

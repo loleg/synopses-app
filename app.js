@@ -577,6 +577,27 @@ function populateRecord(record, button, dialog) {
   }
 }
 
+function populateProfile(profile, button, dialog) {
+  var the_form = dialog.querySelector('form#patientform');
+  if (!profile) { return false; }
+  // Populate forms
+  for (var key in profile) {
+    // console.log(key, profile[key]);
+    var the_input =
+          the_form.querySelector('paper-input[name="' + key + '"]') ||
+          the_form.querySelector('gold-email-input[name="' + key + '"]') ||
+          the_form.querySelector('input[name="' + key + '"]');
+    if (the_input !== null) {
+      the_input.value = profile[key];
+      the_input = the_form.querySelector('input[name="' + key + '"]');
+      the_input.value = profile[key];
+    }
+  }
+  the_form.parentElement.$.title = "Edit patient file";
+  the_form.action = "/api/patient/" + profile.id + "/save";
+  return true;
+}
+
 template.openDialog = function(e) {
   var button = e.target;
   while (!button.hasAttribute('data-dialog') && button !== document.body) {
@@ -603,11 +624,36 @@ template.openDialog = function(e) {
         dialog.open();
       });
 
+    } else if (button.id === 'editpatient') {
+
+      var ajax2 = document.createElement('iron-ajax');
+      ajax2.auto = true;
+      ajax2.url = '/api/' + template.selectedPatient.id + '/profile';
+      ajax2.addEventListener('error', function(e) {
+        console.warn(e);
+      });
+      ajax2.addEventListener('response', function(e) {
+        populateProfile(e.detail.response.profile, button, dialog);
+
+        dialog.open();
+      });
+
     } else {
+
+      the_form = dialog.querySelector('form');
+      the_form.reset();
+      if (the_form.id === "patientform") {
+        the_form.action = "/api/patient/save";
+        var all_fields = the_form.querySelectorAll(
+          'input,gold-email-input,paper-input'
+        );
+        for (var i = 0; i < all_fields.length; i++) {
+          all_fields[i].value = "";
+        }
+      }
       dialog.open();
 
     }
-
   }
 };
 
@@ -627,7 +673,7 @@ template.patientSelect = function(e) {
 
 template.hideCalendar = function() {
   this.$.googlecalendar.hidden = true;
-}
+};
 
 //////////////////
 //////////////////
