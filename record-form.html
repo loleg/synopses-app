@@ -205,6 +205,10 @@
       }
       this.fire('record-saved');
       document.getElementById(this.ident).close();
+      if (the_form.dataset.type == 'DATA') {
+        document.location.href="?debug";
+        document.reload(); // TODO: fix me
+      }
     }
 
   });
