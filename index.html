@@ -22,8 +22,8 @@
   <!-- Polyfill webcomponents in browsers that don't support it. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <!-- <link rel="import" href="vulcanized.html"> -->
-  <link rel="import" href="elements.html">
+  <link rel="import" href="vulcanized.html">
+  <!-- <link rel="import" href="elements.html"> -->
 </head>
 <body class="fullbleed">
 
@@ -180,7 +180,7 @@
 
       <paper-item id="googlecalendar" hidden="{{selectedPatient}}">
         <span class="layout horizontal">
-          <iiframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showNav=0&amp;showPrint=0&amp;showCalendars=0&amp;height=360&amp;wkst=2&amp;bgcolor=%23fafafa&amp;color=%232952A3&amp;src=hn3odj3s81luanv184o4108gg0%40group.calendar.google.com&amp;ctz=Europe/Zurich" style=" border-width:0 " width="800" height="360" frameborder="0" scrolling="no"></iframe>
+          <iframe src="https://www.google.com/calendar/embed?showTitle=0&amp;showNav=0&amp;showPrint=0&amp;showCalendars=0&amp;height=360&amp;wkst=2&amp;bgcolor=%23fafafa&amp;color=%232952A3&amp;src=hn3odj3s81luanv184o4108gg0%40group.calendar.google.com&amp;ctz=Europe/Zurich" style=" border-width:0 " width="800" height="360" frameborder="0" scrolling="no"></iframe>
           <paper-icon-button id="clearbtn" icon="clear" on-tap="hideCalendar"></paper-icon-button>
         </span>
       </paper-item>
