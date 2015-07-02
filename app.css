@@ -257,12 +257,13 @@ iframe[src^="https://apis.google.com"] {
   display: none;
 }
 
-#patientdetails .justified span {
+#patientdetails .justified .label {
   margin:0 0 0 1em;
+  color: #999;
 }
 
-#patientdetails .justified .label {
-  color: #999;
+#patientdetails .justified .label * {
+  color: #000;
 }
 
 record-thread paper-fab {

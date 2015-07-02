@@ -140,7 +140,6 @@ template._computeHeaderTitle = function(numSelectedThreads) {
 // See github.com/PolymerElements/iron-selector/issues/33
 template._onThreadSelectChange = function(e) {
   this.selectedPatient = false;
-  this.selectedDetails = false;
   this.headerTitle = this._computeHeaderTitle(this.selectedThreads.length);
   this.headerClass = this._computeMainHeaderClass();
 };
@@ -449,21 +448,21 @@ template.onSignOut = function(e) {
 //////////////////
 //////////////////
 
-var assignPhotos = function(patientlist) {
-  patientlist.forEach(function (p, index) {
-    p.photo = "https://randomuser.me/api/portraits/med/" +
-      (p.sex == "Female" ? "women" : "men") +
-      "/" + p.id + ".jpg";
-  });
-};
-
 template.loadPatients = function() {
   var ajax1 = document.createElement('iron-ajax');
   ajax1.auto = true;
   ajax1.url = '/api/patients';
   ajax1.addEventListener('response', function(e) {
     template.patientstoday = e.detail.response.patients;
-    assignPhotos(template.patientstoday);
+  });
+};
+
+template.loadPatientsPast = function() {
+  var ajax1 = document.createElement('iron-ajax');
+  ajax1.auto = true;
+  ajax1.url = '/data/patients.json';
+  ajax1.addEventListener('response', function(e) {
+    template.patientspast = e.detail.response.patients;
   });
 };
 
@@ -487,11 +486,12 @@ template.handleLogin = function(event, data) {
   // Cached data? We're already using it. Bomb out before making unnecessary requests.
   if (template.threads && template.patientstoday) return;
 
+  this.loadPatientsPast();
   this.loadPatients();
   this.loadRecords();
 };
 
-function populateRecord(profile, button, dialog) {
+function populateRecord(record, button, dialog) {
 
   // Switch to appropriate tab
   var skip = button.getAttribute('icon');
@@ -499,9 +499,8 @@ function populateRecord(profile, button, dialog) {
   record_form.selected = parseInt(button.dataset.tab);
 
   var the_form = dialog.querySelector('form[data-type="DATA"]');
-  if (profile.record) {
+  if (record) {
     // Populate forms
-    var record = JSON.parse(profile.record);
     for (var key in record) {
       // console.log(key, record[key]);
       var the_input =
@@ -547,7 +546,7 @@ template.openDialog = function(e) {
         console.warn(e);
       });
       ajax.addEventListener('response', function(e) {
-        populateRecord(e.detail.response, button, dialog);
+        populateRecord(e.detail.response.profile.record, button, dialog);
 
         dialog.open();
       });
@@ -562,7 +561,6 @@ template.openDialog = function(e) {
 
 template.inboxSelect = function(e) {
   this.selectedPatient = false;
-  this.selectedDetails = false;
   this.headerTitle = this._computeHeaderTitle(0);
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
@@ -570,10 +568,6 @@ template.inboxSelect = function(e) {
 
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
-  this.selectedDetails = e.model.item;
-  if (typeof e.model.item.date_birth === 'undefined') {
-    this.selectedDetails = false;
-  }
   this.headerTitle = e.model.item.name;
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
@@ -594,7 +588,6 @@ template.isAuthenticated = false;
 template.threads = [];
 template.selectedThreads = [];
 template.selectedPatient = false;
-template.selectedDetails = false;
 template.headerTitle = 'Inbox';
 template.headerClass = template._computeMainHeaderClass();
 template._scrollArchiveSetup = false; // True if the user has attempted to archive a thread.
