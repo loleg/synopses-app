@@ -94,8 +94,7 @@ pikaday-decorator {
     <iron-pages selected="{{recordType}}" id="recordform">
 
       <div class="record-DATA">
-        <form is="iron-form" method="post" data-type="DATA"
-              action="/api/$PATIENTID$/record/0/save">
+        <form is="iron-form" method="post" data-type="DATA" data-typeid="0">
           <div class="vertical layout">
             <pikaday-decorator format="DD.MM.YYYY">
               <button type="button" pikaday-decorator-trigger>Date of birth</button>
@@ -133,8 +132,7 @@ pikaday-decorator {
       </div>
 
       <div class="record-NOTE">
-        <form is="iron-form" method="post" data-type="NOTE"
-              action="/api/$PATIENTID$/record/1/save">
+        <form is="iron-form" method="post" data-type="NOTE" data-typeid="1">
           <div class="vertical layout">
             <paper-input name="subject" label="Summary" required></paper-input>
             <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
@@ -145,8 +143,7 @@ pikaday-decorator {
       </div>
 
       <div class="record-MED">
-        <form is="iron-form" method="post" data-type="MED"
-              action="/api/$PATIENTID$/record/3/save">
+        <form is="iron-form" method="post" data-type="MED" data-typeid="3">
           <div class="vertical layout">
             <paper-input name="medication1" label="Medication" required></paper-input>
             <paper-input name="medication2" label="" required></paper-input>
@@ -157,8 +154,7 @@ pikaday-decorator {
       </div>
 
       <div class="record-LAB">
-        <form is="iron-form" method="post" data-type="LAB"
-              action="/api/$PATIENTID$/record/2/save">
+        <form is="iron-form" method="post" data-type="LAB" data-typeid="2">
           <div class="vertical layout">
             <paper-input name="condition" label="Reason for test" required></paper-input>
             <label>Summary of results:</label>
@@ -210,17 +206,25 @@ pikaday-decorator {
 
     saveDialog: function(e) {
       var the_form = this.$.recordform.selectedItem.firstElementChild;
-      the_form.action = the_form.action.replace('$PATIENTID$', this.patientid);
+      if (this.patientid === null) {
+        alert("Invalid patient ID"); return;
+      }
+      the_form.action =
+        '/api/' + this.patientid +
+        '/record/' + the_form.dataset.typeid +
+        '/save';
       the_form.submit();
-      if (the_form.dataset.type !== 'DATA') {
-        the_form.reset();
+      the_form.reset();
+      var all_fields = the_form.querySelectorAll(
+        'input[type="text"],gold-email-input,paper-input'
+      );
+      for (var i = 0; i < all_fields.length; i++) {
+        if (typeof all_fields[i].value !== 'undefined') {
+          all_fields[i].value = "";
+        }
       }
       this.fire('record-saved');
       document.getElementById(this.ident).close();
-      if (the_form.dataset.type == 'DATA') {
-        document.location.href="?debug";
-        document.reload(); // TODO: fix me
-      }
     }
 
   });

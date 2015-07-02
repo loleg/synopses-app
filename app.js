@@ -567,7 +567,9 @@ function populateRecord(record, button, dialog) {
         }
       } else if (the_input.type === 'radio') {
         the_input = the_form.querySelector('input[name="' + key + '"][value="' + record[key] + '"]');
-        the_input.checked = true;
+        if (the_input !== null) {
+          the_input.checked = true;
+        }
       } else {
         the_input.value = record[key];
       }
@@ -616,7 +618,7 @@ template.openDialog = function(e) {
       ajax.auto = true;
       ajax.url = '/api/' + template.selectedPatient.id + '/profile';
       ajax.addEventListener('error', function(e) {
-        console.warn(e);
+        // console.warn(e);
       });
       ajax.addEventListener('response', function(e) {
         populateRecord(e.detail.response.profile.record, button, dialog);
@@ -630,7 +632,7 @@ template.openDialog = function(e) {
       ajax2.auto = true;
       ajax2.url = '/api/' + template.selectedPatient.id + '/profile';
       ajax2.addEventListener('error', function(e) {
-        console.warn(e);
+        // console.warn(e);
       });
       ajax2.addEventListener('response', function(e) {
         populateProfile(e.detail.response.profile, button, dialog);
@@ -645,7 +647,7 @@ template.openDialog = function(e) {
       if (the_form.id === "patientform") {
         the_form.action = "/api/patient/save";
         var all_fields = the_form.querySelectorAll(
-          'input,gold-email-input,paper-input'
+          'input[type="text"],gold-email-input,paper-input'
         );
         for (var i = 0; i < all_fields.length; i++) {
           all_fields[i].value = "";
@@ -669,6 +671,11 @@ template.patientSelect = function(e) {
   this.headerTitle = "Patient file";
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
+};
+
+template.patientSaved = function(e) {
+  this.loadRecords();
+  this.loadPatients();
 };
 
 template.hideCalendar = function() {

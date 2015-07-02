@@ -22,10 +22,10 @@
   <!-- Polyfill webcomponents in browsers that don't support it. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <link rel="import" href="vulcanized.html">
-  <!-- <link rel="import" href="elements.html"> -->
+  <!-- <link rel="import" href="vulcanized.html"> -->
+  <link rel="import" href="elements.html">
 </head>
-<body class="fullbleed">
+<body fullbleed>
 
   <iron-iconset name="my-icons" src="images/pill-24.png" width="24" size="24"
       icons="pill">
@@ -60,7 +60,7 @@
 
 <record-form ident="addrecord" title="New record"
   patientid="{{selectedPatient.id}}"
-  on-record-saved="loadRecords"></record-form>
+  on-record-saved="patientSaved"></record-form>
 
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
