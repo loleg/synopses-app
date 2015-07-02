@@ -492,26 +492,6 @@ template.handleLogin = function(event, data) {
 };
 
 function populateRecord(profile, button, dialog) {
-  var record = JSON.parse(profile.record);
-
-  // Populate forms
-  the_form = dialog.querySelector('.record-DATA');
-  for (var key in record) {
-    the_input = the_form.querySelector('input[name="' + key + '"]');
-    if (the_input === null) {
-      the_input = the_form.querySelector('select[name="' + key + '"]');
-      if (the_input === null) {
-        console.warn(key + ' not found in record form');
-      } else {
-        the_input.value = record[key];
-      }
-    } else if (the_input.type === 'radio') {
-      the_input = the_form.querySelector('input[name="' + key + '"][value="' + record[key] + '"]');
-      the_input.checked = true;
-    } else {
-      the_input.value = record[key];
-    }
-  }
 
   // Switch to appropriate tab
   var skip = button.getAttribute('icon');
@@ -524,6 +504,33 @@ function populateRecord(profile, button, dialog) {
     record_form.selected = 2;
   } else {
     record_form.selected = 1;
+  }
+
+  var the_form = dialog.querySelector('form[data-type="DATA"]');
+  if (profile.record) {
+    // Populate forms
+    var record = JSON.parse(profile.record);
+    for (var key in record) {
+      // console.log(key, record[key]);
+      var the_input =
+            the_form.querySelector('paper-input[name="' + key + '"]') ||
+            the_form.querySelector('input[name="' + key + '"]');
+      if (the_input === null) {
+        the_input = the_form.querySelector('select[name="' + key + '"]');
+        if (the_input === null) {
+          console.warn(key + ' not found in record form');
+        } else {
+          the_input.value = record[key];
+        }
+      } else if (the_input.type === 'radio') {
+        the_input = the_form.querySelector('input[name="' + key + '"][value="' + record[key] + '"]');
+        the_input.checked = true;
+      } else {
+        the_input.value = record[key];
+      }
+    }
+  } else {
+    the_form.reset();
   }
 }
 
@@ -541,12 +548,11 @@ template.openDialog = function(e) {
   if (dialog) {
     if (id === "addrecord") {
 
-      // Obtain latest record
       var ajax = document.createElement('iron-ajax');
       ajax.auto = true;
       ajax.url = '/api/' + template.selectedPatient.id + '/profile';
       ajax.addEventListener('error', function(e) {
-        alert(e);
+        console.warn(e);
       });
       ajax.addEventListener('response', function(e) {
         populateRecord(e.detail.response, button, dialog);

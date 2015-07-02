@@ -85,7 +85,7 @@
     <iron-pages selected="{{recordType}}" id="recordform">
 
       <div class="record-DATA">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" data-type="DATA"
               action="/api/$PATIENTID$/record/0/save">
           <div class="vertical layout">
             <span class="horizontal layout">
@@ -109,17 +109,20 @@
                 <option>Unknown</option>
               </select></label>
             </span>
-            <paper-input name="date_birth" label="Date of birth" value="01.01.1900"></paper-input>
+            <paper-input name="date_birth" label="Date of birth"
+                         bind-value="{{ p_date_birth }}"></paper-input>
             <span class="horizontal layout">
-              <paper-input name="weight" label="Weight (kg)"></paper-input>
-              <paper-input name="height" label="Height (cm)"></paper-input>
+              <paper-input name="weight" label="Weight (kg)"
+                           bind-value="{{ p_weight }}"></paper-input>
+              <paper-input name="height" label="Height (cm)"
+                           bind-value="{{ p_height }}"></paper-input>
             </span>
           </div>
         </form>
       </div>
 
       <div class="record-NOTE">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" data-type="NOTE"
               action="/api/$PATIENTID$/record/1/save">
           <div class="vertical layout">
             <paper-input name="subject" label="Summary" required></paper-input>
@@ -131,7 +134,7 @@
       </div>
 
       <div class="record-MED">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" data-type="MED"
               action="/api/$PATIENTID$/record/3/save">
           <div class="vertical layout">
             <paper-input name="medication1" label="Medication" required></paper-input>
@@ -143,7 +146,7 @@
       </div>
 
       <div class="record-LAB">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" data-type="LAB"
               action="/api/$PATIENTID$/record/2/save">
           <div class="vertical layout">
             <paper-input name="condition" label="Reason for test" required></paper-input>
@@ -186,14 +189,20 @@
       patientid: {
         value: null,
         reflectToAttribute: true
-      }
+      },
+      //////
+      p_date_birth: { value: "01.01.1900" },
+      p_weight: { value: "" },
+      p_height: { value: "" }
     },
 
     saveDialog: function(e) {
       var the_form = this.$.recordform.selectedItem.firstElementChild;
       the_form.action = the_form.action.replace('$PATIENTID$', this.patientid);
       the_form.submit();
-      the_form.reset();
+      if (the_form.dataset.type !== 'DATA') {
+        the_form.reset();
+      }
       this.fire('record-saved');
       document.getElementById(this.ident).close();
     }
