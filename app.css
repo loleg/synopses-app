@@ -253,8 +253,8 @@ iframe[src^="https://apis.google.com"] {
   display: none;
 }
 
-.narrow-layout #patientdetails {
-  display: none;
+#patientdetails {
+  background: white;
 }
 
 #patientdetails .justified .label {
@@ -264,6 +264,10 @@ iframe[src^="https://apis.google.com"] {
 
 #patientdetails .justified .label * {
   color: #000;
+}
+
+#patientdetails .justified .label.patient_name {
+  font-size: 120%;
 }
 
 record-thread paper-fab {

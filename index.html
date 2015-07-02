@@ -131,26 +131,26 @@
         </paper-dropdown>
       </paper-menu-button> -->
 
-      <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
-        <span class="layout vertical flex">
-          <h2><span>{{selectedPatient.name}}</span></h2>
-          <span class="layout horizontal center justified">
-            <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
-              Born:
-              <time>{{selectedPatient.record.date_birth}}</time>
-            </span>
-            <span class="label" hidden="{{!selectedPatient.gender}}">
-              Gender:
-              <span>{{selectedPatient.gender}}</span>
-            </span>
-            <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
-              B.G.:
-              <span>{{selectedPatient.record.blood_group}}</span>
-            </span>
-            <span class="label">
-              Last visit:
-              <time>{{selectedPatient.updated}}</time>
-            </span>
+      <paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
+        <span class="layout horizontal center justified">
+          <span class="label patient_name">
+            <b>{{selectedPatient.name}}</b>
+          </span>
+          <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
+            Born:
+            <time>{{selectedPatient.record.date_birth}}</time>
+          </span>
+          <span class="label" hidden="{{!selectedPatient.gender}}">
+            Gender:
+            <span>{{selectedPatient.gender}}</span>
+          </span>
+          <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
+            B.G.:
+            <span>{{selectedPatient.record.blood_group}}</span>
+          </span>
+          <span class="label">
+            Last visit:
+            <time>{{selectedPatient.updated}}</time>
           </span>
         </span>
       </paper-item>
