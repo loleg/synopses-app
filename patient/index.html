@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1">
+  <title>Patient Synopses</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <meta name="apple-mobile-web-app-status-bar-style" content="#e32d43">
+  <meta name="msapplication-TileColor" content="#e32d43">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="theme-color" content="#e32d43">
+
+  <base href="..">
+
+  <link rel="icon" sizes="192x192" href="images/synopses-icon.png">
+
+  <link rel="manifest" href="manifest.json">
+
+  <link rel="stylesheet" href="app.css">
+
+  <!-- Polyfill webcomponents in browsers that don't support it. -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+
+  <link rel="import" href="vulcanized.html">
+  <!-- <link rel="import" href="elements.html"> -->
+</head>
+<body fullbleed>
+
+  <!-- <iron-iconset name="my-icons" src="images/pill-24.png" width="24" size="24"
+      icons="pill">
+  </iron-iconset> -->
+
+<template id="t" is="dom-bind">
+
+
+<patient-form ident="addpatient"
+  on-patient-saved="loadPatients"></patient-form>
+
+<record-form ident="addrecord" title="New record"
+  patientid="{{selectedPatient.id}}"
+  on-record-saved="patientSaved"></record-form>
+
+<paper-scroll-header-panel id="scrollheader" main
+    on-trackstart="onRefreshStart"
+    on-tracky="onMainAreaTrack"
+    on-trackend="onRefreshUp">
+
+  <paper-toolbar id="mainheader" class$="[[headerClass]]">
+    <paper-icon-button icon="arrow-back" class="selected-item" on-tap="deselectAll"></paper-icon-button>
+
+    <paper-icon-button id="navicon" icon="menu" paper-drawer-toggle></paper-icon-button>
+    <div class="flex"></div>
+
+    <span class="top indent title">{{headerTitle}}</span>
+
+    <paper-icon-button icon="archive" class="selected-item" on-tap="archiveAll"></paper-icon-button>
+    <!--
+      <paper-icon-button icon="delete" class="selected-item"></paper-icon-button>
+      <paper-icon-button icon="mail" class="selected-item"></paper-icon-button> -->
+    <!-- <paper-menu-button class="selected-item" class="layout horizontal">
+      <paper-icon-button icon="more-vert"></paper-icon-button>
+      <paper-dropdown class="dropdown" halign="right">
+        <paper-item>Move to</paper-item>
+        <paper-item>Change labels</paper-item>
+        <paper-item>Add star</paper-item>
+        <paper-item>Mark not important</paper-item>
+        <paper-item>Mute</paper-item>
+        <paper-item>Report spam</paper-item>
+        <paper-item>Report phishing</paper-item>
+      </paper-dropdown>
+    </paper-menu-button> -->
+
+    <paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
+      <span class="layout horizontal center justified">
+        <span class="label patient_name">
+          <b>{{selectedPatient.name}}</b>
+        </span>
+        <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
+          Born:
+          <time>{{selectedPatient.record.date_birth}}</time>
+        </span>
+        <span class="label" hidden="{{!selectedPatient.gender}}">
+          Gender:
+          <span>{{selectedPatient.gender}}</span>
+        </span>
+        <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
+          B.G.:
+          <span>{{selectedPatient.record.blood_group}}</span>
+        </span>
+        <span class="label">
+          Last visit:
+          <time>{{selectedPatient.updated}}</time>
+        </span>
+      </span>
+    </paper-item>
+
+    <paper-fab id="editpatient" mini icon="create" class="icon-create"
+       on-tap="openDialog" data-dialog="addpatient"
+       hidden="{{!selectedPatient}}"></paper-fab>
+
+    <div id="refresh" class="bottom fit layout horizontal center-center"
+         on-transitionend="onRefreshTransitionEnd">
+      <div>
+        <!-- <paper-material class="fit" elevation="2" animated></paper-material> -->
+        <paper-spinner id="refreshspinner"></paper-spinner>
+      </div>
+    </div>
+
+  </paper-toolbar>
+
+  <div content on-thread-archive="onThreadArchive">
+
+    <template is="dom-if" if="{{_computeShowSpinner(threads, signedIn)}}">
+      <div class="layout vertical center-center" style="height:100%">
+        <paper-spinner active></paper-spinner>
+      </div>
+    </template>
+
+    <!-- TODO: don't pass all messages, users, labels into mail-thread -->
+    <iron-selector id="threadlist" multi activate-event=""
+                   selected-attribute="selected"
+                   selected-items="{{selectedThreads}}"
+                   on-iron-select="_onThreadSelectChange"
+                   on-iron-deselect="_onThreadSelectChange">
+      <template is="dom-repeat" items="[[threads]]">
+        <record-thread messages="[[item.messages]]"
+                     labels="[[labelMap]]" users="[[users]]"
+                     narrow="[[narrow]]"
+                     on-thread-select="_onThreadTap"></record-thread>
+      </template>
+    </iron-selector>
+
+   </div>
+</paper-scroll-header-panel>
+
+<paper-toast id="toast" class="layout horizontal justified"
+             duration="10000" text="{{toastMessage}}" visible="{{toastOpened}}"
+             on-paper-overlay-open="onToastOpenClose"
+             on-transitionend="onToastOpenClose">
+  <div on-tap="undoAll" class="undo">Undo</div>
+</paper-toast>
+
+<paper-fab id="fab-favorite" mini icon="favorite" class="icon-favorite"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="0" data-tabname="DATA"></paper-fab>
+<paper-fab id="fab-done" mini icon="done" class="icon-done"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="3" data-tabname="LAB"></paper-fab>
+<paper-fab id="fab-pill" mini icon="maps:local-pharmacy" class="icon-pill"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="2" data-tabname="MED"></paper-fab>
+<paper-fab id="fab" icon="create" class="icon-create"
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
+   data-tab="1" data-tabname="NOTE"></paper-fab>
+
+<!-- Cache data requests. -->
+<!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->
+<!--<iron-localstorage name="polymer-mail-labels" value="{{labels}}"></iron-localstorage>-->
+<!--<iron-localstorage name="polymer-mail-threads" value="{{threads}}"></iron-localstorage>-->
+<!--<iron-localstorage name="polymer-mail-users" value="{{users}}"></iron-localstorage>-->
+
+</template>
+
+<!--<script src="scripts/polymer_metrics.js"></script>-->
+<script src="app.js"></script>
+<script>
+  <!-- analytics -->
+</script>
+</body>
+</html>

@@ -6,6 +6,7 @@ if (window.PolymerMetrics) {
 }
 
 var DEBUG = location.search.indexOf('debug') != -1;
+var PATIENT = location.search.indexOf('patient') != -1;
 var FROM_HEADER_REGEX = new RegExp(/"?(.*?)"?\s?<(.*)>/);
 
 var Labels = {
@@ -717,12 +718,19 @@ template.previousSearches = [
   'beta'
 ];
 
+if (PATIENT) {
+  template.handleLogin();
+  alert('yo,');
+}
+
 template.addEventListener('dom-change', function(e) {
   // Force binding updated when narrow has been calculated via binding.
   this.headerClass = this._computeMainHeaderClass();
 
   var headerEl = document.querySelector('#mainheader');
   var title = document.querySelector('.title');
+
+  if (typeof this.$.drawerPanel === 'undefined') return;
 
   this.$.drawerPanel.addEventListener('paper-header-transform', function(e) {
 
