@@ -6,7 +6,7 @@ if (window.PolymerMetrics) {
 }
 
 var DEBUG = location.search.indexOf('debug') != -1;
-var PATIENT = location.search.indexOf('patient') != -1;
+var PATIENT = location.pathname == '/patient/';
 var FROM_HEADER_REGEX = new RegExp(/"?(.*?)"?\s?<(.*)>/);
 
 var Labels = {
@@ -686,6 +686,18 @@ template.hideCalendar = function() {
   this.$.googlecalendar.hidden = true;
 };
 
+template.loadPatientFile = function() {
+  var patientHash = location.search.replace('?','');
+  var ajax1 = document.createElement('iron-ajax');
+  ajax1.auto = true;
+  ajax1.url = '/api/patient/' + patientHash;
+  ajax1.addEventListener('response', function(e) {
+    template.selectedPatient = e.detail.response.patient;
+    template.isAuthenticated = true;
+    template.loadRecords();
+  });
+};
+
 //////////////////
 //////////////////
 //////////////////
@@ -718,10 +730,7 @@ template.previousSearches = [
   'beta'
 ];
 
-if (PATIENT) {
-  template.handleLogin();
-  alert('yo,');
-}
+if (PATIENT) { template.loadPatientFile(); }
 
 template.addEventListener('dom-change', function(e) {
   // Force binding updated when narrow has been calculated via binding.
@@ -730,9 +739,8 @@ template.addEventListener('dom-change', function(e) {
   var headerEl = document.querySelector('#mainheader');
   var title = document.querySelector('.title');
 
-  if (typeof this.$.drawerPanel === 'undefined') return;
-
-  this.$.drawerPanel.addEventListener('paper-header-transform', function(e) {
+  if (typeof this.$.drawerPanel !== 'undefined')
+   this.$.drawerPanel.addEventListener('paper-header-transform', function(e) {
 
     if (!headerEl.classList.contains('tall')) {
       return;
