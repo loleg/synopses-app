@@ -1,0 +1,157 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
+<link rel="import" href="bower_components/pikaday-decorator/pikaday-decorator.html">
+
+<dom-module id="selfcheck-form">
+<style>
+:host {
+  --paper-toolbar-background: #00bcd4;
+}
+
+:host paper-tabs, :host paper-toolbar {
+  background-color: #00bcd4;
+  color: #fff;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+:host paper-toolbar paper-tabs {
+  box-shadow: none;
+}
+
+:host paper-tabs[noink][no-bar] paper-tab.iron-selected {
+  color: #ffff8d;
+}
+
+:host form paper-icon-button {
+  color: #333333;
+}
+
+:host label { margin-right:1em; }
+
+#dropzone {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 20px 10px;
+  text-align: center;
+  font: 20pt bold 'Helvetica';
+  color: #bbb;
+  background: white;
+}
+
+#files {
+  display: block;
+  margin: 0 auto;;
+}
+
+#files::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+#files::before {
+  content: 'or click to select files';
+  background: white;
+  padding: 5px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  font-size: 16pt;
+  margin: 0 auto;
+}
+
+#files:hover::before {
+  border-color: black;
+}
+
+#files:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+:host input, :host select, :host button {
+  font-size: 16px;
+}
+
+pikaday-decorator {
+  margin-bottom: 2em;
+}
+</style>
+<template>
+  <paper-dialog id="{{ ident }}" modal>
+    <h2>{{ title }}</h2>
+    <paper-tabs autofocus>
+      <paper-tab>Patient Note</paper-tab>
+    </paper-tabs>
+    <iron-pages id="recordform">
+
+      <div class="record-SELFCHECK">
+        <form is="iron-form" method="post" data-type="SELFCHECK" data-typeid="1">
+          <div class="vertical layout">
+            <paper-input name="subject" label="Summary" required></paper-input>
+            <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
+              <textarea name="note" id="ta1" rows="6"></textarea>
+            </iron-autogrow-textarea>
+          </div>
+        </form>
+      </div>
+
+    </iron-pages>
+    <div class="buttons">
+      <paper-button dialog-dismiss>Cancel</paper-button>
+      <paper-button raised on-tap="saveDialog">Save</paper-button>
+    </div>
+  </paper-dialog>
+</template>
+<script>
+  Polymer({
+    is: 'selfcheck-form',
+
+    properties: {
+      title: {
+        value: "New record",
+        reflectToAttribute: true
+      },
+      recordType: {
+        value: 1
+      },
+      patientid: {
+        value: null,
+        reflectToAttribute: true
+      },
+      //////
+      p_date_birth: { value: "01.01.1900" },
+      p_weight: { value: "" },
+      p_height: { value: "" }
+    },
+
+    saveDialog: function(e) {
+      var the_form = this.$.recordform.selectedItem.firstElementChild;
+      if (this.patientid === null) {
+        alert("Invalid patient ID"); return;
+      }
+      the_form.action =
+        '/api/' + this.patientid +
+        '/record/' + the_form.dataset.typeid +
+        '/save';
+      the_form.submit();
+      the_form.reset();
+      var all_fields = the_form.querySelectorAll(
+        'input[type="text"],gold-email-input,paper-input'
+      );
+      for (var i = 0; i < all_fields.length; i++) {
+        if (typeof all_fields[i].value !== 'undefined') {
+          all_fields[i].value = "";
+        }
+      }
+      this.fire('record-saved');
+      document.getElementById(this.ident).close();
+    }
+
+  });
+</script>
+</dom-module>

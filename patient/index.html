@@ -39,9 +39,9 @@
 <patient-form ident="addpatient" title="Edit my profile"
   on-patient-saved="loadPatients"></patient-form>
 
-<record-form ident="addrecord" title="New record"
+<selfcheck-form ident="selfcheck" title="New patient note"
   patientid="{{selectedPatient.id}}"
-  on-record-saved="patientSaved"></record-form>
+  on-record-saved="patientSaved"></selfcheck-form>
 
 <div class="layout vertical">
   <div>
@@ -51,10 +51,12 @@
 <paper-icon-button id="navicon" icon="menu" paper-drawer-toggle></paper-icon-button>
 <div class="flex"></div>
 
-<span class="top indent title">{{headerTitle}}</span>
+<span class="top indent title">My Synopses</span>
 
-<paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
+<paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
   <span class="layout horizontal center justified">
+    <profile-img id="profileimage" item-icon
+                 src="{{item.photo}}"></profile-img>
     <span class="label patient_name">
       <b>{{selectedPatient.name}}</b>
     </span>
@@ -80,15 +82,6 @@
 <paper-fab id="editpatient" mini icon="create" class="icon-create"
    on-tap="openDialog" data-dialog="addpatient"
    hidden="{{!selectedPatient}}"></paper-fab>
-
-<div id="refresh" class="bottom fit layout horizontal center-center"
-     on-transitionend="onRefreshTransitionEnd">
-  <div>
-    <!-- <paper-material class="fit" elevation="2" animated></paper-material> -->
-    <paper-spinner id="refreshspinner"></paper-spinner>
-  </div>
-</div>
-</div>
 
 <div content on-thread-archive="onThreadArchive">
 
@@ -123,18 +116,8 @@
   <div on-tap="undoAll" class="undo">Undo</div>
 </paper-toast>
 
-<paper-fab id="fab-favorite" mini icon="favorite" class="icon-favorite"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="0" data-tabname="DATA"></paper-fab>
-<paper-fab id="fab-done" mini icon="done" class="icon-done"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="3" data-tabname="LAB"></paper-fab>
-<paper-fab id="fab-pill" mini icon="maps:local-pharmacy" class="icon-pill"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="2" data-tabname="MED"></paper-fab>
 <paper-fab id="fab" icon="create" class="icon-create"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="1" data-tabname="NOTE"></paper-fab>
+   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="selfcheck"></paper-fab>
 
 <!-- Cache data requests. -->
 <!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->
