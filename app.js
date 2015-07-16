@@ -663,6 +663,11 @@ template.openDialog = function(e) {
   }
 };
 
+template.openPatientLink = function() {
+  window.prompt("Share this link with the patient:",
+    location.origin + '/patient/?' + this.selectedPatient.hash);
+};
+
 template.inboxSelect = function(e) {
   this.selectedPatient = false;
   this.headerTitle = this._computeHeaderTitle(0);
@@ -692,9 +697,16 @@ template.loadPatientFile = function() {
   ajax1.auto = true;
   ajax1.url = '/api/patient/' + patientHash;
   ajax1.addEventListener('response', function(e) {
+    if (e.detail.response.flag === 'fail') {
+      window.alert('Looks like your code is incorrect,\n'+
+        'contact your clinic for a new one.');
+      return;
+    }
     template.selectedPatient = e.detail.response.patient;
     template.isAuthenticated = true;
     template.loadRecords();
+  });
+  ajax1.addEventListener('error', function(e) {
   });
 };
 

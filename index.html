@@ -166,6 +166,8 @@
       <paper-fab id="editpatient" mini icon="create" class="icon-create"
          on-tap="openDialog" data-dialog="addpatient"
          hidden="{{!selectedPatient}}"></paper-fab>
+     <paper-fab id="linkpatient" mini icon="link" class="icon-link"
+        on-tap="openPatientLink" hidden="{{!selectedPatient}}"></paper-fab>
 
       <div id="refresh" class="bottom fit layout horizontal center-center"
            on-transitionend="onRefreshTransitionEnd">
