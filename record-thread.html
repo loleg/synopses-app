@@ -197,7 +197,7 @@
             <span class="layout vertical">
               <iron-image class="attachment"
                 src="{{thread.imageurl}}"></iron-image>
-              <span class="body">[[_decodeHTMLEntities(thread.payload.body.data)]]</span>
+              <span class="body">{{thread.payload.body.data}}</span>
             </span>
           </paper-material>
         </section>
@@ -320,8 +320,7 @@
       // this.async(function() {
         this.target = this.$.thread;
       // });
-// this.setScrollDirection('y');
-
+      // this.setScrollDirection('y');
     },
 
     _objectItem: function(prop, id, path) {
@@ -338,12 +337,24 @@
       if (this.messages.length >= 2) {
         this._setShowMessageCount(true);
       }
+      this.decodeRecordBody();
     },
 
     _decodeHTMLEntities: function(val) {
       var t = document.createElement('textarea');
       t.innerHTML = val;
       return t.textContent;
+    },
+
+    decodeRecordBody: function(self) {
+      var els = document.getElementsByClassName("body style-scope record-thread");
+      for (var i = 0; i < els.length; i++) {
+        var value = els[i].innerHTML;
+        if (value.indexOf('<')>0) return;
+        var htmlvalue = value.replace(/{{([a-z]+)}}/g,
+          "<a class='abbr' href='http://www.merriam-webster.com/medlineplus/\$1' target='_blank'>\$1</a>");
+        els[i].innerHTML = htmlvalue;
+      }
     },
 
     _hideThreadLabel: function(id) {
@@ -446,6 +457,7 @@
         this.toggleClass('shrink', false);
       }
     }
+
   });
 </script>
 </dom-module>

@@ -6,6 +6,10 @@ body {
   font-weight: 300;
 }
 
+a.abbr {
+  color: green;
+}
+
 .patientapp.title {
   background: url(images/synopses-icon.png) no-repeat top left;
   background-size: auto 100%;
