@@ -139,11 +139,12 @@ pikaday-decorator {
             <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
               <textarea name="note" id="ta1" rows="6"></textarea>
             </iron-autogrow-textarea>
-            <paper-input-container on-input="_onChangeMedTerms">
+            <paper-input-container on-keypress="_onChangeMedTerms">
               <input list="medterms" is="iron-input">
               <datalist id="medterms"></datalist>
             </paper-input-container>
-            <label>Start typing above for auto-medical terms, press Enter to add to the note</label>
+            <label>Start typing above for auto-medical terms,
+              then press Enter to add to note.</label>
           </div>
         </form>
       </div>
@@ -236,6 +237,11 @@ pikaday-decorator {
     _onChangeMedTerms: function(e) {
       var text = e.target.value;
       if (text.length < 2) return;
+      if (e.which == 13 || e.keyCode == 13) {
+        this.$.ta1.textarea.value += text;
+        e.target.value = "";
+        return false;
+      }
       // Clear the suggestions
       var $obj = this.$.medterms;
       while ($obj.firstChild) { $obj.removeChild($obj.firstChild); }
@@ -244,7 +250,12 @@ pikaday-decorator {
       ajax.auto = true;
       ajax.url = '/api/assist/medical/' + text.trim().toLowerCase();
       ajax.addEventListener('response', function(e) {
-        console.log(e.detail.response);
+        var terms = e.detail.response.matches;
+        var result = "";
+        for (var i = 0; i < terms.length; i++) {
+          result = result + '<option value="' + terms[i] + '"></option>';
+        }
+        $obj.innerHTML = result;
       });
     }
 
