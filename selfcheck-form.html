@@ -1,6 +1,8 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
@@ -73,6 +75,34 @@
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
+paper-radio-button.blue {
+  --paper-radio-button-checked-color: var(--paper-light-blue-500);
+  --paper-radio-button-checked-ink-color: var(--paper-light-blue-500);
+  --paper-radio-button-unchecked-color: var(--paper-light-blue-900);
+  --paper-radio-button-unchecked-ink-color: var(--paper-light-blue-900);
+}
+
+paper-radio-button.red {
+  --paper-radio-button-checked-color: var(--paper-red-500);
+  --paper-radio-button-checked-ink-color: var(--paper-red-500);
+  --paper-radio-button-unchecked-color: var(--paper-red-900);
+  --paper-radio-button-unchecked-ink-color: var(--paper-red-900);
+}
+
+paper-radio-button.green {
+  --paper-radio-button-checked-color: var(--paper-green-500);
+  --paper-radio-button-checked-ink-color: var(--paper-green-500);
+  --paper-radio-button-unchecked-color: var(--paper-green-900);
+  --paper-radio-button-unchecked-ink-color: var(--paper-green-900);
+}
+
+paper-radio-button.orange {
+  --paper-radio-button-checked-color: var(--paper-orange-500);
+  --paper-radio-button-checked-ink-color: var(--paper-orange-500);
+  --paper-radio-button-unchecked-color: var(--paper-orange-900);
+  --paper-radio-button-unchecked-ink-color: var(--paper-orange-900);
+}
+
 :host input, :host select, :host button {
   font-size: 16px;
 }
@@ -84,23 +114,26 @@ pikaday-decorator {
 <template>
   <paper-dialog id="{{ ident }}" modal>
     <h2>{{ title }}</h2>
-    <paper-tabs autofocus>
-      <paper-tab>Patient Note</paper-tab>
-    </paper-tabs>
-    <iron-pages id="recordform">
 
-      <div class="record-SELFCHECK">
-        <form is="iron-form" method="post" data-type="SELFCHECK" data-typeid="1">
-          <div class="vertical layout">
-            <paper-input name="subject" label="Summary" required></paper-input>
-            <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
-              <textarea name="note" id="ta1" rows="6"></textarea>
-            </iron-autogrow-textarea>
+    <div class="record-SELFCHECK">
+      <form is="iron-form" method="post" data-type="SELFCHECK" data-typeid="1">
+        <div class="vertical layout">
+          <h3>How are you?</h3>
+          <div class="horizontal-section">
+            <paper-radio-group name="subject">
+              <paper-radio-button class="green" name="better" value="Patient feels improved">Better</paper-radio-button>
+              <paper-radio-button class="blue" name="same" value="Patient feels the same">The same</paper-radio-button>
+              <paper-radio-button class="orange" name="worse" value="Patient feels worse">Worsening</paper-radio-button>
+            </paper-radio-group>
           </div>
-        </form>
-      </div>
+          <h3>Please elaborate:</h3>
+          <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
+            <textarea name="note" id="ta1" rows="6"></textarea>
+          </iron-autogrow-textarea>
+        </div>
+      </form>
+    </div>
 
-    </iron-pages>
     <div class="buttons">
       <paper-button dialog-dismiss>Cancel</paper-button>
       <paper-button raised on-tap="saveDialog">Save</paper-button>
