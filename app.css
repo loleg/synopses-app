@@ -6,6 +6,13 @@ body {
   font-weight: 300;
 }
 
+.patientapp.title {
+  background: url(images/synopses-icon.png) no-repeat top left;
+  background-size: auto 100%;
+  padding-left: 60px;
+  font-style: italic;
+}
+
 #loginscreen {
   background: rgba(255, 255, 255, 1);
   z-index: 1;
@@ -99,10 +106,23 @@ paper-icon-item.iron-selected iron-icon {
   opacity: 0.8;
 }
 
+.shadowbox {
+  color: #555;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+
+.shadowbox record-thread {
+  border-top: 1px solid #ccc;
+}
+
 #mainheader {
   color: #555;
   background-color: transparent;
   box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+
+.shadowbox #mainheader {
+  box-shadow: none !important;
 }
 
 #mainheader .title {

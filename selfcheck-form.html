@@ -116,20 +116,35 @@ pikaday-decorator {
     <h2>{{ title }}</h2>
 
     <div class="record-SELFCHECK">
-      <form is="iron-form" method="post" data-type="SELFCHECK" data-typeid="1">
+      <form is="iron-form" id="recordform" method="post" data-type="SELFCHECK" data-typeid="1">
         <div class="vertical layout">
+
           <h3>How are you?</h3>
           <div class="horizontal-section">
-            <paper-radio-group name="subject">
-              <paper-radio-button class="green" name="better" value="Patient feels improved">Better</paper-radio-button>
-              <paper-radio-button class="blue" name="same" value="Patient feels the same">The same</paper-radio-button>
-              <paper-radio-button class="orange" name="worse" value="Patient feels worse">Worsening</paper-radio-button>
+            <input type="hidden" name="selfcheck" id="selfcheck" value="">
+            <paper-radio-group on-change="_onSetSelfCheck">
+              <paper-radio-button class="green" value="better">Better</paper-radio-button>
+              <paper-radio-button class="blue" value="same">The same</paper-radio-button>
+              <paper-radio-button class="orange" value="worse">Worsening</paper-radio-button>
             </paper-radio-group>
           </div>
+
           <h3>Please elaborate:</h3>
           <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
             <textarea name="note" id="ta1" rows="6"></textarea>
           </iron-autogrow-textarea>
+
+          <paper-input name="imageurl" label="Link to image file"></paper-input>
+          <label hidden="true">
+            <div id="dropzone" on-tap="{{tapSelect}}"
+              on-dragover="{{handleDragOver}}"
+              on-drop="{{handleFileSelect}}">
+              Drag files to upload
+              <input type="file" id="files" name="files[]"
+                on-change="{{handleFilePick}}" multiple>
+            </div>
+          </label>
+
         </div>
       </form>
     </div>
@@ -146,7 +161,7 @@ pikaday-decorator {
 
     properties: {
       title: {
-        value: "New record",
+        value: "New self check",
         reflectToAttribute: true
       },
       recordType: {
@@ -155,15 +170,16 @@ pikaday-decorator {
       patientid: {
         value: null,
         reflectToAttribute: true
-      },
+      }
       //////
-      p_date_birth: { value: "01.01.1900" },
-      p_weight: { value: "" },
-      p_height: { value: "" }
+    },
+
+    _onSetSelfCheck: function(e) {
+      this.$.recordform.selfcheck.value = e.target.getAttribute('value');
     },
 
     saveDialog: function(e) {
-      var the_form = this.$.recordform.selectedItem.firstElementChild;
+      var the_form = this.$.recordform;
       if (this.patientid === null) {
         alert("Invalid patient ID"); return;
       }

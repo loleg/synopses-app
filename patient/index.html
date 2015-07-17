@@ -43,70 +43,67 @@
   patientid="{{selectedPatient.id}}"
   on-record-saved="patientSaved"></selfcheck-form>
 
-<div class="layout vertical">
+<div class="layout vertical shadowbox">
   <div>
-<paper-toolbar id="mainheader" class$="[[headerClass]]">
-<paper-icon-button icon="arrow-back" class="selected-item" on-tap="deselectAll"></paper-icon-button>
+    <paper-toolbar id="mainheader" class$="[[headerClass]]">
+    <paper-icon-button icon="arrow-back" class="selected-item" on-tap="deselectAll"></paper-icon-button>
 
-<paper-icon-button id="navicon" icon="menu" paper-drawer-toggle></paper-icon-button>
-<div class="flex"></div>
+    <div class="flex"></div>
 
-<span class="top indent title">My Synopses</span>
+    <span class="top indent title patientapp">My Synopses</span>
 
-<paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
-  <span class="layout horizontal center justified">
-    <profile-img id="profileimage" item-icon
-                 src="{{item.photo}}"></profile-img>
-    <span class="label patient_name">
-      <b>{{selectedPatient.name}}</b>
-    </span>
-    <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
-      Born:
-      <time>{{selectedPatient.record.date_birth}}</time>
-    </span>
-    <span class="label" hidden="{{!selectedPatient.gender}}">
-      Gender:
-      <span>{{selectedPatient.gender}}</span>
-    </span>
-    <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
-      B.G.:
-      <span>{{selectedPatient.record.blood_group}}</span>
-    </span>
-    <span class="label">
-      Last visit:
-      <time>{{selectedPatient.updated}}</time>
-    </span>
-  </span>
-</paper-item>
+    <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
+      <span class="layout horizontal center justified">
+        <profile-img id="profileimage" item-icon
+                     src="{{item.photo}}"></profile-img>
+        <span class="label patient_name">
+          <b>{{selectedPatient.name}}</b>
+        </span>
+        <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
+          Born:
+          <time>{{selectedPatient.record.date_birth}}</time>
+        </span>
+        <span class="label" hidden="{{!selectedPatient.gender}}">
+          Gender:
+          <span>{{selectedPatient.gender}}</span>
+        </span>
+        <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
+          B.G.:
+          <span>{{selectedPatient.record.blood_group}}</span>
+        </span>
+        <span class="label">
+          Last visit:
+          <time>{{selectedPatient.updated}}</time>
+        </span>
+        <paper-fab id="editpatient" mini icon="create" class="icon-create"
+           on-tap="openDialog" data-dialog="addpatient" style="margin-left:2em"
+           hidden="{{!selectedPatient}}"></paper-fab>
+      </span>
+    </paper-item>
+  </div>
+  <div content on-thread-archive="onThreadArchive">
+      <template is="dom-if" if="{{_computeShowSpinner(threads, signedIn)}}">
+        <div class="layout vertical center-center" style="height:100%">
+          <paper-spinner active></paper-spinner>
+        </div>
+      </template>
 
-<paper-fab id="editpatient" mini icon="create" class="icon-create"
-   on-tap="openDialog" data-dialog="addpatient"
-   hidden="{{!selectedPatient}}"></paper-fab>
+      <!-- TODO: don't pass all messages, users, labels into mail-thread -->
+      <iron-selector id="threadlist" multi activate-event=""
+                     selected-attribute="selected"
+                     selected-items="{{selectedThreads}}"
+                     on-iron-select="_onThreadSelectChange"
+                     on-iron-deselect="_onThreadSelectChange">
+        <template is="dom-repeat" items="[[threads]]">
+          <record-thread messages="[[item.messages]]"
+                       labels="[[labelMap]]" users="[[users]]"
+                       narrow="[[narrow]]"
+                       on-thread-select="_onThreadTap"></record-thread>
+        </template>
+      </iron-selector>
+  </div>
 
-<div content on-thread-archive="onThreadArchive">
-
-  <template is="dom-if" if="{{_computeShowSpinner(threads, signedIn)}}">
-    <div class="layout vertical center-center" style="height:100%">
-      <paper-spinner active></paper-spinner>
-    </div>
-  </template>
-
-  <!-- TODO: don't pass all messages, users, labels into mail-thread -->
-  <iron-selector id="threadlist" multi activate-event=""
-                 selected-attribute="selected"
-                 selected-items="{{selectedThreads}}"
-                 on-iron-select="_onThreadSelectChange"
-                 on-iron-deselect="_onThreadSelectChange">
-    <template is="dom-repeat" items="[[threads]]">
-      <record-thread messages="[[item.messages]]"
-                   labels="[[labelMap]]" users="[[users]]"
-                   narrow="[[narrow]]"
-                   on-thread-select="_onThreadTap"></record-thread>
-    </template>
-  </iron-selector>
-
- </div>
-</div>
+</div><!-- /.layout vertical -->
 
 
 <paper-toast id="toast" class="layout horizontal justified"
