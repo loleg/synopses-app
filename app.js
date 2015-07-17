@@ -532,14 +532,29 @@ template.runSearch = function() {
 };
 
 template.handleLogin = function(event, data) {
-  this.isAuthenticated = true;
+  var self = this;
+  var ajax = document.createElement('iron-ajax');
+  ajax.auto = true;
+  ajax.url = '/api/login';
+  ajax.method = 'POST';
+  ajax.body='{"username":"' + event.detail.username +
+          '", "password":"' + event.detail.password + '"}';
+  ajax.addEventListener('response', function(e) {
+    var r = e.detail.response;
+    if (r.flag != "success") {
+      alert('Sorry, try again please');
+      return false;
+    }
+    self.isAuthenticated = true;
 
-  // Cached data? We're already using it. Bomb out before making unnecessary requests.
-  if (template.threads && template.patientstoday) return;
+    // Cached data? We're already using it. Bomb out before making unnecessary requests.
+    if (template.threads && template.patientstoday) return;
 
-  this.loadPatientsPast();
-  this.loadPatients();
-  this.loadRecords();
+    self.loadPatientsPast();
+    self.loadPatients();
+    self.loadRecords();
+  });
+
 };
 
 function populateRecord(record, button, dialog) {

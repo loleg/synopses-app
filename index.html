@@ -38,12 +38,6 @@
      hidden="{{DEBUG}}">
      <login-polyform on-login="handleLogin" credentials="{{_user}}">
       <img avatar src="images/synopses-icon.png"/>
-      <iron-ajax
-        id="ajax-login"
-        url="/api/login"
-        method="POST"
-        content-type="application/json"
-        last-response="{{_response}}"></iron-ajax>
     </login-polyform>
   <!--google-signin width="wide" height="tall"
       client-id="229000986068-hld1d9ovioamaaur218vg3jg5dgvf2a2.apps.googleusercontent.com"
