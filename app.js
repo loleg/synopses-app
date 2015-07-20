@@ -140,9 +140,9 @@ template._computeHeaderTitle = function(numSelectedThreads) {
 // after the first selection. For now, use events instead to update title.
 // See github.com/PolymerElements/iron-selector/issues/33
 template._onThreadSelectChange = function(e) {
-  this.selectedPatient = false;
-  this.headerTitle = this._computeHeaderTitle(this.selectedThreads.length);
-  this.headerClass = this._computeMainHeaderClass();
+  // this.selectedPatient = false;
+  // this.headerTitle = this._computeHeaderTitle(this.selectedThreads.length);
+  // this.headerClass = this._computeMainHeaderClass();
 };
 
 template._onThreadTap = function(e) {
@@ -700,13 +700,13 @@ template.openPatientLink = function() {
 template.inboxSelect = function(e) {
   this.selectedPatient = false;
   this.headerTitle = this._computeHeaderTitle(0);
-  this.headerClass = this._computeMainHeaderClass();
+  // this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
 };
 
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
-  this.headerTitle = "Patient file";
+  this.headerTitle = "Patient";
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
 };

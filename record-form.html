@@ -90,6 +90,7 @@ pikaday-decorator {
       <paper-tab>Doctor Note</paper-tab>
       <paper-tab>Medication</paper-tab>
       <paper-tab>Test Results</paper-tab>
+      <paper-tab>Appointment</paper-tab>
     </paper-tabs>
 
     <iron-pages selected="{{recordType}}" id="recordform">
@@ -153,8 +154,8 @@ pikaday-decorator {
         <form is="iron-form" method="post" data-type="MED" data-typeid="3">
           <div class="vertical layout">
             <paper-input name="medication1" label="Medication" required></paper-input>
-            <paper-input name="medication2" label="" required></paper-input>
-            <paper-input name="medication3" label="" required></paper-input>
+            <paper-input name="medication2" label=""></paper-input>
+            <paper-input name="medication3" label=""></paper-input>
             <paper-input name="condition" label="For condition" required></paper-input>
           </div>
         </form>
@@ -178,6 +179,22 @@ pikaday-decorator {
                   on-change="{{handleFilePick}}" multiple>
               </div>
             </label>
+          </div>
+        </form>
+      </div>
+
+      <div class="record-EVENT">
+        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+              data-type="EVENT" data-typeid="4">
+          <div class="vertical layout">
+            <pikaday-decorator format="DD.MM.YYYY">
+              <button type="button" pikaday-decorator-trigger>Date:</button>
+              <input name="date" label="Date of event" required></input>
+              <label style="margin-left:2em">Time:</label>
+              <input name="time" label="Time of event" type="time" required></input>
+            </pikaday-decorator>
+            <paper-input name="with" label="Referred to" value=""></paper-input>
+            <paper-input name="note" label="Additional notes" value=""></paper-input>
           </div>
         </form>
       </div>
@@ -212,6 +229,7 @@ pikaday-decorator {
     },
 
     saveDialog: function(e) {
+      var self = this;
       var the_form = this.$.recordform.selectedItem.firstElementChild;
       if (this.patientid === null) {
         alert("Invalid patient ID"); return;
@@ -221,6 +239,13 @@ pikaday-decorator {
         '/record/' + the_form.dataset.typeid +
         '/save';
       the_form.submit();
+    },
+
+    _onSubmitForm: function(e) {
+      var the_form = e.target;
+      if (e.detail.flag !== 'success') {
+        alert(e.detail.msg); return;
+      }
       the_form.reset();
       var all_fields = the_form.querySelectorAll(
         'input[type="text"],gold-email-input,paper-input'
