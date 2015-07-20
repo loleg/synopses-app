@@ -123,9 +123,9 @@ pikaday-decorator {
           <div class="horizontal-section">
             <input type="hidden" name="selfcheck" id="selfcheck" value="">
             <paper-radio-group on-change="_onSetSelfCheck">
-              <paper-radio-button class="green" value="better">Better</paper-radio-button>
-              <paper-radio-button class="blue" value="same">The same</paper-radio-button>
-              <paper-radio-button class="orange" value="worse">Worsening</paper-radio-button>
+              <paper-radio-button class="green" name="better">Better</paper-radio-button>
+              <paper-radio-button class="blue" name="same">The same</paper-radio-button>
+              <paper-radio-button class="orange" name="worse">Worsening</paper-radio-button>
             </paper-radio-group>
           </div>
 
@@ -175,7 +175,7 @@ pikaday-decorator {
     },
 
     _onSetSelfCheck: function(e) {
-      this.$.recordform.selfcheck.value = e.target.getAttribute('value');
+      this.$.recordform.selfcheck.value = e.target.getAttribute('name');
     },
 
     saveDialog: function(e) {

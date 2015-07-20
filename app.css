@@ -190,11 +190,12 @@ paper-scroll-header-panel [content] {
   display: block;
 }
 
-.action-menu {
+.action-menu, .action-icon {
   position: fixed;
   bottom: 0px;
   right: 24px;
 }
+.action-icon { bottom: 16px }
 
 .action-menu label {
   position: absolute;
@@ -312,4 +313,14 @@ iframe[src^="https://apis.google.com"] {
 
 record-thread paper-fab {
   background-color: #eda !important;
+}
+
+#filters {
+  position: absolute;
+  right: 0px;
+}
+
+#filters paper-icon-button {
+  margin: 0 !important;
+  color: #ccc;
 }
