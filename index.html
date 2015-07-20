@@ -22,7 +22,9 @@
   <!-- Polyfill webcomponents in browsers that don't support it. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <!-- <link rel="import" href="vulcanized.html"> -->
+  <!--
+  <link rel="import" href="vulcanized.html">
+  -->
   <link rel="import" href="elements.html">
 </head>
 <body fullbleed>
@@ -160,8 +162,17 @@
       <paper-fab id="editpatient" mini icon="create" class="icon-create"
          on-tap="openDialog" data-dialog="addpatient"
          hidden="{{!selectedPatient}}"></paper-fab>
-     <paper-fab id="linkpatient" mini icon="link" class="icon-link"
+      <paper-fab id="linkpatient" mini icon="link" class="icon-link"
         on-tap="openPatientLink" hidden="{{!selectedPatient}}"></paper-fab>
+
+      <paper-item id="filters" class="bottom">
+        <!-- <paper-icon-button icon="label" selected></paper-icon-button> -->
+        <paper-icon-button icon="favorite" on-tap="filterBy" selected></paper-icon-button>
+        <paper-icon-button icon="event" on-tap="filterBy" selected></paper-icon-button>
+        <paper-icon-button icon="maps:local-pharmacy" on-tap="filterBy" selected></paper-icon-button>
+        <paper-icon-button icon="done" on-tap="filterBy" selected></paper-icon-button>
+        <paper-icon-button icon="create" on-tap="filterBy" selected></paper-icon-button>
+      </paper-item>
 
       <div id="refresh" class="bottom fit layout horizontal center-center"
            on-transitionend="onRefreshTransitionEnd">

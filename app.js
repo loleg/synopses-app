@@ -534,6 +534,25 @@ template.runSearch = function() {
   template.threads = tt;
 };
 
+template.filterBy = function(e) {
+  var the_icon = e.target.icon;
+  // Filter threads
+  var tt = [];
+  template.threadsLoaded.forEach(function(thread) {
+    has_match = false;
+    thread.messages.forEach(function(message) {
+      if (has_match) { return; }
+      if (message.icon == the_icon) {
+        has_match = true;
+      }
+    });
+    if (has_match === true) {
+      tt.push(thread);
+    }
+  });
+  template.threads = tt;
+};
+
 template.mockLogin = function() {
   this.isAuthenticated = true;
   if (PATIENT) { template.loadPatientFile(); return; }
