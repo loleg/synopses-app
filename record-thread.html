@@ -130,6 +130,10 @@
     label.purple {
       @apply(--label-purple);
     }
+    .labels.record-thread label.casename {
+      background-color: orange;
+      font-size:110%;
+    }
     paper-material {
       display: block;
       background: white;
@@ -172,6 +176,7 @@
             <span id="lastline" class="layout horizontal center justified" hidden="{{showfulltext}}">
               <span class="snippet flex">[[_decodeHTMLEntities(thread.snippet)]]</span>
               <span class="labels">
+                <label class="casename" hidden="{{!thread.label}}">{{thread.label}}</label>
                 <template is="dom-repeat" items="[[thread.labelIds]]" as="id">
                   <label hidden="{{_hideThreadLabel(id)}}"
                          class$="[[_objectItem('labels', id, 'color')]]">[[_objectItem('labels', id, 'name')]]</label>

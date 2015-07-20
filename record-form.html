@@ -1,7 +1,6 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-input/paper-input.html">
-<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
@@ -84,7 +83,14 @@ pikaday-decorator {
 </style>
 <template>
   <paper-dialog id="{{ ident }}" modal>
-    <h2>{{ title }}</h2>
+    <div class="layout vertical">
+      <h2>{{ title }}</h2>
+      <paper-input-container id="casename">
+        <label>Select or enter a new case</label>
+        <input list="caselist" is="iron-input" bind-value="{{caseName}}">
+        <datalist id="caselist"></datalist>
+      </paper-input-container>
+    </div>
     <paper-tabs selected="{{recordType}}" autofocus>
       <paper-tab>Data Entry</paper-tab>
       <paper-tab>Doctor Note</paper-tab>
@@ -96,7 +102,9 @@ pikaday-decorator {
     <iron-pages selected="{{recordType}}" id="recordform">
 
       <div class="record-DATA">
-        <form is="iron-form" method="post" data-type="DATA" data-typeid="0">
+        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+              data-type="DATA" data-typeid="0">
+              <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
             <pikaday-decorator format="DD.MM.YYYY">
               <button type="button" pikaday-decorator-trigger>Date of birth</button>
@@ -134,7 +142,9 @@ pikaday-decorator {
       </div>
 
       <div class="record-NOTE">
-        <form is="iron-form" method="post" data-type="NOTE" data-typeid="1">
+        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+              data-type="NOTE" data-typeid="1">
+              <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
             <paper-input name="subject" label="Summary" required></paper-input>
             <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
@@ -151,7 +161,9 @@ pikaday-decorator {
       </div>
 
       <div class="record-MED">
-        <form is="iron-form" method="post" data-type="MED" data-typeid="3">
+        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+              data-type="MED" data-typeid="3">
+              <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
             <paper-input name="medication1" label="Medication" required></paper-input>
             <paper-input name="medication2" label=""></paper-input>
@@ -162,7 +174,9 @@ pikaday-decorator {
       </div>
 
       <div class="record-LAB">
-        <form is="iron-form" method="post" data-type="LAB" data-typeid="2">
+        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+              data-type="LAB" data-typeid="2">
+              <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
             <paper-input name="condition" label="Reason for test" required></paper-input>
             <label>Summary of results:</label>
@@ -186,6 +200,7 @@ pikaday-decorator {
       <div class="record-EVENT">
         <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
               data-type="EVENT" data-typeid="4">
+              <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
             <pikaday-decorator format="DD.MM.YYYY">
               <button type="button" pikaday-decorator-trigger>Date:</button>
@@ -195,7 +210,7 @@ pikaday-decorator {
             </pikaday-decorator>
             <paper-input name="with" label="Referred to" value=""></paper-input>
             <paper-input name="note" label="Additional notes" value=""></paper-input>
-          </div>
+          </div>caseName
         </form>
       </div>
 
@@ -211,12 +226,15 @@ pikaday-decorator {
     is: 'record-form',
 
     properties: {
+      recordType: {
+        value: 1
+      },
+      caseName: {
+        value: ''
+      },
       title: {
         value: "New record",
         reflectToAttribute: true
-      },
-      recordType: {
-        value: 1
       },
       patientid: {
         value: null,
@@ -229,11 +247,13 @@ pikaday-decorator {
     },
 
     saveDialog: function(e) {
-      var self = this;
-      var the_form = this.$.recordform.selectedItem.firstElementChild;
       if (this.patientid === null) {
         alert("Invalid patient ID"); return;
       }
+      if (this.caseName === '') {
+        alert("You must select or enter a case"); return;
+      }
+      var the_form = this.$.recordform.selectedItem.firstElementChild;
       the_form.action =
         '/api/' + this.patientid +
         '/record/' + the_form.dataset.typeid +
