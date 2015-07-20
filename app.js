@@ -737,6 +737,10 @@ template.loadPatientFile = function() {
   });
 };
 
+template.togglePanel = function() {
+  this.$.drawerPanel.togglePanel();
+};
+
 //////////////////
 //////////////////
 //////////////////
