@@ -531,32 +531,37 @@ template.runSearch = function() {
   template.threads = tt;
 };
 
-template.handleLogin = function(event, data) {
-  var self = this;
-  if (typeof event === 'undefined') {
-    self.isAuthenticated = true;
-    // Cached data? We're already using it. Bomb out before making unnecessary requests.
-    if (template.threads && template.patientstoday) return;
-    self.loadPatientsPast();
-    self.loadRecords();
-    return;
-  }
+template.mockLogin = function() {
+  this.isAuthenticated = true;
+  if (PATIENT) { template.loadPatientFile(); return; }
+  // Cached data? We're already using it. Bomb out before making unnecessary requests.
+  if (template.threads && template.patientstoday) return;
+  this.loadPatientsPast();
+  this.loadRecords();
+};
+
+template.handleLogin = function(event, data, silentMode) {
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
   ajax.url = '/api/login';
   ajax.method = 'POST';
-  ajax.body='{"username":"' + event.detail.username +
-          '", "password":"' + event.detail.password + '"}';
+  if (silentMode) {
+    ajax.body='{"username":"", "password":""}';
+  } else {
+    ajax.body='{"username":"' + event.detail.username +
+            '", "password":"' + event.detail.password + '"}';
+  }
   ajax.addEventListener('response', function(e) {
     var r = e.detail.response;
-    if (r.flag != "success") {
+    if (r.flag != "success" && !silentMode) {
+      // Alert the user
       alert('Sorry, try again please');
       return false;
     }
-    self.isAuthenticated = true;
-    self.loadPatientsPast();
-    self.loadPatients();
-    self.loadRecords();
+    template.isAuthenticated = true;
+    template.loadPatientsPast();
+    template.loadPatients();
+    template.loadRecords();
   });
 };
 
@@ -721,7 +726,6 @@ template.loadPatientFile = function() {
       return;
     }
     template.selectedPatient = e.detail.response.patient;
-    template.isAuthenticated = true;
     template.loadRecords();
   });
   ajax1.addEventListener('error', function(e) {
@@ -759,8 +763,6 @@ template.previousSearches = [
   'alpha',
   'beta'
 ];
-
-if (PATIENT) { template.loadPatientFile(); }
 
 template.addEventListener('dom-change', function(e) {
   // Force binding updated when narrow has been calculated via binding.
@@ -802,7 +804,9 @@ template.addEventListener('dom-change', function(e) {
 // };
 
 if (DEBUG) { // !navigator.onLine ||
-  template.handleLogin();
+  template.mockLogin();
+} else {
+  template.handleLogin(null, null, true);
 }
 
 // window.Polymer.dom = 'shadow';

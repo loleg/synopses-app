@@ -35,6 +35,13 @@
 
 <template id="t" is="dom-bind">
 
+<div id="loginscreen"
+     class$="[[_computeLoginScreenClass(isAuthenticated, 'layout vertical center-center fit')]]"
+     hidden="{{DEBUG}}">
+     <login-polyform on-login="mockLogin" username="demo" password="demo" credentials="{{_user}}">
+      <img avatar src="images/synopses-icon.png"/>
+    </login-polyform>
+</div>
 
 <patient-form ident="addpatient" title="Edit my profile"
   on-patient-saved="loadPatients"></patient-form>
