@@ -533,6 +533,14 @@ template.runSearch = function() {
 
 template.handleLogin = function(event, data) {
   var self = this;
+  if (typeof event === 'undefined') {
+    self.isAuthenticated = true;
+    // Cached data? We're already using it. Bomb out before making unnecessary requests.
+    if (template.threads && template.patientstoday) return;
+    self.loadPatientsPast();
+    self.loadRecords();
+    return;
+  }
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
   ajax.url = '/api/login';
@@ -546,15 +554,10 @@ template.handleLogin = function(event, data) {
       return false;
     }
     self.isAuthenticated = true;
-
-    // Cached data? We're already using it. Bomb out before making unnecessary requests.
-    if (template.threads && template.patientstoday) return;
-
     self.loadPatientsPast();
     self.loadPatients();
     self.loadRecords();
   });
-
 };
 
 function populateRecord(record, button, dialog) {
