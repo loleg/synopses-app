@@ -477,6 +477,9 @@ template.loadRecords = function() {
   } else {
     ajax.url = '/api/' + template.selectedPatient.id + '/threads';
   }
+  template.threads = [{ "messages": [{
+      "subject": "Please wait, loading ..."
+    }] }];
   ajax.addEventListener('response', function(e) {
     var threads = e.detail.response.threads;
     template.threads = threads;

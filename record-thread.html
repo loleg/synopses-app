@@ -197,7 +197,7 @@
             <span class="layout vertical">
               <iron-image class="attachment"
                 src="{{thread.imageurl}}"></iron-image>
-              <span class="body">{{thread.payload.body.data}}</span>
+              <span class="body" id="fullbody">{{thread.payload.body.data}}</span>
             </span>
           </paper-material>
         </section>
@@ -321,6 +321,7 @@
         this.target = this.$.thread;
       // });
       // this.setScrollDirection('y');
+      //this._messagesChanged();
     },
 
     _objectItem: function(prop, id, path) {
@@ -334,10 +335,11 @@
     _messagesChanged: function() {
       // TODO(ericbidelman): this is only the last thread. Support all messages in thread.
       this._setThread(this.messages[0]);
+      this.showfulltext = false;
       if (this.messages.length >= 2) {
         this._setShowMessageCount(true);
       }
-      this.decodeRecordBody();
+      //this.decodeRecordBody();
     },
 
     _decodeHTMLEntities: function(val) {
@@ -346,15 +348,12 @@
       return t.textContent;
     },
 
-    decodeRecordBody: function(self) {
-      var els = document.getElementsByClassName("body style-scope record-thread");
-      for (var i = 0; i < els.length; i++) {
-        var value = els[i].innerHTML;
-        if (value.indexOf('<')>0) return;
-        var htmlvalue = value.replace(/{{([a-z]+)}}/g,
-          "<a class='abbr' href='http://www.merriam-webster.com/medlineplus/\$1' target='_blank'>\$1</a>");
-        els[i].innerHTML = htmlvalue;
-      }
+    decodeRecordBody: function(els) {
+      var value = els.innerHTML;
+      if (value.indexOf('<')>-1) return;
+      var htmlvalue = value.replace(/{{([A-Za-z0-9 _]+)}}/g,
+        "<a class='abbr' href='http://www.merriam-webster.com/medlineplus/\$1' target='_blank'>\$1</a>");
+      els.innerHTML = htmlvalue;
     },
 
     _hideThreadLabel: function(id) {
@@ -412,6 +411,7 @@
     _onThreadTap: function(e) {
       if (Polymer.dom(e).localTarget !== this.$.profileimage) {
         e.stopPropagation();
+        this.decodeRecordBody(this.$.fullbody);
         this.showfulltext = !this.showfulltext;
         this.$.fulltext.animate([
           {'max-height': 0}, {'max-height': 200}
