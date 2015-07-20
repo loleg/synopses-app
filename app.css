@@ -243,6 +243,9 @@ paper-scroll-header-panel [content] {
   transform: translate3d(0, -48px, 0);
 }
 
+#navisible { color: #333; }
+#navisible.active { color: #ccc; }
+
 #refresh {
   position: absolute;
   z-index: -1;

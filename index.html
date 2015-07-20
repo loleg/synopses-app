@@ -61,7 +61,7 @@
 
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
-  <paper-header-panel mode="scroll" drawer>
+  <paper-header-panel mode="scroll" drawer hidden="{{!isDrawerVisible}}">
     <paper-toolbar id="navheader" class="narrow">
       <material-search id="search" narrow="[[narrow]]" class="fit"
         active on-run-search="runSearch" query="{{query}}"></material-search>
@@ -110,8 +110,8 @@
 
     <paper-toolbar id="mainheader" class$="[[headerClass]]">
       <paper-icon-button icon="arrow-back" class="selected-item" on-tap="deselectAll"></paper-icon-button>
-
       <paper-icon-button id="navicon" icon="menu" paper-drawer-toggle></paper-icon-button>
+      <paper-icon-button id="navisible" class$="[[drawerToggleClass]]" icon="visibility" hidden="{{narrow}}" on-tap="toggleVisibility"></paper-icon-button>
       <div class="flex"></div>
 
       <span class="top indent title">{{headerTitle}}</span>

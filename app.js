@@ -704,6 +704,11 @@ template.inboxSelect = function(e) {
   this.loadRecords();
 };
 
+template.toggleVisibility = function(e) {
+  this.isDrawerVisible = !this.isDrawerVisible;
+  this.drawerToggleClass = (this.isDrawerVisible) ? "" : "active";
+};
+
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
   this.headerTitle = "Patient";
@@ -759,6 +764,8 @@ template.headerClass = template._computeMainHeaderClass();
 template._scrollArchiveSetup = false; // True if the user has attempted to archive a thread.
 // template.touchAction = 'none'; // Allow track events from x/y directions.
 
+template.isDrawerVisible = true;
+template.drawerToggleClass = "";
 template.actionOpened = false;
 template.actionOpenClose = function() {
   template.actionOpened = !template.actionOpened;
