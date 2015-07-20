@@ -553,9 +553,11 @@ template.handleLogin = function(event, data, silentMode) {
   }
   ajax.addEventListener('response', function(e) {
     var r = e.detail.response;
-    if (r.flag != "success" && !silentMode) {
-      // Alert the user
-      alert('Sorry, try again please');
+    if (r.flag != "success") {
+      if (!silentMode) {
+        // Alert the user
+        alert('Sorry, try again please');
+      }
       return false;
     }
     template.isAuthenticated = true;
