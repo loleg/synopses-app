@@ -630,6 +630,7 @@ function populateProfile(profile, button, dialog) {
 }
 
 template.openDialog = function(e) {
+  template.actionOpened = false;
   var button = e.target;
   while (!button.hasAttribute('data-dialog') && button !== document.body) {
     button = button.parentElement;
@@ -757,6 +758,11 @@ template.headerTitle = 'Inbox';
 template.headerClass = template._computeMainHeaderClass();
 template._scrollArchiveSetup = false; // True if the user has attempted to archive a thread.
 // template.touchAction = 'none'; // Allow track events from x/y directions.
+
+template.actionOpened = false;
+template.actionOpenClose = function() {
+  template.actionOpened = !template.actionOpened;
+};
 
 template.MAX_REFRESH_Y = 150;
 template.syncing = false; // True, if the mail is syncing.

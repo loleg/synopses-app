@@ -207,18 +207,37 @@
   <div on-tap="undoAll" class="undo">Undo</div>
 </paper-toast>
 
-<paper-fab id="fab-favorite" mini icon="favorite" class="icon-favorite"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="0" data-tabname="DATA"></paper-fab>
-<paper-fab id="fab-done" mini icon="done" class="icon-done"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="3" data-tabname="LAB"></paper-fab>
-<paper-fab id="fab-pill" mini icon="maps:local-pharmacy" class="icon-pill"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="2" data-tabname="MED"></paper-fab>
-<paper-fab id="fab" icon="create" class="icon-create"
-   hidden="{{!selectedPatient}}" on-tap="openDialog" data-dialog="addrecord"
-   data-tab="1" data-tabname="NOTE"></paper-fab>
+<div class="action-menu" hidden="{{!selectedPatient}}">
+  <paper-fab id="fab" icon="create" class="icon-create"
+     on-tap="actionOpenClose" hidden="{{actionOpened}}"></paper-fab>
+
+  <div class="action-extra" hidden="{{!actionOpened}}">
+    <label class="addrecord favorite">Vitals</label>
+    <paper-fab id="fab-favorite" mini icon="favorite" class="icon-favorite"
+       on-tap="openDialog" data-dialog="addrecord"
+       data-tab="0" data-tabname="DATA"></paper-fab>
+
+    <label class="addrecord event">Event</label>
+    <paper-fab id="fab-event" mini icon="event" class="icon-event"
+       on-tap="openDialog" data-dialog="addrecord"
+       data-tab="4" data-tabname="EVENT"></paper-fab>
+
+    <label class="addrecord done">Results</label>
+    <paper-fab id="fab-done" mini icon="done" class="icon-done"
+       on-tap="openDialog" data-dialog="addrecord"
+       data-tab="3" data-tabname="LAB"></paper-fab>
+
+    <label class="addrecord pill">Prescription</label>
+    <paper-fab id="fab-pill" mini icon="maps:local-pharmacy" class="icon-pill"
+       on-tap="openDialog" data-dialog="addrecord"
+       data-tab="2" data-tabname="MED"></paper-fab>
+
+    <label class="addrecord create">Notes</label>
+    <paper-fab id="fab-create" icon="create" class="icon-create"
+       on-tap="openDialog" data-dialog="addrecord"
+       data-tab="1" data-tabname="NOTE"></paper-fab>
+  </div>
+</div>
 
 <!-- Cache data requests. -->
 <!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->
