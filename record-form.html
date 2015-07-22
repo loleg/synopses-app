@@ -255,7 +255,7 @@ pikaday-decorator {
       }
       var the_form = this.$.recordform.selectedItem.firstElementChild;
       the_form.action =
-        '/api/' + this.patientid +
+        '/api/patient/' + this.patientid +
         '/record/' + the_form.dataset.typeid +
         '/save';
       the_form.submit();

@@ -199,6 +199,7 @@
         </paper-tab><paper-tab>
           <iron-icon icon="accessibility"></iron-icon>
           Message
+        </paper-tab><paper-tab hidden>
         </paper-tab><paper-tab>
           <iron-icon icon="select-all"></iron-icon>
           All
@@ -225,6 +226,7 @@
           <record-thread messages="[[item.messages]]"
                        labels="[[labelMap]]" users="[[users]]"
                        narrow="[[narrow]]"
+                       on-label-select="_onLabelTap"
                        on-thread-select="_onThreadTap"></record-thread>
         </template>
       </iron-selector>

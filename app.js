@@ -475,7 +475,7 @@ template.loadRecords = function() {
   if (!template.selectedPatient) {
     ajax.url = '/api/threads';
   } else {
-    ajax.url = '/api/' + template.selectedPatient.id + '/threads';
+    ajax.url = '/api/patient/' + template.selectedPatient.id + '/threads';
   }
   template.threads = [{ "messages": [{
       "subject": "Please wait, loading ..."
@@ -547,6 +547,26 @@ template.filterBy = function(e, f, g) {
     thread.messages.forEach(function(message) {
       if (has_match) { return; }
       if (message.icon == the_icon) {
+        has_match = true;
+      }
+    });
+    if (has_match === true) {
+      tt.push(thread);
+    }
+  });
+  template.threads = tt;
+};
+
+template._onLabelTap = function(e) {
+  var the_label = e.detail.label;
+  this.$.filters.select('' + (this.$.filters.items.length-2));
+  // Filter threads
+  var tt = [];
+  template.threadsLoaded.forEach(function(thread) {
+    has_match = false;
+    thread.messages.forEach(function(message) {
+      if (has_match) { return; }
+      if (message.label == the_label) {
         has_match = true;
       }
     });

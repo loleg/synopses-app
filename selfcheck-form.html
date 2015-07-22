@@ -116,7 +116,7 @@ pikaday-decorator {
     <h2>{{ title }}</h2>
 
     <div class="record-SELFCHECK">
-      <form is="iron-form" id="recordform" method="post" data-type="SELFCHECK" data-typeid="1">
+      <form is="iron-form" id="recordform" method="post" data-type="SELFCHECK" data-typeid="5">
         <div class="vertical layout">
 
           <h3>How are you?</h3>
@@ -167,9 +167,8 @@ pikaday-decorator {
       recordType: {
         value: 1
       },
-      patientid: {
-        value: null,
-        reflectToAttribute: true
+      patientHash: {
+        value: document.location.search.replace('?', '')
       }
       //////
     },
@@ -180,12 +179,9 @@ pikaday-decorator {
 
     saveDialog: function(e) {
       var the_form = this.$.recordform;
-      if (this.patientid === null) {
-        alert("Invalid patient ID"); return;
-      }
       the_form.action =
-        '/api/' + this.patientid +
-        '/record/' + the_form.dataset.typeid +
+        '/api/patient/' + this.patientHash +
+        '/record' + // single type
         '/save';
       the_form.submit();
       the_form.reset();

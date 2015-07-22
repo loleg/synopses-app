@@ -132,7 +132,8 @@
     }
     .labels.record-thread label.casename {
       background-color: orange;
-      font-size:110%;
+      font-size: 110%;
+      cursor: pointer;
     }
     paper-material {
       display: block;
@@ -175,7 +176,7 @@
             <span id="subjectline" class="layout horizontal center justified">
               <span class="subject">{{thread.subject}}</span>
               <span class="labels">
-                <label class="casename" hidden="{{!thread.label}}">{{thread.label}}</label>
+                <label class="casename" hidden="{{!thread.label}}" on-tap="_onLabelTap">{{thread.label}}</label>
                 <template is="dom-repeat" items="[[thread.labelIds]]" as="id">
                   <label hidden="{{_hideThreadLabel(id)}}"
                          class$="[[_objectItem('labels', id, 'color')]]">[[_objectItem('labels', id, 'name')]]</label>
@@ -424,6 +425,12 @@
           {'max-height': 0}, {'max-height': 200}
         ], { duration: 250 });
       }
+    },
+
+    _onLabelTap: function(e) {
+      e.stopPropagation();
+      var labelName = e.target.textContent;
+      this.fire('label-select', {label: labelName});
     },
 
     _onProfileImgTransitionEnd: function(e) {
