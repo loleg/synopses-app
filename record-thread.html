@@ -175,6 +175,7 @@
               <span class="right">
                 <iron-icon id="star" icon="[[starredIcon]]"
                            on-tap="_onHighlightStar" starred$="{{thread.starred}}"></iron-icon>
+                <iron-icon id="attachments" icon="icons:attachment" hidden="{{!thread.imageurl}}"></iron-icon>
                 <time>{{thread.date}}</time>
               </span>
             </span>
