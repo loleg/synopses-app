@@ -534,8 +534,12 @@ template.runSearch = function() {
   template.threads = tt;
 };
 
-template.filterBy = function(e) {
-  var the_icon = e.target.icon;
+template.filterBy = function(e, f, g) {
+  var the_icon = this.$.filters.selectedItem.querySelector('iron-icon').icon;
+  if (the_icon === 'select-all') {
+    template.threads = template.threadsLoaded;
+    return;
+  }
   // Filter threads
   var tt = [];
   template.threadsLoaded.forEach(function(thread) {

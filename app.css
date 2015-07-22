@@ -45,13 +45,13 @@ a.abbr {
   transition: opacity 300ms ease-in-out;
 }
 
-#drawerPanel paper-header-panel {
+#drawerPanel .sidepanel {
   background: #fafafa;
   box-shadow: 1px 0 1px rgba(0, 0, 0, 0.1);
   color: #757575;
 }
 
-#drawerPanel paper-header-panel .separator {
+#drawerPanel .sidepanel .separator {
   padding: 16px;
   font-size: 14px;
   font-weight: 500;
@@ -59,11 +59,7 @@ a.abbr {
   border-top: 1px solid #e0e0e0;
 }
 
-#drawerPanel paper-header-panel paper-menu {
-  margin: 16px 0 0 0;
-}
-
-#drawerPanel paper-header-panel paper-menu paper-icon-item {
+#drawerPanel .sidepanel paper-menu paper-icon-item {
   cursor: pointer;
 }
 
@@ -311,16 +307,18 @@ iframe[src^="https://apis.google.com"] {
   background: #ddd !important;
 }
 
+#togglefilters {
+  background: #aaa !important;
+}
+#togglefilters.active {
+  background: #eee !important;
+}
+
 record-thread paper-fab {
   background-color: #eda !important;
 }
 
-#filters {
-  position: absolute;
-  right: 0px;
-}
-
-#filters paper-icon-button {
-  margin: 0 !important;
+#filters iron-icon {
+  left: -6px;
   color: #ccc;
 }

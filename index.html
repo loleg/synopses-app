@@ -63,11 +63,13 @@
 
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
-  <paper-header-panel mode="scroll" drawer hidden="{{!isDrawerVisible}}">
-    <paper-toolbar id="navheader" class="narrow">
+  <paper-scroll-header-panel class="sidepanel" mode="scroll" drawer hidden="{{!isDrawerVisible}}">
+
+    <paper-toolbar id="navheader" class="narrow x-scope">
       <material-search id="search" narrow="[[narrow]]" class="fit"
         active on-run-search="runSearch" query="{{query}}"></material-search>
     </paper-toolbar>
+
     <paper-menu selectable="paper-icon-item" on-iron-select="menuSelect">
       <paper-icon-item id="gotoinbox" role="menuitem" on-tap="inboxSelect">
         <iron-icon icon="mail" item-icon></iron-icon>Inbox
@@ -102,7 +104,7 @@
       </template>
 
     </paper-menu>
-  </paper-header-panel>
+  </paper-scroll-header-panel>
 
   <paper-scroll-header-panel id="scrollheader" main
       keep-condensed-header condenses="{{!narrow}}" fixed="{{narrow}}"
@@ -135,7 +137,7 @@
         </paper-dropdown>
       </paper-menu-button> -->
 
-      <paper-item id="patientdetails" class="bottom" hidden="{{!selectedPatient}}">
+      <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
         <span class="layout horizontal center justified">
           <span class="label patient_name">
             <b>{{selectedPatient.name}}</b>
@@ -162,25 +164,46 @@
       <paper-fab id="editpatient" mini icon="create" class="icon-create"
          on-tap="openDialog" data-dialog="addpatient"
          hidden="{{!selectedPatient}}"></paper-fab>
+
       <paper-fab id="linkpatient" mini icon="link" class="icon-link"
         on-tap="openPatientLink" hidden="{{!selectedPatient}}"></paper-fab>
 
-      <paper-item id="filters" class="bottom">
-        <!-- <paper-icon-button icon="label" selected></paper-icon-button> -->
-        <paper-icon-button icon="favorite" on-tap="filterBy" selected></paper-icon-button>
-        <paper-icon-button icon="event" on-tap="filterBy" selected></paper-icon-button>
-        <paper-icon-button icon="maps:local-pharmacy" on-tap="filterBy" selected></paper-icon-button>
-        <paper-icon-button icon="done" on-tap="filterBy" selected></paper-icon-button>
-        <paper-icon-button icon="create" on-tap="filterBy" selected></paper-icon-button>
-      </paper-item>
+      <!--<paper-fab id="togglefilters" mini icon="filter-list" class="icon-filter-list"
+        on-tap="toggleFilters" active="{{filtersEnabled}}"></paper-fab>-->
 
-      <div id="refresh" class="bottom fit layout horizontal center-center"
+      <!--<div id="refresh" class="bottom fit layout horizontal center-center"
            on-transitionend="onRefreshTransitionEnd">
         <div>
-          <!-- <paper-material class="fit" elevation="2" animated></paper-material> -->
+          <paper-material class="fit" elevation="2" animated></paper-material>
           <paper-spinner id="refreshspinner"></paper-spinner>
         </div>
-      </div>
+      </div>-->
+
+      <paper-tabs id="filters" class="bottom fit layout horizontal center-center"
+                  selected="6" hidden="{{!filtersEnabled}}" on-iron-select="filterBy">
+        <paper-tab>
+          <iron-icon icon="favorite"></iron-icon>
+          Vitals
+        </paper-tab><paper-tab>
+          <iron-icon icon="maps:local-pharmacy"></iron-icon>
+          Prescription
+        </paper-tab><paper-tab>
+          <iron-icon icon="event"></iron-icon>
+          Agenda
+        </paper-tab><paper-tab>
+          <iron-icon icon="done"></iron-icon>
+          Results
+        </paper-tab><paper-tab>
+          <iron-icon icon="create"></iron-icon>
+          Notes
+        </paper-tab><paper-tab>
+          <iron-icon icon="accessibility"></iron-icon>
+          Message
+        </paper-tab><paper-tab>
+          <iron-icon icon="select-all"></iron-icon>
+          All
+        </paper-tab>
+      </paper-tabs>
 
     </paper-toolbar>
 
