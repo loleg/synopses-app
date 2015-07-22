@@ -172,9 +172,8 @@
                 <time>{{thread.date}}</time>
               </span>
             </span>
-            <span class="subject">{{thread.subject}}</span>
-            <span id="lastline" class="layout horizontal center justified" hidden="{{showfulltext}}">
-              <span class="snippet flex">[[_decodeHTMLEntities(thread.snippet)]]</span>
+            <span id="subjectline" class="layout horizontal center justified">
+              <span class="subject">{{thread.subject}}</span>
               <span class="labels">
                 <label class="casename" hidden="{{!thread.label}}">{{thread.label}}</label>
                 <template is="dom-repeat" items="[[thread.labelIds]]" as="id">
@@ -182,6 +181,9 @@
                          class$="[[_objectItem('labels', id, 'color')]]">[[_objectItem('labels', id, 'name')]]</label>
                 </template>
               </span>
+            </span>
+            <span id="lastline" class="layout horizontal center justified" hidden="{{showfulltext}}">
+              <span class="snippet flex">[[_decodeHTMLEntities(thread.snippet)]]</span>
             </span>
           </header>
           <!--<div id="actionicons" on-down="_onMailAction" class="self-start">
