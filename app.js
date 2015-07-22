@@ -535,7 +535,9 @@ template.runSearch = function() {
 };
 
 template.filterBy = function(e, f, g) {
-  var the_icon = this.$.filters.selectedItem.querySelector('iron-icon').icon;
+  var qs = this.$.filters.selectedItem.querySelector('iron-icon');
+  if (qs == null) return;
+  var the_icon = qs.icon;
   if (the_icon === 'select-all') {
     template.threads = template.threadsLoaded;
     return;
@@ -757,6 +759,17 @@ template.patientSelect = function(e) {
   this.headerTitle = "Patient";
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
+};
+
+template._onThreadExpand = function(e) {
+  var patientId = e.detail.thread.from.id;
+  template.patientstodayLoaded.forEach(function(person) {
+    if (person.id == patientId) {
+      template.selectedPatient = person;
+      template.headerTitle = "Patient";
+      template.headerClass = this._computeMainHeaderClass();
+    }
+  });
 };
 
 template.patientSaved = function(e) {

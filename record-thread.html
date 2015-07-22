@@ -424,13 +424,14 @@
         this.$.fulltext.animate([
           {'max-height': 0}, {'max-height': 200}
         ], { duration: 250 });
+        this.fire('thread-expand', {thread: this.thread});
       }
     },
 
     _onLabelTap: function(e) {
       e.stopPropagation();
       var labelName = e.target.textContent;
-      this.fire('label-select', {label: labelName});
+      this.fire('label-tap', {label: labelName});
     },
 
     _onProfileImgTransitionEnd: function(e) {

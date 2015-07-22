@@ -226,7 +226,8 @@
           <record-thread messages="[[item.messages]]"
                        labels="[[labelMap]]" users="[[users]]"
                        narrow="[[narrow]]"
-                       on-label-select="_onLabelTap"
+                       on-label-tap="_onLabelTap"
+                       on-thread-expand="_onThreadExpand"
                        on-thread-select="_onThreadTap"></record-thread>
         </template>
       </iron-selector>
