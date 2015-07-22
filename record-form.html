@@ -246,6 +246,28 @@ pikaday-decorator {
       p_height: { value: "" }
     },
 
+    ready: function() {
+      this.loadPastCases();
+    },
+
+    loadPastCases: function() {
+      // Clear the suggestions
+      var $obj = this.$.caselist;
+      while ($obj.firstChild) { $obj.removeChild($obj.firstChild); }
+      // Make a call
+      var ajax = document.createElement('iron-ajax');
+      ajax.auto = true;
+      ajax.url = '/api/assist/cases';
+      ajax.addEventListener('response', function(e) {
+        var terms = e.detail.response.cases;
+        var result = "";
+        for (var i = 0; i < terms.length; i++) {
+          result = result + '<option value="' + terms[i] + '"></option>';
+        }
+        $obj.innerHTML = result;
+      });
+    },
+
     saveDialog: function(e) {
       if (this.patientid === null) {
         alert("Invalid patient ID"); return;

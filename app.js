@@ -483,7 +483,7 @@ template.loadRecords = function() {
   ajax.addEventListener('response', function(e) {
     var threads = e.detail.response.threads;
     threads.forEach(function(t) {
-      if (!t.messages || t.messages.length == 0) {return;}
+      if (!t.messages || t.messages.length === 0) { return; }
       var topMsg = t.messages[0];
       var ident = 'thread-' + topMsg.id + '-unread';
       var v = window.localStorage.getItem(ident);
