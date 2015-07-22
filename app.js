@@ -482,6 +482,13 @@ template.loadRecords = function() {
     }] }];
   ajax.addEventListener('response', function(e) {
     var threads = e.detail.response.threads;
+    threads.forEach(function(t) {
+      if (!t.messages || t.messages.length == 0) {return;}
+      var topMsg = t.messages[0];
+      var ident = 'thread-' + topMsg.id + '-unread';
+      var v = window.localStorage.getItem(ident);
+      if (v === 'false') { topMsg.unread = false; }
+    });
     template.threads = threads;
     template.threadsLoaded = threads;
   });
@@ -762,14 +769,20 @@ template.patientSelect = function(e) {
 };
 
 template._onThreadExpand = function(e) {
-  var patientId = e.detail.thread.from.id;
+  var threadId = e.detail.thread.id,
+      patientId = e.detail.thread.from.id;
   template.patientstodayLoaded.forEach(function(person) {
     if (person.id == patientId) {
       template.selectedPatient = person;
       template.headerTitle = "Patient";
-      template.headerClass = this._computeMainHeaderClass();
+      template.headerClass = template._computeMainHeaderClass();
     }
   });
+  // Store unread status
+  if (threadId >= 0) {
+    var ident = 'thread-' + threadId + '-unread';
+    window.localStorage.setItem(ident, false);
+  }
 };
 
 template.patientSaved = function(e) {

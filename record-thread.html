@@ -53,12 +53,16 @@
       margin-left: 16px;
       font-size: 14px;
     }
-    header[unread] .name,
-    header[unread] .subject,
-    header[unread] time {
-      font-weight: 500;
+    paper-fab {
+      border: 2px solid transparent;
     }
-    header[unread] time {
+    div[unread] paper-fab {
+      border: 2px solid #8df;
+    }
+    div[unread] header .subject {
+      font-weight: 600;
+    }
+    div[unread] header time {
       color: var(--paper-light-blue-500);
     }
     header span.name {
@@ -146,7 +150,7 @@
   </style>
   <template>
     <div id="container">
-      <div id="thread" class="layout horizontal">
+      <div id="thread" class="layout horizontal" unread$="{{thread.unread}}">
         <paper-fab id="profileimage" mini icon="{{thread.icon}}"
                     selected="[[selected]]" on-tap="_onSelectThread"
                     on-transitionend="_onProfileImgTransitionEnd"></paper-fab>
@@ -160,7 +164,7 @@
                      selected="[[selected]]" on-tap="_onSelectThread"
                      on-transitionend="_onProfileImgTransitionEnd"></profile-img>-->
         <div class="flex layout horizontal">
-          <header class="layout vertical flex" unread$="{{thread.unread}}"
+          <header class="layout vertical flex"
                   on-down="_onDown" on-up="_onUp" on-tap="_onThreadTap">
             <span class="layout horizontal center justified">
               <span class="name">
@@ -424,6 +428,7 @@
         this.$.fulltext.animate([
           {'max-height': 0}, {'max-height': 200}
         ], { duration: 250 });
+        this.set('thread.unread', false);
         this.fire('thread-expand', {thread: this.thread});
       }
     },
