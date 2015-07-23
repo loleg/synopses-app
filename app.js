@@ -632,9 +632,9 @@ function populateRecord(record, button, dialog) {
     record_form.selected = parseInt(button.dataset.tab);
   }, 100);
 
+  // Populate DATA forms
   var the_form = dialog.querySelector('form[data-type="DATA"]');
   if (record) {
-    // Populate forms
     for (var key in record) {
       // console.log(key, record[key]);
       var the_input =
@@ -656,9 +656,17 @@ function populateRecord(record, button, dialog) {
         the_input.value = record[key];
       }
     }
+
   } else {
     the_form.reset();
   }
+
+  // Populate template form
+  dialog
+    .querySelector('form[data-type="NOTE"] textarea[name="note"]')
+    .value =
+      "-- Subjective --\n\n-- Objective --\n\n-- Assessment --\n\n-- Plan --\n";
+
 }
 
 function populateProfile(profile, button, dialog) {
