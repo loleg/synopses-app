@@ -90,7 +90,6 @@
     iron-icon[starred] {
       color: var(--paper-yellow-600);
     }
-    #star { display:none; }
     .undo {
       @apply(--gmail-undo-action);
     }
@@ -385,6 +384,7 @@
     _onHighlightStar: function(e) {
       e.stopPropagation();
       this.set('thread.starred', !this.thread.starred);
+      this.fire('thread-starred', {thread: this.thread});
     },
 
     _onMailAction: function(e) {

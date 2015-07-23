@@ -485,9 +485,16 @@ template.loadRecords = function() {
     threads.forEach(function(t) {
       if (!t.messages || t.messages.length === 0) { return; }
       var topMsg = t.messages[0];
-      var ident = 'thread-' + topMsg.id + '-unread';
-      var v = window.localStorage.getItem(ident);
-      if (v === 'false') { topMsg.unread = false; }
+      var patientId = topMsg.from.id;
+      var ident = 'P-' + patientId + '-T-' + topMsg.id;
+      var v_unread = window.localStorage.getItem(ident + '-unread');
+      if (v_unread === 'false') {
+        topMsg.unread = false;
+      }
+      var v_star = window.localStorage.getItem(ident + '-star');
+      if (v_star !== null) {
+        topMsg.starred = v_star;
+      }
     });
     template.threads = threads;
     template.threadsLoaded = threads;
@@ -543,7 +550,7 @@ template.runSearch = function() {
 
 template.filterBy = function(e, f, g) {
   var qs = this.$.filters.selectedItem.querySelector('iron-icon');
-  if (qs == null) return;
+  if (qs === null) return;
   var the_icon = qs.icon;
   if (the_icon === 'select-all') {
     template.threads = template.threadsLoaded;
@@ -555,7 +562,10 @@ template.filterBy = function(e, f, g) {
     has_match = false;
     thread.messages.forEach(function(message) {
       if (has_match) { return; }
-      if (message.icon == the_icon) {
+      if (
+          (the_icon === "icons:star" && message.starred) ||
+          (message.icon == the_icon)
+        ) {
         has_match = true;
       }
     });
@@ -588,7 +598,6 @@ template._onLabelTap = function(e) {
 
 template.mockLogin = function() {
   this.isAuthenticated = true;
-  window.localStorage.clear();
   if (PATIENT) { template.loadPatientFile(); return; }
   // Cached data? We're already using it. Bomb out before making unnecessary requests.
   if (template.threads && template.patientstoday) return;
@@ -789,8 +798,19 @@ template._onThreadExpand = function(e) {
   });
   // Store unread status
   if (threadId >= 0) {
-    var ident = 'thread-' + threadId + '-unread';
+    var ident = 'P-' + patientId + '-T-' + threadId + '-unread';
     window.localStorage.setItem(ident, false);
+  }
+};
+
+template._onThreadStarred = function(e) {
+  var threadId = e.detail.thread.id,
+      patientId = e.detail.thread.from.id,
+      starredValue = e.detail.thread.starred;
+  // Store starred status
+  if (threadId >= 0) {
+    var ident = 'P-' + patientId + '-T-' + threadId + '-star';
+    window.localStorage.setItem(ident, starredValue);
   }
 };
 
@@ -912,6 +932,7 @@ template.addEventListener('dom-change', function(e) {
 // };
 
 if (DEBUG) { // !navigator.onLine ||
+  window.localStorage.clear();
   template.mockLogin();
 } else {
   template.handleLogin(null, null, true);

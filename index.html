@@ -174,8 +174,6 @@
       <paper-fab id="linkpatient" mini icon="link" class="icon-link"
         on-tap="openPatientLink" hidden="{{!selectedPatient}}"></paper-fab>
 
-      <!--<paper-fab id="togglefilters" mini icon="filter-list" class="icon-filter-list"
-        on-tap="toggleFilters" active="{{filtersEnabled}}"></paper-fab>-->
 
       <!--<div id="refresh" class="bottom fit layout horizontal center-center"
            on-transitionend="onRefreshTransitionEnd">
@@ -185,26 +183,35 @@
         </div>
       </div>-->
 
+      <!-- TODO: (in separate component)
+      <paper-fab id="togglefilters" mini icon="filter-list" class="icon-filter-list"
+        on-tap="toggleFilters" hidden="{{!filtersEnabled}}"></paper-fab>
+        <iron-dropdown horizontal-align="right" vertical-align="top">
+      -->
+
       <paper-tabs id="filters" class="bottom fit layout horizontal center-center"
-                  selected="6" hidden="{{!filtersEnabled}}" on-iron-select="filterBy">
+                  selected="8" hidden="{{!filtersEnabled}}" on-iron-select="filterBy">
         <paper-tab>
-          <iron-icon icon="favorite"></iron-icon>
-          Vitals
-        </paper-tab><paper-tab>
-          <iron-icon icon="maps:local-pharmacy"></iron-icon>
-          Prescription
-        </paper-tab><paper-tab>
           <iron-icon icon="event"></iron-icon>
           Agenda
         </paper-tab><paper-tab>
-          <iron-icon icon="done"></iron-icon>
-          Results
+          <iron-icon icon="icons:star"></iron-icon>
+          Starred
         </paper-tab><paper-tab>
           <iron-icon icon="create"></iron-icon>
           Notes
         </paper-tab><paper-tab>
           <iron-icon icon="accessibility"></iron-icon>
           Message
+        </paper-tab><paper-tab>
+          <iron-icon icon="favorite"></iron-icon>
+          Vitals
+        </paper-tab><paper-tab>
+          <iron-icon icon="maps:local-pharmacy"></iron-icon>
+          Prescription
+        </paper-tab><paper-tab>
+          <iron-icon icon="done"></iron-icon>
+          Results
         </paper-tab><paper-tab hidden>
         </paper-tab><paper-tab>
           <iron-icon icon="select-all"></iron-icon>
@@ -234,6 +241,7 @@
                        narrow="[[narrow]]"
                        on-label-tap="_onLabelTap"
                        on-thread-expand="_onThreadExpand"
+                       on-thread-starred="_onThreadStarred"
                        on-thread-select="_onThreadTap"></record-thread>
         </template>
       </iron-selector>
