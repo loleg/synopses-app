@@ -140,9 +140,9 @@ template._computeHeaderTitle = function(numSelectedThreads) {
 // after the first selection. For now, use events instead to update title.
 // See github.com/PolymerElements/iron-selector/issues/33
 template._onThreadSelectChange = function(e) {
-  // this.selectedPatient = false;
   // this.headerTitle = this._computeHeaderTitle(this.selectedThreads.length);
-  // this.headerClass = this._computeMainHeaderClass();
+  this.headerClass = this._computeMainHeaderClass(
+      this.narrow, this.selectedThreads.length);
 };
 
 template._onThreadTap = function(e) {
@@ -588,6 +588,7 @@ template._onLabelTap = function(e) {
 
 template.mockLogin = function() {
   this.isAuthenticated = true;
+  window.localStorage.clear();
   if (PATIENT) { template.loadPatientFile(); return; }
   // Cached data? We're already using it. Bomb out before making unnecessary requests.
   if (template.threads && template.patientstoday) return;
@@ -810,6 +811,18 @@ template.loadPatientFile = function() {
   });
   ajax1.addEventListener('error', function(e) {
   });
+};
+
+template.shareThreads = function() {
+  // TODO: Template
+  var messageBody = "PATIENT RECORD\n------------------------------\nSTRICTLY CONFIDENTIAL\n------------------------------\n";
+  this.selectedThreads.forEach(function(thread) {
+    messageBody += "\n" + thread.querySelector('header').innerText;
+  });
+
+  messageBody += "\n\nRecords provided by Synopses.ch - please visit our site for more information.\nThis e-mail message and any attachments to it contain confidential information which is for the sole attention and use of the intended recipient. Please notify us at once if you think that it may not be intended for you, and delete it immediately. Thank you.";
+  messageBody = messageBody.replace(/\n/g, '%0D%0A');
+  window.location.href = "mailto:?subject=Synopses Shared Record&body=" + messageBody;
 };
 
 //////////////////

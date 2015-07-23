@@ -113,9 +113,15 @@
       on-trackend="onRefreshUp">
 
     <paper-toolbar id="mainheader" class$="[[headerClass]]">
-      <paper-icon-button icon="arrow-back" class="selected-item" on-tap="deselectAll"></paper-icon-button>
-      <paper-icon-button id="navicon" icon="menu" paper-drawer-toggle></paper-icon-button>
-      <paper-icon-button id="navisible" class$="[[drawerToggleClass]]" icon="visibility" hidden="{{narrow}}" on-tap="toggleVisibility"></paper-icon-button>
+      <paper-icon-button icon="arrow-back" class="selected-item"
+        on-tap="deselectAll"></paper-icon-button>
+      <paper-icon-button id="navicon" icon="menu"
+        paper-drawer-toggle></paper-icon-button>
+      <paper-icon-button id="navisible" class$="[[drawerToggleClass]]"
+        icon="visibility" hidden="{{narrow}}"
+        on-tap="toggleVisibility"></paper-icon-button>
+      <paper-icon-button id="shareitems" icon="icons:mail" class="selected-item"
+        on-tap="shareThreads"></paper-icon-button>
       <div class="flex"></div>
 
       <span class="top indent title">{{headerTitle}}</span>
