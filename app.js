@@ -923,6 +923,10 @@ template.addEventListener('dom-change', function(e) {
 
     // Adjust header's color
     //document.querySelector('#mainheader').style.color = (d.y >= d.height - d.condensedHeight) ? '#fff' : '';
+
+    // Hide filters in narrow view
+    // TODO: Apply class when collapsed
+    document.querySelector('#filters').hidden = (d.y >= d.height - d.condensedHeight);
   });
 });
 
