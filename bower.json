@@ -30,6 +30,7 @@
     "iron-autogrow-textarea": "PolymerElements/iron-autogrow-textarea#^1.0.0",
     "iron-iconset": "PolymerElements/iron-iconset#^1.0.0",
     "pikaday-decorator": "*",
-    "iron-image": "PolymerElements/iron-image#^1.0.0"
+    "iron-image": "PolymerElements/iron-image#^1.0.0",
+    "iron-dropdown": "PolymerElements/iron-dropdown#^1.0.0"
   }
 }

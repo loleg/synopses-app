@@ -2,6 +2,7 @@
 <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="bower_components/paper-input/paper-input.html">
 <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
 <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
@@ -86,6 +87,23 @@
 pikaday-decorator {
   margin-bottom: 2em;
 }
+
+.autosuggest {
+  position: fixed;
+  max-height: 6em;
+  min-width: 10em;
+  overflow-y: scroll;
+  z-index: 999;
+}
+.autosuggest li {
+  list-style: none;
+  margin: 0;
+}
+.autosuggest a {
+  text-decoration: none;
+  color: blue;
+  border-bottom: 1px dashed blue;
+}
 </style>
 <template>
   <paper-dialog id="{{ ident }}" modal>
@@ -157,15 +175,20 @@ pikaday-decorator {
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
             <paper-input name="subject" label="Summary" required></paper-input>
-            <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
+            <iron-autogrow-textarea id="ta1" name="note" label="Note"
+              required maxRows="16" rows="8" on-keypress="_onChangeMedTerms">
               <textarea name="note" id="ta1" rows="6"></textarea>
             </iron-autogrow-textarea>
-            <paper-input-container on-keypress="_onChangeMedTerms">
-              <input list="medterms" is="iron-input">
-              <datalist id="medterms"></datalist>
-            </paper-input-container>
-            <label>Start typing above for auto-medical terms,
-              then press Enter to add to note.</label>
+            <div class="horizontal layout">
+              <paper-button raised on-tap="_onTapSoapForm">
+                Use SOAP form
+              </paper-button>
+              <ul class="autosuggest">
+                <template is="dom-repeat" items="[[medterms]]">
+                  <li><a href="#" on-tap="_onSelectMedTerm">[[item]]</a></li>
+                </template>
+              </ul>
+            </div>
           </div>
         </form>
       </div>
@@ -242,6 +265,12 @@ pikaday-decorator {
       caseName: {
         value: ''
       },
+      medterms: {
+        value: []
+      },
+      termsLastEntered: {
+        value: ''
+      },
       title: {
         value: "New record",
         reflectToAttribute: true
@@ -313,28 +342,67 @@ pikaday-decorator {
       document.getElementById(this.ident).close();
     },
 
-    _onChangeMedTerms: function(e) {
-      var text = e.target.value;
-      if (text.length < 2) return;
-      if (e.which == 13 || e.keyCode == 13) {
-        this.$.ta1.textarea.value += text;
-        e.target.value = "";
-        return false;
+    _onTapSoapForm: function() {
+      // Populate template form
+      if (this.$.ta1.textarea.value.length > 0) {
+        if (!window.confirm('Overwrite current note with SOAP form?'))
+          return;
       }
-      // Clear the suggestions
-      var $obj = this.$.medterms;
-      while ($obj.firstChild) { $obj.removeChild($obj.firstChild); }
+      this.$.ta1.textarea.value =
+        "Subjective:\n\nObjective:\n\nAssessment:\n\nPlan:\n";
+    },
+
+    _onSelectMedTerm: function(e) {
+      var term = e.target.innerText,
+          entered = this.termsLastEntered,
+          contents = this.$.ta1.textarea.value;
+      // var re = new RegExp("(^|\s)(" + entered + ")(\s|$)");
+      // console.log(contents.match(re));
+      var n = contents.lastIndexOf(entered);
+      if (n < 0) return false;
+      contents = contents.substring(0, n) + term +
+                 contents.substring(n + entered.length);
+      this.$.ta1.textarea.value = contents;
+      this.medterms = [];
+      this.termsLastEntered = '';
+      return false;
+    },
+
+    _onChangeMedTerms: function(e) {
+      if (!(
+        (e.which > 64 && e.which < 91) || // A-Z
+        (e.which > 96 && e.which < 123)   // a-z
+      )) {
+        this.termsLastEntered = '';
+        this.medterms = [];
+        return;
+      }
+      if (e.target.value.indexOf(this.termsLastEntered)<0) {
+        this.termsLastEntered = '';
+        this.medterms = [];
+      }
+      var key = String.fromCharCode(e.which);
+      var text = this.termsLastEntered + key;
+      this.termsLastEntered = text;
+      // Stop searching for this word
+      if (text.length < 3 ||
+        (this.medterms.length === 0 && text.length > 5)) {
+        this.medterms = [];
+        return;
+      }
       // Make a call
       var ajax = document.createElement('iron-ajax');
       ajax.auto = true;
       ajax.url = '/api/assist/medical/' + text.trim().toLowerCase();
+      var self = this;
       ajax.addEventListener('response', function(e) {
         var terms = e.detail.response.matches;
-        var result = "";
+        var result = [];
         for (var i = 0; i < terms.length; i++) {
-          result = result + '<option value="' + terms[i] + '"></option>';
+          result.push(terms[i]);
         }
-        $obj.innerHTML = result;
+        console.log(text);
+        self.medterms = result;
       });
     }
 

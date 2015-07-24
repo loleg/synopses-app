@@ -675,13 +675,6 @@ function populateRecord(record, button, dialog) {
   } else {
     the_form.reset();
   }
-
-  // Populate template form
-  dialog
-    .querySelector('form[data-type="NOTE"] textarea[name="note"]')
-    .value =
-      "-- Subjective --\n\n-- Objective --\n\n-- Assessment --\n\n-- Plan --\n";
-
 }
 
 function populateProfile(profile, button, dialog) {
