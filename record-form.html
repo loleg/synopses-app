@@ -89,7 +89,6 @@ pikaday-decorator {
 }
 
 .autosuggest {
-  position: fixed;
   max-height: 6em;
   min-width: 10em;
   overflow-y: scroll;
@@ -97,7 +96,6 @@ pikaday-decorator {
 }
 .autosuggest li {
   list-style: none;
-  margin: 0;
 }
 .autosuggest a {
   text-decoration: none;
@@ -198,9 +196,14 @@ pikaday-decorator {
               data-type="MED" data-typeid="3">
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
-            <paper-input name="medication1" label="Medication" required></paper-input>
-            <paper-input name="medication2" label=""></paper-input>
-            <paper-input name="medication3" label=""></paper-input>
+            <paper-input name="medication1" on-keypress="_onChangeMedTerms" label="Medication" required></paper-input>
+            <paper-input name="medication2" on-keypress="_onChangeMedTerms" label=""></paper-input>
+            <paper-input name="medication3" on-keypress="_onChangeMedTerms" label=""></paper-input>
+            <ul class="autosuggest">
+              <template is="dom-repeat" items="[[medterms]]">
+                <li><a href="#" on-tap="_onSelectMedTerm">[[item]]</a></li>
+              </template>
+            </ul>
             <paper-input name="condition" label="For condition" required></paper-input>
           </div>
         </form>
@@ -267,6 +270,9 @@ pikaday-decorator {
       },
       medterms: {
         value: []
+      },
+      elemLastEntered: {
+        value: null
       },
       termsLastEntered: {
         value: ''
@@ -355,14 +361,14 @@ pikaday-decorator {
     _onSelectMedTerm: function(e) {
       var term = e.target.innerText,
           entered = this.termsLastEntered,
-          contents = this.$.ta1.textarea.value;
+          contents = this.elemLastEntered.value;
       // var re = new RegExp("(^|\s)(" + entered + ")(\s|$)");
       // console.log(contents.match(re));
       var n = contents.lastIndexOf(entered);
       if (n < 0) return false;
       contents = contents.substring(0, n) + term +
                  contents.substring(n + entered.length);
-      this.$.ta1.textarea.value = contents;
+      this.elemLastEntered.value = contents;
       this.medterms = [];
       this.termsLastEntered = '';
       return false;
@@ -377,10 +383,13 @@ pikaday-decorator {
         this.medterms = [];
         return;
       }
-      if (e.target.value.indexOf(this.termsLastEntered)<0) {
+      if (
+        e.target != this.elemLastEntered ||
+        e.target.value.indexOf(this.termsLastEntered)<0) {
         this.termsLastEntered = '';
         this.medterms = [];
       }
+      this.elemLastEntered = e.target;
       var key = String.fromCharCode(e.which);
       var text = this.termsLastEntered + key;
       this.termsLastEntered = text;
@@ -393,7 +402,8 @@ pikaday-decorator {
       // Make a call
       var ajax = document.createElement('iron-ajax');
       ajax.auto = true;
-      ajax.url = '/api/assist/medical/' + text.trim().toLowerCase();
+      var t_api = (e.target.tagName === 'TEXTAREA') ? 'medical' : 'druginfo';
+      ajax.url = '/api/assist/' + t_api + '/' + text.trim().toLowerCase();
       var self = this;
       ajax.addEventListener('response', function(e) {
         var terms = e.detail.response.matches;
