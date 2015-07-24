@@ -33,6 +33,12 @@
 
 :host label { margin-right:1em; }
 
+:host .warning {
+  background-color: #ffb;
+  padding: 8px;
+  margin: 0;
+}
+
 #dropzone {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -90,6 +96,10 @@ pikaday-decorator {
         <input list="caselist" is="iron-input" bind-value="{{caseName}}">
         <datalist id="caselist"></datalist>
       </paper-input-container>
+      <p id="requirecasename" class="warning" hidden>
+        A case title is required; please use the field above to
+        choose among existing case names, or create a new one.
+      </p>
     </div>
     <paper-tabs selected="{{recordType}}" autofocus>
       <paper-tab>Data Entry</paper-tab>
@@ -273,7 +283,9 @@ pikaday-decorator {
         alert("Invalid patient ID"); return;
       }
       if (this.caseName === '') {
-        alert("You must select or enter a case"); return;
+        this.$.casename.querySelector('input').focus();
+        this.$.requirecasename.hidden = false;
+        return;
       }
       var the_form = this.$.recordform.selectedItem.firstElementChild;
       the_form.action =
