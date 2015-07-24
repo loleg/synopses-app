@@ -365,7 +365,8 @@
       var value = els.innerHTML;
       if (value.indexOf('<')>-1) return;
       var htmlvalue = value.replace(/{{([A-Za-z0-9 _]+)}}/g,
-        "<a class='abbr' href='http://www.merriam-webster.com/medlineplus/\$1' target='_blank'>\$1</a>");
+        "<a class='abbr' href='http://www.merriam-webster.com/medlineplus/\$1' target='_blank'>\$1</a>")
+        .replace(/\n/g, "<br>");
       els.innerHTML = htmlvalue;
     },
 
