@@ -108,7 +108,8 @@
         <template is="dom-repeat" items="[[threads]]">
           <record-thread messages="[[item.messages]]"
                        labels="[[labelMap]]" users="[[users]]"
-                       narrow="[[narrow]]"></record-thread>
+                       narrow="[[narrow]]"
+                       on-thread-expand="_onThreadExpand"></record-thread>
         </template>
       </iron-selector>
   </div>

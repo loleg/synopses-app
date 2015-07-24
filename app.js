@@ -795,18 +795,30 @@ template.patientSelect = function(e) {
 template._onThreadExpand = function(e) {
   var threadId = e.detail.thread.id,
       patientId = e.detail.thread.from.id;
-  template.patientstodayLoaded.forEach(function(person) {
-    if (person.id == patientId) {
-      template.selectedPatient = person;
-      template.headerTitle = "Patient";
-      template.headerClass = template._computeMainHeaderClass();
-    }
-  });
+  if (template.patientstodayLoaded) {
+    template.patientstodayLoaded.forEach(function(person) {
+      if (person.id == patientId) {
+        template.selectedPatient = person;
+        template.headerTitle = "Patient";
+        template.headerClass = template._computeMainHeaderClass();
+      }
+    });
+  }
   // Store unread status
   if (threadId >= 0) {
     var ident = 'P-' + patientId + '-T-' + threadId + '-unread';
     window.localStorage.setItem(ident, false);
   }
+  // Close other threads
+  template.$.threadlist.items.forEach(function(thread) {
+    if (thread.thread == e.detail.thread) { return; }
+    if (thread.showfulltext) {
+      thread.showfulltext = false;
+      thread.$.fulltext.animate([
+        {'max-height': 200}, {'max-height': 0}
+      ], { duration: 50 });
+    }
+  });
 };
 
 template._onThreadStarred = function(e) {
