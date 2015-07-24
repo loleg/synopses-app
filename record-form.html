@@ -117,7 +117,7 @@ pikaday-decorator {
         choose among existing case names, or create a new one.
       </p>
     </div>
-    <paper-tabs selected="{{recordType}}" autofocus>
+    <paper-tabs selected="{{recordType}}" autofocus on-tap="_onSwitchTab">
       <paper-tab>Data Entry</paper-tab>
       <paper-tab>Doctor Note</paper-tab>
       <paper-tab>Medication</paper-tab>
@@ -358,6 +358,11 @@ pikaday-decorator {
         "Subjective:\n\nObjective:\n\nAssessment:\n\nPlan:\n";
     },
 
+    _onSwitchTab: function() {
+      this.medterms = [];
+      this.termsLastEntered = '';
+    },
+
     _onSelectMedTerm: function(e) {
       var term = e.target.innerText,
           entered = this.termsLastEntered,
@@ -411,7 +416,7 @@ pikaday-decorator {
         for (var i = 0; i < terms.length; i++) {
           result.push(terms[i]);
         }
-        console.log(text);
+        // console.log(text);
         self.medterms = result;
       });
     }
