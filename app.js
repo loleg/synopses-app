@@ -472,7 +472,11 @@ template.loadPatientsPast = function() {
 template.loadRecords = function() {
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
-  if (!template.selectedPatient) {
+  var hasPatient = (template.selectedPatient &&
+             typeof template.selectedPatient.id !== 'undefined');
+  if (!hasPatient && PATIENT) {
+    console.warn("No selected patient!"); return;
+  } else if (!hasPatient) {
     ajax.url = '/api/threads';
   } else {
     ajax.url = '/api/patient/' + template.selectedPatient.id + '/threads';
@@ -607,6 +611,7 @@ template.mockLogin = function() {
 };
 
 template.handleLogin = function(event, data, silentMode) {
+  if (PATIENT) return; // not supported yet
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
   ajax.url = '/api/login';
