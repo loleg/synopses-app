@@ -746,31 +746,27 @@ template.openDialog = function(e) {
         dialog.open();
       });
 
-    } else if (button.id !== 'gotocalendar') {
-
-      the_form = dialog.querySelector('form');
-      the_form.reset();
-      if (the_form.id === "patientform") {
-        the_form.action = "/api/patient/save";
-        var all_fields = the_form.querySelectorAll(
-          'input[type="text"],gold-email-input,paper-input'
-        );
-        for (var i = 0; i < all_fields.length; i++) {
-          all_fields[i].value = "";
-        }
-      }
-      dialog.open();
-
     } else {
+
+    //   // Reset any forms
+    //   the_form = dialog.querySelector('form');
+    //   the_form.reset();
+    //   if (the_form.id === "patientform") {
+    //     the_form.action = "/api/patient/save";
+    //     var all_fields = the_form.querySelectorAll(
+    //       'input[type="text"],gold-email-input,paper-input'
+    //     );
+    //     for (var i = 0; i < all_fields.length; i++) {
+    //       all_fields[i].value = "";
+    //     }
+    //   }
+    //   dialog.open();
+    //
+    // } else {
       dialog.open();
 
     }
   }
-};
-
-template.openPatientLink = function() {
-  window.prompt("Share this link with the patient:",
-    location.origin + '/patient/?' + this.selectedPatient.hash);
 };
 
 template.inboxSelect = function(e) {

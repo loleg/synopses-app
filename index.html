@@ -59,7 +59,8 @@
   patientid="{{selectedPatient.id}}"
   on-record-saved="patientSaved"></record-form>
 
-<planner-form ident="googlecalendar"></planner-form>
+<share-dialog ident="sharelink" title="Share patient link"
+  patient="{{selectedPatient}}"></share-dialog>
 
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
@@ -172,7 +173,7 @@
          hidden="{{!selectedPatient}}"></paper-fab>
 
       <paper-fab id="linkpatient" mini icon="link" class="icon-link"
-        on-tap="openPatientLink" hidden="{{!selectedPatient}}"></paper-fab>
+        on-tap="openDialog" data-dialog="sharelink" hidden="{{!selectedPatient}}"></paper-fab>
 
 
       <!--<div id="refresh" class="bottom fit layout horizontal center-center"

@@ -1,0 +1,61 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-input/iron-input.html">
+<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+
+<dom-module id="share-dialog">
+<style>
+:host label { margin-right:1em; }
+</style>
+<template>
+  <paper-dialog id="{{ ident }}" on-open="_selectAll" modal>
+    <div class="layout vertical">
+      <h2>{{ title }}</h2>
+      <p>Copy this link to share selected data privately:</p>
+      <input id="shareInput" readonly on-tap="_selectAll" is="iron-input" bind-value="{{shareLink}}">
+    </div>
+    <div class="buttons">
+      <paper-button on-tap="linkToEmail">E-mail</paper-button>
+      <paper-button raised dialog-dismiss>Close</paper-button>
+    </div>
+  </paper-dialog>
+</template>
+<script>
+  Polymer({
+    is: 'share-dialog',
+
+    properties: {
+      shareLink: {
+        value: ''
+      },
+      patient: {
+        value: null,
+        reflectToAttribute: true,
+        observer: '_patientChanged'
+      },
+      title: {
+        value: "Share link",
+        reflectToAttribute: true
+      }
+    },
+
+    _selectAll: function() {
+      this.querySelector('#shareInput').select();
+    },
+
+    _patientChanged: function() {
+      this.shareLink = location.origin + '/patient/?' + this.patient.hash;
+    },
+
+    linkToEmail: function(e) {
+      // TODO: Template
+      var messageBody = "PATIENT FILE\n------------------------------\nSTRICTLY CONFIDENTIAL\n------------------------------\n";
+      messageBody += "Click here to visit your private medical file:";
+      messageBody += "\n\n" + this.shareLink;
+      messageBody += "\n\nRecords provided by Synopses.ch - please visit our site for more information.\nThis e-mail message and any attachments to it contain confidential information which is for the sole attention and use of the intended recipient. Please notify us at once if you think that it may not be intended for you, and delete it immediately. Thank you.";
+      messageBody = messageBody.replace(/\n/g, '%0D%0A');
+      window.location.href = "mailto:?subject=Synopses Shared Record&body=" + messageBody;
+    }
+
+  });
+</script>
+</dom-module>
