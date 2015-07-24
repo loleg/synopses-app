@@ -722,7 +722,7 @@ template.openDialog = function(e) {
 
       var ajax = document.createElement('iron-ajax');
       ajax.auto = true;
-      ajax.url = '/api/' + template.selectedPatient.id + '/profile';
+      ajax.url = '/api/patient/' + template.selectedPatient.id + '/profile';
       ajax.addEventListener('error', function(e) {
         // console.warn(e);
       });
@@ -736,7 +736,7 @@ template.openDialog = function(e) {
 
       var ajax2 = document.createElement('iron-ajax');
       ajax2.auto = true;
-      ajax2.url = '/api/' + template.selectedPatient.id + '/profile';
+      ajax2.url = '/api/patient/' + template.selectedPatient.id + '/profile';
       ajax2.addEventListener('error', function(e) {
         // console.warn(e);
       });
