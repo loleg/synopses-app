@@ -3,7 +3,7 @@
   "short_name": "Synopses",
   "start_url": "https://synopses.ch",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "landscape",
   "icons": [{
     "src": "images/synopses-icon.png",
     "sizes": "96x96",
