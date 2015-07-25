@@ -516,7 +516,6 @@ template.runSearch = function() {
   }
   if (q.length < 3) {
     template.patientstoday = template.patientstodayLoaded;
-    template.patientspast = template.patientspastLoaded;
     template.threads = template.threadsLoaded;
     return;
   }
@@ -528,13 +527,6 @@ template.runSearch = function() {
     }
   });
   template.patientstoday = ppt;
-  var ppp = [];
-  template.patientspastLoaded.forEach(function(person) {
-    if (person.name.toLowerCase().indexOf(q) !== -1) {
-      ppp.push(person);
-    }
-  });
-  template.patientspast = ppp;
   // Filter threads
   var tt = [];
   template.threadsLoaded.forEach(function(thread) {
@@ -606,7 +598,7 @@ template.mockLogin = function() {
   if (PATIENT) { template.loadPatientFile(); return; }
   // Cached data? We're already using it. Bomb out before making unnecessary requests.
   if (template.threads && template.patientstoday) return;
-  this.loadPatientsPast();
+  if (DEBUG) { this.loadPatientsPast(); }
   this.loadRecords();
 };
 
@@ -632,7 +624,6 @@ template.handleLogin = function(event, data, silentMode) {
       return false;
     }
     template.isAuthenticated = true;
-    template.loadPatientsPast();
     template.loadPatients();
     template.loadRecords();
   });

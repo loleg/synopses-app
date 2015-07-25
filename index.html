@@ -84,17 +84,16 @@
         <iron-icon icon="note-add" item-icon></iron-icon>New patient
       </paper-icon-item>
 
-      <div class="separator" style="border-top:none">Today</div>
-
       <template is="dom-repeat" items="{{patientstoday}}">
+        <div class="separator" hidden="{{!item.showtime}}">
+          <span>{{item.showtime}}</span>
+        </div>
         <paper-icon-item class="patient" on-tap="patientSelect">
           <profile-img id="profileimage" item-icon
                        src="{{item.photo}}"></profile-img>
           <span>{{item.name}}</span>
         </paper-icon-item>
       </template>
-
-      <div class="separator">Yesterday</div>
 
       <template is="dom-repeat" items="{{patientspast}}">
         <paper-icon-item class="patient" on-tap="patientSelect">
