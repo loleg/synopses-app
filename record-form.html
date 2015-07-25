@@ -40,6 +40,16 @@
   margin: 0;
 }
 
+:host paper-dialog:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0 16px 16px 0;
+  border-style: solid;
+  border-color: #00bcd4 #5c5c5c;
+}
+
 #dropzone {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -91,7 +101,7 @@ pikaday-decorator {
 .autosuggest {
   max-height: 6em;
   min-width: 10em;
-  overflow-y: scroll;
+  overflow-y: auto;
   z-index: 999;
 }
 .autosuggest li {
@@ -102,21 +112,19 @@ pikaday-decorator {
   color: blue;
   border-bottom: 1px dashed blue;
 }
+/* Workaround for not saving before switching tabs */
+paper-tab.record-form:not(.iron-selected) {
+  visibility: hidden;
+}
+paper-tab.record-form.iron-selected {
+  position: absolute;
+  left: 0px;
+}
 </style>
 <template>
   <paper-dialog id="{{ ident }}" modal>
-    <div class="layout vertical">
-      <h2>{{ title }}</h2>
-      <paper-input-container id="casename">
-        <label>Select or enter a new case</label>
-        <input list="caselist" is="iron-input" bind-value="{{caseName}}">
-        <datalist id="caselist"></datalist>
-      </paper-input-container>
-      <p id="requirecasename" class="warning" hidden>
-        A case title is required; please use the field above to
-        choose among existing case names, or create a new one.
-      </p>
-    </div>
+    <!-- <h2>{{ title }}</h2> -->
+
     <paper-tabs selected="{{recordType}}" autofocus on-tap="_onSwitchTab">
       <paper-tab>Data Entry</paper-tab>
       <paper-tab>Doctor Note</paper-tab>
@@ -251,6 +259,19 @@ pikaday-decorator {
       </div>
 
     </iron-pages>
+
+    <div class="layout vertical">
+      <paper-input-container id="casename">
+        <label>Select or enter a new case</label>
+        <input list="caselist" is="iron-input" bind-value="{{caseName}}">
+        <datalist id="caselist"></datalist>
+      </paper-input-container>
+      <p id="requirecasename" class="warning" hidden>
+        A case title is required; please use the field above to
+        choose among existing case names, or create a new one.
+      </p>
+    </div>
+
     <div class="buttons">
       <paper-button dialog-dismiss>Cancel</paper-button>
       <paper-button raised on-tap="saveDialog">Save</paper-button>
