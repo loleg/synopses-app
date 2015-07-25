@@ -322,3 +322,9 @@ record-thread paper-fab {
   left: -6px;
   color: #ccc;
 }
+
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (max-width : 320px) {
+  #filters { display: none; }
+}
