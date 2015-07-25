@@ -143,7 +143,8 @@ paper-tab.record-form.iron-selected {
     <iron-pages selected="{{recordType}}" id="recordform">
 
       <div class="record-DATA">
-        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+        <form is="iron-form" method="post"
+              on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="DATA" data-typeid="0">
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
@@ -183,7 +184,8 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-NOTE">
-        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+        <form is="iron-form" method="post"
+              on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="NOTE" data-typeid="1">
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
@@ -207,7 +209,8 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-MED">
-        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+        <form is="iron-form" method="post"
+              on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="MED" data-typeid="3">
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
@@ -225,7 +228,8 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-LAB">
-        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+        <form is="iron-form" method="post"
+              on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="LAB" data-typeid="2">
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
@@ -249,7 +253,8 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-EVENT">
-        <form is="iron-form" method="post" on-iron-form-response="_onSubmitForm"
+        <form is="iron-form" method="post"
+              on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="EVENT" data-typeid="4">
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
@@ -358,10 +363,20 @@ paper-tab.record-form.iron-selected {
       the_form.submit();
     },
 
+    _onSubmitError: function(e) {
+      window.alert(
+        'An error has occurred while saving your record! ' +
+        'Please check your network connection, and ' +
+        'click SAVE to try again.');
+    },
+
     _onSubmitForm: function(e) {
       var the_form = e.target;
       if (e.detail.flag !== 'success') {
-        alert(e.detail.msg); return;
+        window.alert(e.detail.msg +
+          '\nPlease check your network connection, and ' +
+          'click SAVE to try again.');
+        return;
       }
       the_form.reset();
       var all_fields = the_form.querySelectorAll(
