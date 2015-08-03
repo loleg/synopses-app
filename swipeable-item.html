@@ -161,9 +161,10 @@ SwipeableBehavior = {
 
   _onTrack: function(e) {
     // e.preventDefault();
-// console.log(e)
+    //console.log(e)
     switch(e.detail.state) {
       case 'start':
+        if (e.detail.dy !== 0) return; // cancel on vertical swipe
         this._onTrackStart(e);
         break;
       case 'track':
@@ -253,4 +254,3 @@ SwipeableBehavior = {
 
 };
 </script>
-

@@ -325,6 +325,6 @@ record-thread paper-fab {
 
 /* Smartphones (portrait) ----------- */
 @media only screen
-and (max-width : 320px) {
+and (max-width : 360px) {
   #filters { display: none; }
 }
