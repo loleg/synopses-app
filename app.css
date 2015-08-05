@@ -190,6 +190,9 @@ paper-scroll-header-panel [content] {
   position: fixed;
   bottom: 0px;
   right: 24px;
+  width: 158px;
+  height: 304px;
+  background-color: rgba(255,255,255,0.8);
 }
 .action-icon { bottom: 16px }
 
@@ -325,6 +328,6 @@ record-thread paper-fab {
 
 /* Smartphones (portrait) ----------- */
 @media only screen
-and (max-width : 360px) {
-  #filters { display: none; }
+and (max-width : 375px) {
+  #middleBar, #bottomBar { display: none; }
 }
