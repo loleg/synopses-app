@@ -767,7 +767,7 @@ template.toggleVisibility = function(e) {
 
 template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
-  this.headerTitle = "Patient";
+  this.headerTitle = "";
   this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
 };

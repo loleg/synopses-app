@@ -190,8 +190,11 @@ paper-scroll-header-panel [content] {
   position: fixed;
   bottom: 0px;
   right: 24px;
+}
+.action-menu {
   width: 158px;
   height: 304px;
+  right: 0px; padding-right: 24px;
   background-color: rgba(255,255,255,0.8);
 }
 .action-icon { bottom: 16px }
