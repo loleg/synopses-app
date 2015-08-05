@@ -779,7 +779,7 @@ template._onThreadExpand = function(e) {
     template.patientstodayLoaded.forEach(function(person) {
       if (person.id == patientId) {
         template.selectedPatient = person;
-        template.headerTitle = "Patient";
+        template.headerTitle = "";
         template.headerClass = template._computeMainHeaderClass();
       }
     });
