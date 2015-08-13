@@ -85,9 +85,14 @@ a.abbr {
 .action-menu label.create {
   bottom: 27px; right: 58px;
 }
-#fab, #fab-create { bottom: 16px; right: -8px;  }
-#fab-create { background: rgb(211, 47, 47) !important; }
-#fab { background: #633 !important; }
+#fab-create {
+  background: rgb(211, 47, 47) !important;
+  bottom: 22px; right: -8px;
+}
+#fab {
+  background: #633 !important;
+  bottom: 22px; right: 16px;
+}
 
 #navisible { color: #333; }
 #navisible.active { color: #ccc; }
