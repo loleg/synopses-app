@@ -30,6 +30,17 @@ link.addEventListener('load', function(e) {
   }
 });
 
+template.threadsLoaded = [];
+template.selectedThreads = [];
+template.selectedPatient = false;
+
+template.isDrawerVisible = true;
+template.drawerToggleClass = '';
+template.actionOpened = false;
+template.actionOpenClose = function() {
+  template.actionOpened = !template.actionOpened;
+};
+
 template.previousSearches = [
   'to: me',
   'alpha',
