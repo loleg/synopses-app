@@ -1,0 +1,134 @@
+
+a.abbr {
+  color: green;
+}
+
+.patientapp.title {
+  background: url(images/synopses-icon.png) no-repeat top left;
+  background-size: auto 100%;
+  padding-left: 60px;
+  font-style: italic;
+}
+
+#loginscreen {
+  background: rgba(255, 255, 255, 1);
+  visibility: hidden;
+  transition: all 300ms ease-in-out;
+  opacity: 0;
+  will-change: transform;
+  transform: scale(0);
+}
+
+#drawerPanel .sidepanel paper-menu paper-icon-item {
+  cursor: pointer;
+}
+
+.shadowbox {
+  color: #555;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+}
+
+.shadowbox record-thread {
+  border-top: 1px solid #ccc;
+}
+
+.shadowbox #mainheader {
+  box-shadow: none !important;
+}
+
+
+.action-menu, .action-icon {
+  position: fixed;
+  bottom: 0px;
+  right: 24px;
+}
+.action-extra {
+  width: 158px;
+  height: 304px;
+  margin-right: -9px;
+  background-color: rgba(255,255,255,0.8);
+}
+.action-icon { bottom: 16px }
+
+.action-menu label {
+  position: absolute;
+  right: 50px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  padding: 3px;
+}
+
+.action-menu paper-fab {
+  right: 0px;
+  position: absolute;
+}
+
+.action-menu label.favorite,
+#fab-favorite {  bottom: 255px; }
+.icon-favorite { background: #ff9800 !important; }
+
+.action-menu label.pill,
+#fab-pill {      bottom: 200px; }
+.icon-pill {     background: #a95 !important; }
+
+.action-menu label.event,
+#fab-event {     bottom: 145px; }
+.icon-event {    background: #4c4caf !important; }
+
+.action-menu label.done,
+#fab-done {      bottom: 90px; }
+.icon-done {     background: #4caf50 !important; }
+
+.action-menu label.create {
+  bottom: 27px; right: 58px;
+}
+#fab, #fab-create { bottom: 16px; right: -8px;  }
+#fab-create { background: rgb(211, 47, 47) !important; }
+#fab { background: #633 !important; }
+
+#navisible { color: #333; }
+#navisible.active { color: #ccc; }
+
+
+#patientdetails {
+  background: white;
+}
+
+#patientdetails .justified .label {
+  margin:0 0 0 1em;
+  color: #999;
+}
+
+#patientdetails .justified .label * {
+  color: #000;
+}
+
+#patientdetails .justified .label.patient_name {
+  font-size: 120%;
+}
+
+#editpatient {
+  background: #ddd !important;
+}
+
+#togglefilters {
+  background: #aaa !important;
+}
+#togglefilters.active {
+  background: #eee !important;
+}
+
+record-thread paper-fab {
+  background-color: #eda !important;
+}
+
+#filters iron-icon {
+  left: -6px;
+  color: #ccc;
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (max-width : 375px) {
+  #middleBar, #bottomBar { display: none; }
+}
