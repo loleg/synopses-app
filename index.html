@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1">
-  <title>Synopses</title>
+  <title>Synopses Alpha</title>
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -23,10 +23,13 @@
   <!-- Polyfill webcomponents in browsers that don't support it. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <!-- <link rel="import" id="bundle" href="vulcanized.html" async> -->
-  <link rel="import" id="bundle" href="elements.html" async>
+  <!-- <link rel="import" id="bundle" href="elements/vulcanized.html" async> -->
+  <link rel="import" id="bundle" href="elements/elements.html" async>
 </head>
-<body class="fullbleed">
+<body class="fullbleed loading">
+
+<!-- Loading splash outside of Imports + Polymer so 1st paint is always fast. -->
+<div id="loading"></div>
 
 <template id="t" is="dom-bind">
 
@@ -53,7 +56,8 @@
 
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
-  <paper-scroll-header-panel class="sidepanel" mode="scroll" drawer hidden="{{!isDrawerVisible}}">
+  <paper-scroll-header-panel class="sidepanel"
+    mode="scroll" drawer hidden="{{!isDrawerVisible}}">
 
     <paper-toolbar id="navheader" class="narrow x-scope">
       <material-search id="search" narrow="[[narrow]]" class="fit"
@@ -96,10 +100,7 @@
   </paper-scroll-header-panel>
 
   <paper-scroll-header-panel id="scrollheader" main
-      keep-condensed-header condenses="{{!narrow}}" fixed="{{narrow}}"
-      on-trackstart="onRefreshStart"
-      on-tracky="onMainAreaTrack"
-      on-trackend="onRefreshUp">
+      keep-condensed-header condenses="{{!narrow}}" fixed="{{narrow}}">
 
     <paper-toolbar id="mainheader" class$="[[headerClass]]">
       <paper-icon-button icon="arrow-back" class="selected-item"
@@ -213,9 +214,9 @@
     </paper-toolbar>
     <div content on-thread-archive="onThreadArchive">
 
-      <template is="dom-if" if="[[_computeShowNoResults(threads, syncing)]]">
+      <!--template is="dom-if" if="[[_computeShowNoResults(threads, syncing)]]">
         <span class="layout horizontal center-center fit">No results.</span>
-      </template>
+      </template-->
 
       <!-- TODO: don't pass all messages, users, labels into mail-thread -->
       <iron-selector id="threadlist" multi activate-event=""
@@ -240,9 +241,7 @@
 </paper-drawer-panel>
 
 <paper-toast id="toast" class="layout horizontal justified"
-             duration="10000" text="{{toastMessage}}" visible="{{toastOpened}}"
-             on-paper-overlay-open="onToastOpenClose"
-             on-transitionend="onToastOpenClose">
+             duration="10000" text="{{toastMessage}}" visible="{{toastOpened}}">
   <div on-tap="undoAll" class="undo">Undo</div>
 </paper-toast>
 
@@ -278,12 +277,13 @@
   </div>
 </div>
 
-<!-- Cache data requests. -->
-<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>
-<iron-localstorage name="polymer-mail-labels" value="{{labels}}"></iron-localstorage>
-<iron-localstorage name="polymer-mail-threads" value="{{threads}}"
+<!-- Cache data requests. --
+< iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>
+< iron-localstorage name="polymer-mail-labels" value="{{labels}}"></iron-localstorage>
+< iron-localstorage name="polymer-mail-threads" value="{{threads}}"
       on-iron-localstorage-load-empty="_onCachedThreadsEmpty"></iron-localstorage>
-<iron-localstorage name="polymer-mail-users" value="{{users}}"></iron-localstorage>
+< iron-localstorage name="polymer-mail-users" value="{{users}}"></iron-localstorage>
+-->
 
 </template>
 
@@ -303,6 +303,7 @@
 
 <!-- <script src="scripts/polymer_metrics.js"></script> -->
 <script src="scripts/bundle.js"></script>
+<script src="scripts/synopses.js"></script>
 <script>
   <!-- analytics -->
 </script>

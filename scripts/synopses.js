@@ -2,48 +2,18 @@
 
 'use strict';
 
+var template = document.querySelector('#t');
+var DEBUG = template.DEBUG;
+
+console.log('Initialising Synopses App');
+
 var PATIENT = location.pathname === '/patient/';
 
-function synopsesApp(optTemplate) {
-  var template = optTemplate || document;
-
-// template.previousSearches = [
-//   'to: me',
-//   'alpha',
-//   'beta'
-// ];
-
-if (typeof template.$.drawerPanel !== 'undefined') {
-  template.$.drawerPanel.addEventListener('paper-header-transform', function(e) {
-   var d = e.detail;
-   //...
-   // Hide filters in narrow view
-   // TODO: Apply class when collapsed
-   document.querySelector('#filters').hidden = (d.y >= d.height - d.condensedHeight);
- });
-}
-
-}
-
-synopsesApp.prototype.init = function(optTemplate, DEBUG) {
-  var template = optTemplate || document;
-
-if (DEBUG) {
-  // !navigator.onLine ||
-  window.localStorage.clear();
-  template.mockLogin();
-} else {
-  template.handleLogin(null, null, true);
-}
-
-//////////////////
-//////////////////
-//////////////////
-//////////////////
-//////////////////
-//////////////////
-//////////////////
-//////////////////
+template.previousSearches = [
+  'to: me',
+  'alpha',
+  'beta'
+];
 
 template.loadPatients = function() {
   var ajax1 = document.createElement('iron-ajax');
@@ -68,8 +38,10 @@ template.loadPatientsPast = function() {
 template.loadRecords = function() {
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
-  var hasPatient = (template.selectedPatient &&
-             typeof template.selectedPatient.id !== 'undefined');
+  var hasPatient = (
+    template.selectedPatient &&
+    typeof template.selectedPatient.id !== 'undefined'
+  );
   if (!hasPatient && PATIENT) {
     console.warn('No selected patient!'); return;
   } else if (!hasPatient) {
@@ -77,10 +49,12 @@ template.loadRecords = function() {
   } else {
     ajax.url = '/api/patient/' + template.selectedPatient.id + '/threads';
   }
-  template.threads = [{ 'messages': [{
+  template.threads = [{
+    'messages': [{
       'subject': 'Please wait, loading ...',
       'snippet': ''
-    }] }];
+    }]
+  }];
   ajax.addEventListener('response', function(e) {
     var threads = e.detail.response.threads;
     threads.forEach(function(t) {
@@ -88,13 +62,13 @@ template.loadRecords = function() {
       var topMsg = t.messages[0];
       var patientId = topMsg.from.id;
       var ident = 'P-' + patientId + '-T-' + topMsg.id;
-      var v_unread = window.localStorage.getItem(ident + '-unread');
-      if (v_unread === 'false') {
+      var itemUnread = window.localStorage.getItem(ident + '-unread');
+      if (itemUnread === 'false') {
         topMsg.unread = false;
       }
-      var v_star = window.localStorage.getItem(ident + '-star');
-      if (v_star !== null) {
-        topMsg.starred = v_star;
+      var itemStar = window.localStorage.getItem(ident + '-star');
+      if (itemStar !== null) {
+        topMsg.starred = itemStar;
       }
     });
     template.threads = threads;
@@ -126,15 +100,15 @@ template.runSearch = function() {
   // Filter threads
   var tt = [];
   template.threadsLoaded.forEach(function(thread) {
-    var has_match = false;
+    var hasMatch = false;
     thread.messages.forEach(function(message) {
-      if (has_match) { return; }
+      if (hasMatch) { return; }
       if (message.snippet.toLowerCase().indexOf(q) !== -1 ||
-          message.subject.toLowerCase().indexOf(q) !== -1) {
-        has_match = true;
+      message.subject.toLowerCase().indexOf(q) !== -1) {
+        hasMatch = true;
       }
     });
-    if (has_match === true) {
+    if (hasMatch === true) {
       tt.push(thread);
     }
   });
@@ -144,25 +118,25 @@ template.runSearch = function() {
 template.filterBy = function(e, f, g) {
   var qs = this.$.filters.selectedItem.querySelector('iron-icon');
   if (qs === null) { return; }
-  var the_icon = qs.icon;
-  if (the_icon === 'select-all') {
+  var theIcon = qs.icon;
+  if (theIcon === 'select-all') {
     template.threads = template.threadsLoaded;
     return;
   }
   // Filter threads
   var tt = [];
   template.threadsLoaded.forEach(function(thread) {
-    var has_match = false;
+    var hasMatch = false;
     thread.messages.forEach(function(message) {
-      if (has_match) { return; }
+      if (hasMatch) { return; }
       if (
-          (the_icon === 'icons:star' && message.starred) ||
-          (message.icon === the_icon)
-        ) {
-        has_match = true;
+        (theIcon === 'icons:star' && message.starred) ||
+        (message.icon === theIcon)
+      ) {
+        hasMatch = true;
       }
     });
-    if (has_match === true) {
+    if (hasMatch === true) {
       tt.push(thread);
     }
   });
@@ -170,19 +144,19 @@ template.filterBy = function(e, f, g) {
 };
 
 template._onLabelTap = function(e) {
-  var the_label = e.detail.label;
-  this.$.filters.select('' + (this.$.filters.items.length-2));
+  var theLabel = e.detail.label;
+  this.$.filters.select('' + (this.$.filters.items.length - 2));
   // Filter threads
   var tt = [];
   template.threadsLoaded.forEach(function(thread) {
-    var has_match = false;
+    var hasMatch = false;
     thread.messages.forEach(function(message) {
-      if (has_match) { return; }
-      if (message.label === the_label) {
-        has_match = true;
+      if (hasMatch) { return; }
+      if (message.label === theLabel) {
+        hasMatch = true;
       }
     });
-    if (has_match === true) {
+    if (hasMatch === true) {
       tt.push(thread);
     }
   });
@@ -205,10 +179,10 @@ template.handleLogin = function(event, data, silentMode) {
   ajax.url = '/api/login';
   ajax.method = 'POST';
   if (silentMode) {
-    ajax.body='{"username":"", "password":""}';
+    ajax.body = '{"username":"", "password":""}';
   } else {
-    ajax.body='{"username":"' + event.detail.username +
-            '", "password":"' + event.detail.password + '"}';
+    ajax.body = '{"username":"' + event.detail.username +
+    '", "password":"' + event.detail.password + '"}';
   }
   ajax.addEventListener('response', function(e) {
     var r = e.detail.response;
@@ -229,59 +203,62 @@ function populateRecord(record, button, dialog) {
 
   // Switch to appropriate tab
   // var skip = button.getAttribute('icon');
-  var record_form = document.querySelector('paper-tabs.record-form');
+  var recordForm = document.querySelector('paper-tabs.record-form');
   setTimeout(function() {
-    record_form.selected = parseInt(button.dataset.tab);
+    recordForm.selected = parseInt(button.dataset.tab);
   }, 100);
 
   // Populate DATA forms
-  var the_form = dialog.querySelector('form[data-type="DATA"]');
+  var theForm = dialog.querySelector('form[data-type="DATA"]');
   if (record) {
     for (var key in record) {
       // console.log(key, record[key]);
-      var the_input =
-            the_form.querySelector('paper-input[name="' + key + '"]') ||
-            the_form.querySelector('input[name="' + key + '"]');
-      if (the_input === null) {
-        the_input = the_form.querySelector('select[name="' + key + '"]');
-        if (the_input === null) {
+      var theInput =
+      theForm.querySelector('paper-input[name="' + key + '"]') ||
+      theForm.querySelector('input[name="' + key + '"]');
+      if (theInput === null) {
+        theInput = theForm.querySelector('select[name="' + key + '"]');
+        if (theInput === null) {
           console.warn(key + ' not found in record form');
         } else {
-          the_input.value = record[key];
+          theInput.value = record[key];
         }
-      } else if (the_input.type === 'radio') {
-        the_input = the_form.querySelector('input[name="' + key + '"][value="' + record[key] + '"]');
-        if (the_input !== null) {
-          the_input.checked = true;
+      } else if (theInput.type === 'radio') {
+        theInput = theForm.querySelector(
+          'input[name="' + key + '"]' +
+          '[value="' + record[key] + '"]'
+        );
+        if (theInput !== null) {
+          theInput.checked = true;
         }
       } else {
-        the_input.value = record[key];
+        theInput.value = record[key];
       }
     }
 
   } else {
-    the_form.reset();
+    theForm.reset();
   }
 }
 
 function populateProfile(profile, button, dialog) {
-  var the_form = dialog.querySelector('form#patientform');
+  var theForm = dialog.querySelector('form#patientform');
   if (!profile) { return false; }
   // Populate forms
   for (var key in profile) {
     // console.log(key, profile[key]);
-    var the_input =
-          the_form.querySelector('paper-input[name="' + key + '"]') ||
-          the_form.querySelector('gold-email-input[name="' + key + '"]') ||
-          the_form.querySelector('input[name="' + key + '"]');
-    if (the_input !== null) {
-      the_input.value = profile[key];
-      the_input = the_form.querySelector('input[name="' + key + '"]');
-      the_input.value = profile[key];
+    var theInput =
+    theForm.querySelector('paper-input[name="' + key + '"]') ||
+    theForm.querySelector('gold-email-input[name="' + key + '"]') ||
+    theForm.querySelector('input[name="' + key + '"]');
+    if (theInput !== null) {
+      theInput.value = profile[key];
+      theInput = theForm.querySelector('input[name="' + key + '"]');
+      theInput.value = profile[key];
     }
   }
-  the_form.parentElement.$.title = 'Edit patient file';
-  the_form.action = '/api/patient/' + profile.id + '/save';
+  theForm.parentElement.$.title = 'Edit patient file';
+  theForm.action = '/api/patient/' + profile.id + '/save';
   return true;
 }
 
@@ -328,21 +305,21 @@ template.openDialog = function(e) {
 
     } else {
 
-    //   // Reset any forms
-    //   the_form = dialog.querySelector('form');
-    //   the_form.reset();
-    //   if (the_form.id === "patientform") {
-    //     the_form.action = "/api/patient/save";
-    //     var all_fields = the_form.querySelectorAll(
-    //       'input[type="text"],gold-email-input,paper-input'
-    //     );
-    //     for (var i = 0; i < all_fields.length; i++) {
-    //       all_fields[i].value = "";
-    //     }
-    //   }
-    //   dialog.open();
-    //
-    // } else {
+      //   // Reset any forms
+      //   theForm = dialog.querySelector('form');
+      //   theForm.reset();
+      //   if (theForm.id === "patientform") {
+      //     theForm.action = "/api/patient/save";
+      //     var all_fields = theForm.querySelectorAll(
+      //       'input[type="text"],gold-email-input,paper-input'
+      //     );
+      //     for (var i = 0; i < all_fields.length; i++) {
+      //       all_fields[i].value = "";
+      //     }
+      //   }
+      //   dialog.open();
+      //
+      // } else {
       dialog.open();
 
     }
@@ -369,8 +346,8 @@ template.patientSelect = function(e) {
 };
 
 template._onThreadExpand = function(e) {
-  var threadId = e.detail.thread.id,
-      patientId = e.detail.thread.from.id;
+  var threadId = e.detail.thread.id;
+  var patientId = e.detail.thread.from.id;
   if (template.patientstodayLoaded) {
     template.patientstodayLoaded.forEach(function(person) {
       if (person.id === patientId) {
@@ -392,15 +369,15 @@ template._onThreadExpand = function(e) {
       thread.showfulltext = false;
       thread.$.fulltext.animate([
         {'max-height': 200}, {'max-height': 0}
-      ], { duration: 50 });
+      ], {duration: 50});
     }
   });
 };
 
 template._onThreadStarred = function(e) {
-  var threadId = e.detail.thread.id,
-      patientId = e.detail.thread.from.id,
-      starredValue = e.detail.thread.starred;
+  var threadId = e.detail.thread.id;
+  var patientId = e.detail.thread.from.id;
+  var starredValue = e.detail.thread.starred;
   // Store starred status
   if (threadId >= 0) {
     var ident = 'P-' + patientId + '-T-' + threadId + '-star';
@@ -424,7 +401,7 @@ template.loadPatientFile = function() {
   ajax1.url = '/api/patient/' + patientHash;
   ajax1.addEventListener('response', function(e) {
     if (e.detail.response.flag === 'fail') {
-      window.alert('Looks like your code is incorrect,\n'+
+      window.alert('Looks like your code is incorrect,\n' +
         'contact your clinic for a new one.');
       return;
     }
@@ -437,14 +414,38 @@ template.loadPatientFile = function() {
 
 template.shareThreads = function() {
   // TODO: Template
-  var messageBody = 'PATIENT RECORD\n------------------------------\nSTRICTLY CONFIDENTIAL\n------------------------------\n';
+  var messageBody = 'PATIENT RECORD\n------------------------------\n' +
+    'STRICTLY CONFIDENTIAL\n------------------------------\n';
   this.selectedThreads.forEach(function(thread) {
     messageBody += '\n' + thread.querySelector('header').innerText;
   });
 
-  messageBody += '\n\nRecords provided by Synopses.ch - please visit our site for more information.\nThis e-mail message and any attachments to it contain confidential information which is for the sole attention and use of the intended recipient. Please notify us at once if you think that it may not be intended for you, and delete it immediately. Thank you.';
+  messageBody += '\n\nRecords provided by Synopses.ch - please visit our ' +
+    'site for more information.\nThis e-mail message and any attachments ' +
+    'to it contain confidential information which is for the sole attention' +
+    ' and use of the intended recipient. Please notify us at once if you ' +
+    'think that it may not be intended for you, and delete it immediately. ' +
+    'Thank you.';
   messageBody = messageBody.replace(/\n/g, '%0D%0A');
-  window.location.href = 'mailto:?subject=Synopses Shared Record&body=' + messageBody;
+  messageBody = 'mailto:?subject=Synopses Shared Record&body=' + messageBody;
+  window.location.href = messageBody;
 };
 
-}; // -synopsesApp.init
+/*if (typeof template.$.drawerPanel !== 'undefined') {
+  template.$.drawerPanel.addEventListener('paper-header-transform',
+    function(e) {
+      var d = e.detail;
+      //...
+      // Hide filters in narrow view
+      var shouldCollapse = (d.y >= d.height - d.condensedHeight);
+      document.querySelector('#filters').hidden = shouldCollapse;
+    });
+}*/
+
+if (DEBUG) {
+  // !navigator.onLine ||
+  window.localStorage.clear();
+  template.mockLogin();
+} else {
+  template.handleLogin(null, null, true);
+}

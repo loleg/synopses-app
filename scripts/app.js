@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {GMail as Gmail, GPlus as Gplus} from './googleapis';
+// import {GMail as Gmail, GPlus as Gplus} from './googleapis';
 
 (() => {
 
@@ -25,8 +25,8 @@ import {GMail as Gmail, GPlus as Gplus} from './googleapis';
   var inboxRefreshId;
   var pendingArchivedThreads = [];
 
-  var GMail = new Gmail();
-  var GPlus = new Gplus();
+  // var GMail = new Gmail();
+  // var GPlus = new Gplus();
 
   var template = document.querySelector('#t');
   template.DEBUG = DEBUG;
@@ -133,14 +133,14 @@ import {GMail as Gmail, GPlus as Gplus} from './googleapis';
 
   /**
    * Error callback handler for GMail API calls.
-   */
+   *
   function GMailErrorCallback(e) {
     if (e.status === 401) {
       template.isAuthenticated = false;
     } else {
       console.error(e);
     }
-  }
+  }*/
 
   template._computeShowNoResults = function(threads, syncing) {
     return !syncing && threads && !threads.length;
@@ -232,6 +232,7 @@ import {GMail as Gmail, GPlus as Gplus} from './googleapis';
     this.toggleToast();
   };
 
+  /*
   template.refreshLabels = function() {
     return GMail.fetchLabels().then(labels => {
       template.labels = labels.labels;
@@ -261,6 +262,7 @@ import {GMail as Gmail, GPlus as Gplus} from './googleapis';
     this.showLoadingSpinner();
     this.refreshInbox();
   };
+  */
 
   template.newMail = function(e) {
     console.warn('Not implemented: Create new mail');
@@ -383,6 +385,7 @@ import {GMail as Gmail, GPlus as Gplus} from './googleapis';
       cover: coverImage
     };
 
+    /*
     // Note: these GMail API calls are wrapped by a promise that loads the
     // client library, once. No need to init gapi.client.
     this.refreshLabels();
@@ -396,6 +399,7 @@ import {GMail as Gmail, GPlus as Gplus} from './googleapis';
     GPlus.fetchUsersCoverImage().then(coverImg => {
       template.set('user.cover',  coverImg);
     });
+    */
   };
 
   template._onCachedThreadsEmpty = function(e) {
