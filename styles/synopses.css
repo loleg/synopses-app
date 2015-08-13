@@ -1,3 +1,6 @@
+#navheader, #mainheader {
+  background-color: #aaa;
+}
 
 a.abbr {
   color: green;
@@ -54,7 +57,7 @@ a.abbr {
   position: absolute;
   right: 50px;
   margin-bottom: 10px;
-  background-color: #fff;
+  background-color: #fafafa;
   padding: 3px;
 }
 
@@ -116,10 +119,6 @@ a.abbr {
 }
 #togglefilters.active {
   background: #eee !important;
-}
-
-record-thread paper-fab {
-  background-color: #eda !important;
 }
 
 #filters iron-icon {

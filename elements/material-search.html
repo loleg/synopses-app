@@ -64,19 +64,28 @@
       <input id="searchbox" placeholder="Search mail" class="flex"
              value="{{searchValue::change}}"
              on-keyup="doSearch">
-      <paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>
+      <!--<paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>-->
+      <paper-icon-button id="clearbtn" icon="clear" on-tap="_clearSearch" disabled></paper-icon-button>
     </paper-toolbar>
-    <paper-menu on-iron-activate="onSelect">
+    <!--<paper-menu on-iron-activate="onSelect">
       <template is="dom-repeat" items="{{previousSearches}}">
         <paper-item class="relative" data-value$="{{item}}">
           <iron-icon icon="history"></iron-icon><span>{{item}}</span>
           <paper-ripple></paper-ripple>
         </paper-item>
       </template>
-    </paper-menu>
+    </paper-menu>-->
   </paper-header-panel>
 </template>
 <script>
+  var delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
+
   Polymer({
     is: 'material-search',
 
@@ -118,6 +127,7 @@
       if (this.active) {
         this.$.searchbox.focus();
       }
+      this.$.clearbtn.disabled = (this.searchValue.length < 3);
     },
 
     getSpeechInput: function(e) {

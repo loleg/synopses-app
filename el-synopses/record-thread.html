@@ -1,12 +1,12 @@
-<link rel="import" href="bower_components/polymer/polymer.html">
-<link rel="import" href="bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="bower_components/paper-styles/paper-styles.html">
-<link rel="import" href="bower_components/paper-material/paper-material.html">
-<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 
-<link rel="import" href="profile-img.html">
-<link rel="import" href="swipeable-item.html">
+<link rel="import" href="../elements/profile-img.html">
+<link rel="import" href="../elements/swipeable-item.html">
 
 <dom-module id="record-thread">
   <style>
@@ -146,6 +146,9 @@
       margin: 16px;
       padding: 16px;
       border-radius: 2px;
+    }
+    :host paper-fab {
+      background-color: #eda !important;
     }
   </style>
   <template>
@@ -342,7 +345,7 @@
     },
 
     _computeProfilePic: function(users, name) {
-      this._setProfileSrc(this.users[name]);
+      //this._setProfileSrc(this.users[name]);
     },
 
     _messagesChanged: function() {

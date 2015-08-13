@@ -9,6 +9,27 @@ console.log('Initialising Synopses App');
 
 var PATIENT = location.pathname === '/patient/';
 
+var link = document.querySelector('#bundle');
+link.addEventListener('load', function(e) {
+  /*if (typeof template.$.drawerPanel !== 'undefined') {
+    template.$.drawerPanel.addEventListener('paper-header-transform',
+      function(e) {
+        var d = e.detail;
+        //...
+        // Hide filters in narrow view
+        var shouldCollapse = (d.y >= d.height - d.condensedHeight);
+        document.querySelector('#filters').hidden = shouldCollapse;
+      });
+  }*/
+
+  if (DEBUG) {
+    console.warn('DEBUG mode loading');
+    window.localStorage.clear();
+  } else {
+    template.handleLogin(null, null, true);
+  }
+});
+
 template.previousSearches = [
   'to: me',
   'alpha',
@@ -79,8 +100,9 @@ template.loadRecords = function() {
   });
 };
 
-template.runSearch = function() {
-  var q = template.query.toLowerCase();
+template.runSearch = function(e) {
+  template.showLoadingSpinner();
+  var q = e.detail.value.toLowerCase();
   if (template.selectedPatient) {
     template.inboxSelect();
   }
@@ -113,6 +135,7 @@ template.runSearch = function() {
     }
   });
   template.threads = tt;
+  template.hideLoadingSpinner();
 };
 
 template.filterBy = function(e, f, g) {
@@ -163,6 +186,7 @@ template._onLabelTap = function(e) {
   template.threads = tt;
 };
 
+/*
 template.mockLogin = function() {
   this.isAuthenticated = true;
   if (PATIENT) { template.loadPatientFile(); return; }
@@ -171,9 +195,11 @@ template.mockLogin = function() {
   if (DEBUG) { this.loadPatientsPast(); }
   this.loadRecords();
 };
+*/
 
 template.handleLogin = function(event, data, silentMode) {
   if (PATIENT) { return; } // not supported yet
+  console.log('Loading patients');
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
   ajax.url = '/api/login';
@@ -196,6 +222,10 @@ template.handleLogin = function(event, data, silentMode) {
     template.isAuthenticated = true;
     template.loadPatients();
     template.loadRecords();
+  });
+  ajax.addEventListener('error', function(e) {
+    console.warn(e);
+    window.alert('Could not log in');
   });
 };
 
@@ -430,22 +460,3 @@ template.shareThreads = function() {
   messageBody = 'mailto:?subject=Synopses Shared Record&body=' + messageBody;
   window.location.href = messageBody;
 };
-
-/*if (typeof template.$.drawerPanel !== 'undefined') {
-  template.$.drawerPanel.addEventListener('paper-header-transform',
-    function(e) {
-      var d = e.detail;
-      //...
-      // Hide filters in narrow view
-      var shouldCollapse = (d.y >= d.height - d.condensedHeight);
-      document.querySelector('#filters').hidden = shouldCollapse;
-    });
-}*/
-
-if (DEBUG) {
-  // !navigator.onLine ||
-  window.localStorage.clear();
-  template.mockLogin();
-} else {
-  template.handleLogin(null, null, true);
-}
