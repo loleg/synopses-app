@@ -20,7 +20,7 @@
 }
 </style>
 <template>
-  <paper-dialog id="{{ ident }}" modal>
+  <paper-dialog id="dialog" modal>
     <h2>{{ title }}</h2>
     <form is="iron-form" id="patientform"
           method="post" action="/api/patient/save">
@@ -78,7 +78,7 @@
       if (this.$.patientform.checkValidity()) {
         this.$.patientform.submit();
         this.fire('patient-saved');
-        document.getElementById(this.ident).close();
+        this.$.dialog.close();
         return true;
       } else {
         return false;

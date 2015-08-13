@@ -129,7 +129,7 @@ paper-tab.record-form.iron-selected {
 }
 </style>
 <template>
-  <paper-dialog id="{{ ident }}" modal>
+  <paper-dialog id="dialog" modal>
     <!-- <h2>{{ title }}</h2> -->
 
     <paper-tabs selected="{{recordType}}" autofocus on-tap="_onSwitchTab">
@@ -143,7 +143,7 @@ paper-tab.record-form.iron-selected {
     <iron-pages selected="{{recordType}}" id="recordform">
 
       <div class="record-DATA">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" id="formtypedata"
               on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="DATA" data-typeid="0">
               <input type="hidden" name="label" value="{{caseName}}">
@@ -388,7 +388,7 @@ paper-tab.record-form.iron-selected {
         }
       }
       this.fire('record-saved');
-      document.getElementById(this.ident).close();
+      this.$.dialog.close();
     },
 
     _onTapSoapForm: function() {

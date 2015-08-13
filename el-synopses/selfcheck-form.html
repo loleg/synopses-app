@@ -112,7 +112,7 @@ pikaday-decorator {
 }
 </style>
 <template>
-  <paper-dialog id="{{ ident }}" modal>
+  <paper-dialog id="dialog" modal>
     <h2>{{ title }}</h2>
 
     <div class="record-SELFCHECK">
@@ -194,7 +194,7 @@ pikaday-decorator {
         }
       }
       this.fire('record-saved');
-      document.getElementById(this.ident).close();
+      this.$.dialog.close();
     }
 
   });

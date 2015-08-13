@@ -240,17 +240,16 @@ template.handleLogin = function(event, data, silentMode) {
   });
 };
 
-function populateRecord(record, button, dialog) {
-
+function populateRecord(record, button) {
   // Switch to appropriate tab
   // var skip = button.getAttribute('icon');
-  var recordForm = document.querySelector('paper-tabs.record-form');
   setTimeout(function() {
-    recordForm.selected = parseInt(button.dataset.tab);
+    var goto = parseInt(button.dataset.tab);
+    template.$.addrecord.$.recordform.selected = goto;
   }, 100);
 
   // Populate DATA forms
-  var theForm = dialog.querySelector('form[data-type="DATA"]');
+  var theForm = template.$.addrecord.$.formtypedata;
   if (record) {
     for (var key in record) {
       // console.log(key, record[key]);
@@ -295,7 +294,9 @@ function populateProfile(profile, button, dialog) {
     if (theInput !== null) {
       theInput.value = profile[key];
       theInput = theForm.querySelector('input[name="' + key + '"]');
-      theInput.value = profile[key];
+      if (theInput !== null) {
+        theInput.value = profile[key];
+      }
     }
   }
   theForm.parentElement.$.title = 'Edit patient file';
@@ -313,8 +314,7 @@ template.openDialog = function(e) {
     return;
   }
   var id = button.getAttribute('data-dialog');
-  var dialog = document.getElementById(id);
-
+  var dialog = template.$[id].$.dialog;
   if (dialog) {
     if (id === 'addrecord') {
 
@@ -325,7 +325,7 @@ template.openDialog = function(e) {
         // console.warn(e);
       });
       ajax.addEventListener('response', function(e) {
-        populateRecord(e.detail.response.profile.record, button, dialog);
+        populateRecord(e.detail.response.profile.record, button);
 
         dialog.open();
       });
