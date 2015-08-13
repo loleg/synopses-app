@@ -1,185 +1,228 @@
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// INCLUDE GULP & PLUGINS
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/**
+ * Copyright 2015 Google Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-var browserSync = require('browser-sync');
-var csso = require('gulp-csso');
-var del = require('del');
+'use strict';
+
 var gulp = require('gulp');
-var minifyHTML = require('gulp-minify-html');
-var stylus = require('gulp-stylus');
-var tinylr = require('tiny-lr');
-var vulcanize = require('gulp-vulcanize');
+var $ = require('gulp-load-plugins')();
+var fs = require('fs');
+var del = require('del');
+var glob = require('glob');
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// DEFAULT TASKS
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var babelify = require('babelify');
 
-// Delete dist and build to allow for nice, clean files!
-gulp.task('clean', function(callback) {
-	return del(['build', 'dist'], callback);
+var runSequence = require('run-sequence');
+var path = require('path');
+
+var version = null;
+var isProd = false;
+
+/** Clean */
+gulp.task('clean', function(done) {
+  del(['dist', 'scripts/bundle.js'], done);
 });
 
-// Compile Stylus into CSS; minify it.
+/** Styles */
 gulp.task('styles', function() {
-	// Set base to 'app/components' so each file goes into the same directory it started.
-	return gulp.src('app/components/**/*.styl', {base: 'app/components'})
-		.pipe(stylus())
-		.pipe(csso())
-		.pipe(gulp.dest('app/components'));
+//   return gulp.src('./styles/*.scss')
+//       .pipe($.sass())
+//       // .pipe($.autoprefixer([
+//       //   'ie >= 10',
+//       //   'ie_mob >= 10',
+//       //   'ff >= 33',
+//       //   'chrome >= 38',
+//       //   'safari >= 7',
+//       //   'opera >= 26',
+//       //   'ios >= 7'
+//       // ]))
+//       .pipe($.minifyCss())
+//       .pipe($.license('Apache', {
+//         organization: 'Google Inc. All rights reserved.'
+//       }))
+//       .pipe(gulp.dest('./dist/styles'));
+  return gulp.src('./styles/*.css')
+    .pipe($.autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
+    .pipe($.minifyCss())
+    .pipe($.license('Apache', {
+      organization: 'Google Inc. All rights reserved.'
+    }))
+    .pipe(gulp.dest('./dist/styles'));
 });
 
-// Copy all files; cache them.
-gulp.task('copy', function() {
-	return gulp.src('app/**')
-		.pipe(gulp.dest('build'))
-		.pipe(gulp.dest('dist'));
+/** Scripts */
+gulp.task('js', ['jshint', 'jscs']);
+
+// Lint JavaScript
+gulp.task('jshint', function() {
+  return gulp.src(['./scripts/**/*.js'])
+    .pipe($.jshint('.jshintrc'))
+    .pipe($.jshint.reporter('jshint-stylish'))
 });
 
-gulp.task('build:vulcanize', function() {
-	return gulp.src('app/index.html')
-		// Concatenate Polymer web components into a single file (build).
-		.pipe(vulcanize({
-			dest: 'build',
-			// Make sure inline (and external) scripts get exported to index.js to be in accordance with CSP; styles are inlined.
-			inline: true,
-			csp: true,
-			// Don't vulcanize LiveReload script, but keep it in the output.
-			strip_excludes: false,
-			excludes: {
-				scripts: ['livereload.js']
-			}
-		}))
-		.pipe(gulp.dest('build'));
+// Check JS style
+gulp.task('jscs', function() {
+  return gulp.src(['./scripts/**/*.js'])
+    .pipe($.jscs());
 });
 
-gulp.task('dist:vulcanize', function() {
-	return gulp.src('dist/index.html')
-		// Concatenate Polymer web components into a single file (dist).
-		.pipe(vulcanize({
-			dest: 'dist',
-			// Make sure inline (and external) scripts get exported to index.js to be in accordance with CSP; styles are inlined.
-			inline: true,
-			csp: true,
-			// Minify; remove comments.
-			strip: true,
-			// Strip LiveReload script from the output.
-			strip_excludes: true,
-			excludes: {
-				scripts: ['livereload.js']
-			}
-		}))
-		.pipe(gulp.dest('dist'));
+function buildBundle(file) {
+  return browserify({
+    entries: [file],
+    debug: isProd
+  })
+  .transform(babelify) // es6 -> e5
+  .bundle();
+}
+
+gulp.task('jsbundle', function() {
+  console.log('==Building JS bundle==');
+
+  var dest = isProd ? 'dist' : '';
+
+  return buildBundle('./scripts/app.js')
+    .pipe(source('bundle.js'))
+    .pipe($.streamify($.uglify()))
+    .pipe($.license('Apache', {
+      organization: 'Google Inc. All rights reserved.'
+    }))
+    .pipe(gulp.dest('./' + dest + '/scripts'))
 });
 
-gulp.task('dist:html', function() {
-	// Minify and remove comments from HTML (purely for dist; sometimes 'strip' doesn't work right).
-	return gulp.src('dist/index.html')
-		.pipe(minifyHTML({
-			comments: true
-		}));
+/** Root */
+gulp.task('root', ['getversion'], function() {
+  gulp.src([
+      './*.*',
+      '!{package,bower}.json',
+      '!gulpfile.js',
+      '!deploy.sh',
+      '!*.md'
+    ])
+    .pipe($.replace(/@VERSION@/g, version))
+    .pipe(gulp.dest('./dist/'));
+
+  gulp.src(['./data/*.json']).pipe(gulp.dest('./dist/data'));
+
+  return gulp.src('./favicon.ico')
+    .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('dist:clean', function(callback) {
-	return del([
-		// Remove bower components (already vulcanized into index.html and index.js).
-		'dist/bower_components',
-		// Delete unnecessary component files so only assets (images and fonts) remain.
-		'dist/components/**/*.{html,css,styl,js}'
-	], callback);
+gulp.task('copy_bower_components', function() {
+  gulp.src([
+      'bower_components/webcomponentsjs/webcomponents-lite.min.js',
+      'bower_components/platinum-sw/*.js'
+    ], {base: './'})
+    .pipe(gulp.dest('./dist'));
+
+  // Service worker elements want files in a specific location.
+  gulp.src(['bower_components/sw-toolbox/*.js'])
+    .pipe(gulp.dest('./dist/sw-toolbox'));
+  gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
+    .pipe(gulp.dest('./dist/elements/bootstrap'));
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CHROME TASKS
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/** HTML */
+// gulp.task('html', function() {
+//   return gulp.src('./**/*.html')
+//     .pipe($.replace(/@VERSION@/g, version))
+//     .pipe(gulp.dest('./dist/'));
+// });
 
-// Automatically reload the Chrome App when files are updated via (modified) LiveReload.
-gulp.task('chrome', function() {
-
-	// Start LiveReload server.
-	var lr = tinylr();
-	lr.listen(35729);
-
-	// Watch Stylus for changes to compile them.
-	gulp.watch('app/components/**/*.styl').on('change', function(event) {
-		// Set base to 'app/components' so each file goes into the same directory it started.
-		return gulp.src(event.path, {base: 'app/components'})
-			.pipe(stylus())
-			.pipe(gulp.dest('app/components/'));
-	});
-
-	// When any source files are modified, copy them to build/.
-	gulp.watch('app/components/**/*.{html,css,js}').on('change', function(event) {
-		return gulp.src(event.path, {base: 'app'})
-			.pipe(gulp.dest('build'));
-	});
-
-	// When any build files are updated, re-vulcanize index.html.
-	gulp.watch('build/components/**/*.{html,css,js}').on('change', function(event) {
-		// Copy index.html from app/ so the already vulcanized index.html in build/ won't be vulcanized again. Then run vulcanize.
-		gulp.series(
-			'chrome:copy',
-			'build:vulcanize'
-		);
-	});
-
-	// Reload the Chrome app when index.html is updated (following vulcanization).
-	gulp.watch('build/index.html').on('change', function(event) {
-		return lr.changed({
-			body: {files: [event.path]}
-		});
-	});
-
+/** Images */
+gulp.task('images', function() {
+  return gulp.src([
+      './images/**/*.svg',
+      './images/**/*.png',
+      './images/**/*.jpg',
+      '!./images/screenshot.jpg'
+    ])
+    .pipe(gulp.dest('./dist/images'));
 });
 
-gulp.task('chrome:copy', function() {
-	return gulp.src('app/index.html')
-		.pipe(gulp.dest('build'));
+
+// Generate a list of files to precached when serving from 'dist'.
+// The list will be consumed by the <platinum-sw-cache> element.
+gulp.task('precache', function(callback) {
+  var dir = 'dist';
+
+  glob('{elements,scripts,styles}/**/*.*', {cwd: dir}, function(error, files) {
+    if (error) {
+      callback(error);
+    } else {
+      files.push('index.html', './', 'bower_components/webcomponentsjs/webcomponents-lite.min.js');
+      var filePath = path.join(dir, 'precache.json');
+      fs.writeFile(filePath, JSON.stringify(files), callback);
+    }
+  });
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// SERVER TASKS
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// Run and automatically reload pages via a BrowserSync server on localhost.
-gulp.task('server', function() {
+/** Vulcanize */
+gulp.task('vulcanize', function() {
+  console.log('==Vulcanizing HTML Imports==');
 
-	// Initiate BrowserSync server.
-	browserSync({
-		server: {
-			baseDir: '.'
-		},
-		port: 8000,
-		browser: 'google-chrome', // Automatically open up chrome...yay!
-		notify: false, // Disable the on-page notice BrowserSync is running.
-		logConnections: true // Log all devices that are connected.
-	});
-
-	// Watch Stylus for changes to compile them.
-	gulp.watch('app/components/**/*.styl').on('change', function(event) {
-		// Set base to 'app/components' so each file goes into the same directory it started.
-		return gulp.src(event.path, {base: 'app/components'})
-			.pipe(stylus())
-			.pipe(gulp.dest('app/components/'));
-	});
-
-	// Watch all files for changes to reload them.
-	gulp.watch(['app/components/**/*.{html,js,css}', 'app/index.html']).on('change', function(event) {
-		// Reload the entire page; injecting (even just CSS) doesn't seem work. F*cking web components.
-		return gulp.src(event.path)
-			.pipe(browserSync.reload({stream: true, once: true}));
-	});
-
+  return gulp.src('./elements/elements.html')
+    .pipe($.vulcanize({
+      inlineScripts: true,
+      inlineCss: true,
+      stripComments: true,
+      //excludes: [path.resolve('./dist/third_party/polymer.html')]
+      //stripExcludes: false,
+    }))
+    // .pipe($.minifyInline()) // TODO: messes up SVG icons
+    .pipe($.crisper()) // Separate JS into its own file for CSP compliance.
+    .pipe(gulp.dest('./dist/elements'))
 });
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// DEFAULT FOR 'gulp' COMMAND
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/** Watches */
+gulp.task('watch', function() {
+  gulp.watch('./styles/**/*.scss', ['styles']);
+  gulp.watch('./*.html', ['root']);
+  // gulp.watch('./sw-import.js', ['serviceworker']);
+  gulp.watch('./elements/**/*.html', ['vulcanize']);
+  gulp.watch('./images/**/*.*', ['images']);
+  gulp.watch('./scripts/**/*.js', ['js']);
+});
 
-gulp.task('default', gulp.series(
-	'clean',
-	'styles',
-	'copy',
-	gulp.parallel('build:vulcanize', 'dist:vulcanize'),
-	gulp.parallel('dist:html', 'dist:clean')
-));
+gulp.task('getversion', function() {
+  version = JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
+});
+
+/** Main tasks */
+
+var allTasks = ['root', 'styles', 'jsbundle', 'images'];//, 'serviceworker'];
+
+gulp.task('bump', function() {
+  return gulp.src([
+      './{package,bower}.json'
+    ])
+    .pipe($.bump({type: 'patch'}))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('default', function() {
+  isProd = true;
+  return runSequence('clean', 'bump', 'getversion', 'js',
+                     allTasks, 'vulcanize', 'precache', 'copy_bower_components');
+})
+
+gulp.task('dev', function() {
+  return runSequence('clean', 'getversion', allTasks, 'watch');
+});

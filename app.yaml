@@ -1,5 +1,5 @@
 application: poly-mail
-version: 1
+version: polymer10
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -15,9 +15,9 @@ handlers:
 - url: /images
   static_dir: images
 
-- url: /(.*).(html|js|css)
+- url: /(.*).(html|js|json|css)
   static_files: \1.\2
-  upload: (.*)\.(html|js|cs)
+  upload: (.*)\.(html|js|json|css)
 
 - url: /$
   static_files: index.html

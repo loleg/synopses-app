@@ -1,8 +1,9 @@
 {
   "name": "Synopses App",
-  "version": "0.1.0",
+  "version": "0.1.9",
   "authors": [
-    "Oleg Lavrovsky <oleg@datalets.ch>"
+    "Oleg Lavrovsky <oleg@datalets.ch>",
+    "Eric Bidelman <ebidel@gmail.com>"
   ],
   "description": "Polymer version of Synopses app",
   "main": "index.html",
@@ -24,6 +25,7 @@
     "iron-elements": "PolymerElements/iron-elements",
     "paper-elements": "PolymerElements/paper-elements",
     "google-signin": "GoogleWebComponents/google-signin",
+    "platinum-sw": "PolymerElements/platinum-sw#^1.0.1",
     "gold-email-input": "PolymerElements/gold-email-input",
     "iron-ajax": "PolymerElements/iron-ajax",
     "login-polyform": "hourliert/login-polyform",

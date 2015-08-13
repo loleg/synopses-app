@@ -1,11 +1,11 @@
-<link rel="import" href="bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
 
 <style is="custom-style">
 /* Global custom props */
 :root {
   --header-red-color: #eee;
 
-  --gmail-undo-action: {
+  --gmail-toast-action: {
     color: #ffa726;
     text-transform: uppercase;
     cursor: pointer;
@@ -28,8 +28,9 @@ paper-scroll-header-panel {
   isolation: isolate; /* force main header title to its own layer */
 }
 
-#toast .undo {
-  @apply(--gmail-undo-action);
+.toast .action {
+  @apply(--gmail-toast-action);
+  margin-left: 16px;
 }
 
 #fab {

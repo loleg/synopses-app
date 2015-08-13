@@ -1,3 +1,4 @@
+<!-- Author: Eric Bidelman <@ebidel> -->
 <!doctype html>
 <html>
 <head>
@@ -6,6 +7,7 @@
   <title>Synopses</title>
 
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- Fallback for manifest.json add to homescreen (Chrome Android) -->
   <meta name="mobile-web-app-capable" content="yes">
 
   <meta name="apple-mobile-web-app-status-bar-style" content="#e32d43">
@@ -17,50 +19,38 @@
 
   <link rel="manifest" href="manifest.json">
 
-  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="styles/app.css">
 
   <!-- Polyfill webcomponents in browsers that don't support it. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <!--
-  <link rel="import" href="vulcanized.html">
-  -->
-  <link rel="import" href="elements.html">
+  <!-- <link rel="import" id="bundle" href="vulcanized.html" async> -->
+  <link rel="import" id="bundle" href="elements.html" async>
 </head>
-<body fullbleed>
-
-  <!-- <iron-iconset name="my-icons" src="images/pill-24.png" width="24" size="24"
-      icons="pill">
-  </iron-iconset> -->
+<body class="fullbleed">
 
 <template id="t" is="dom-bind">
 
-<div id="loginscreen"
-     class$="[[_computeLoginScreenClass(isAuthenticated, 'layout vertical center-center fit')]]"
-     hidden="{{DEBUG}}">
-     <login-polyform on-login="handleLogin" credentials="{{_user}}">
-      <img avatar src="images/synopses-icon.png"/>
-    </login-polyform>
-  <!--google-signin width="wide" height="tall"
+<template is="dom-if" if="{{syncing}}">
+  <div id="refresh" class="fit layout vertical center-center">
+    <div id="refresh-spinner-container" class="layout vertical center-center shrink">
+      <paper-spinner active></paper-spinner>
+    </div>
+  </div>
+</template>
+
+<div id="loginscreen" class="layout vertical center-center fit"
+     hidden="[[_computeHideLogin(isAuthenticated)]]">
+  <google-signin width="wide" height="tall"
       client-id="229000986068-hld1d9ovioamaaur218vg3jg5dgvf2a2.apps.googleusercontent.com"
       scopes="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/gmail.readonly"
       on-google-signin-success="onSigninSuccess"
-      on-google-signed-out="onSignOut"
-      on-google-signout-attempted="onSignOutAttempt"
-      on-google-signin-aware-signed-out="onSignInAwareSignout"
-      on-google-signin-failure="onSigninFailure"
-      signed-in="{{signedIn}}"></google-signin-->
+      signed-in="{{signedIn}}"></google-signin>
 </div>
 
-<patient-form ident="addpatient"
-  on-patient-saved="loadPatients"></patient-form>
-
-<record-form ident="addrecord" title="New record"
-  patientid="{{selectedPatient.id}}"
-  on-record-saved="patientSaved"></record-form>
-
-<share-dialog ident="sharelink" title="Share patient link"
-  patient="{{selectedPatient}}"></share-dialog>
+<material-search id="search" narrow="[[narrow]]"
+                 previous-searches="{{previousSearches}}"
+                 on-search-change="_onSearch" class="fit"></material-search>
 
 <paper-drawer-panel id="drawerPanel" narrow="{{narrow}}">
 
@@ -71,7 +61,7 @@
         active on-run-search="runSearch" query="{{query}}"></material-search>
     </paper-toolbar>
 
-    <paper-menu selectable="paper-icon-item" on-iron-select="menuSelect">
+    <paper-menu selected="0" selectable="paper-icon-item" on-iron-activate="menuSelect">
       <paper-icon-item id="gotoinbox" role="menuitem" on-tap="inboxSelect">
         <iron-icon icon="mail" item-icon></iron-icon>Inbox
       </paper-icon-item>
@@ -123,6 +113,8 @@
       <paper-icon-button id="shareitems" icon="icons:mail" class="selected-item"
         on-tap="shareThreads"></paper-icon-button>
       <div class="flex"></div>
+      <span class="bottom indent title">{{headerTitle}}</span>
+      <paper-icon-button icon="search" class="fade-on-drawer-open" on-tap="toggleSearch"></paper-icon-button>
 
       <span class="top indent title">{{headerTitle}}</span>
 
@@ -220,13 +212,10 @@
       </paper-tabs>
 
     </paper-toolbar>
-
     <div content on-thread-archive="onThreadArchive">
 
-      <template is="dom-if" if="{{_computeShowSpinner(threads, signedIn)}}">
-        <div class="layout vertical center-center" style="height:100%">
-          <paper-spinner active></paper-spinner>
-        </div>
+      <template is="dom-if" if="[[_computeShowNoResults(threads, syncing)]]">
+        <span class="layout horizontal center-center fit">No results.</span>
       </template>
 
       <!-- TODO: don't pass all messages, users, labels into mail-thread -->
@@ -291,15 +280,30 @@
 </div>
 
 <!-- Cache data requests. -->
-<!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->
-<!--<iron-localstorage name="polymer-mail-labels" value="{{labels}}"></iron-localstorage>-->
-<!--<iron-localstorage name="polymer-mail-threads" value="{{threads}}"></iron-localstorage>-->
-<!--<iron-localstorage name="polymer-mail-users" value="{{users}}"></iron-localstorage>-->
+<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>
+<iron-localstorage name="polymer-mail-labels" value="{{labels}}"></iron-localstorage>
+<iron-localstorage name="polymer-mail-threads" value="{{threads}}"
+      on-iron-localstorage-load-empty="_onCachedThreadsEmpty"></iron-localstorage>
+<iron-localstorage name="polymer-mail-users" value="{{users}}"></iron-localstorage>
 
 </template>
 
-<!--<script src="scripts/polymer_metrics.js"></script>-->
-<script src="app.js"></script>
+<platinum-sw-register skip-waiting clients-claim auto-register>
+  <platinum-sw-cache default-cache-strategy="networkFirst"></platinum-sw-cache>
+  <!-- <platinum-sw-cache default-cache-strategy="networkFirst"
+                     precache-file="precache.json"></platinum-sw-cache> -->
+ <!--  <platinum-sw-fetch origin="https://content\.googleapis\.com"
+                     path="/gmail/v1/users/me/threads(.*)"
+                     handler="networkFirst"></platinum-sw-fetch>
+  <platinum-sw-fetch origin="https://content\.googleapis\.com"
+                     path="/plus/v1/(.*)"
+                     handler="networkFirst"></platinum-sw-fetch -->
+ <!--  <platinum-sw-fetch origin="https://content\.googleapis\.com"
+                     path="/plus/v1/people/me"></platinum-sw-fetch> -->
+</platinum-sw-register>
+
+<!-- <script src="scripts/polymer_metrics.js"></script> -->
+<script src="scripts/bundle.js"></script>
 <script>
   <!-- analytics -->
 </script>
