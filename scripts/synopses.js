@@ -436,8 +436,10 @@ template._onThreadStarred = function(e) {
 };
 
 template.patientSaved = function(e) {
-  this.loadRecords();
-  this.loadPatients();
+  template.loadPatients();
+  setTimeout(function() {
+    template.loadRecords();
+  }, 100);
 };
 
 template.hideCalendar = function() {
