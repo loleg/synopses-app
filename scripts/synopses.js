@@ -32,7 +32,6 @@ link.addEventListener('load', function(e) {
 });
 
 template.threadsLoaded = [];
-template.selectedThreads = [];
 template.selectedPatient = false;
 
 template.isDrawerVisible = true;
@@ -434,15 +433,19 @@ template._onThreadStarred = function(e) {
   }
 };
 
+template._onThreadSelect = function(e) {
+  e.stopPropagation();
+  var idx = template.$.threadlist.items.indexOf(e.detail.thread);
+  template.$.threadlist.select(idx);
+  template.headerClass = template._computeMainHeaderClass(
+    template.narrow, template.selectedThreads.length);
+};
+
 template.patientSaved = function(e) {
   template.loadPatients();
   setTimeout(function() {
     template.loadRecords();
   }, 100);
-};
-
-template.hideCalendar = function() {
-  this.$.googlecalendar.hidden = true;
 };
 
 template.loadPatientFile = function() {
