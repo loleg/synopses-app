@@ -22,12 +22,6 @@ a.abbr {
   font-style: italic;
 }
 
-.top.title {
-  font-size: 0px;
-  text-indent: -9999px;
-  color: transparent;
-}
-
 body #loading {
   background: url(../images/synopses-icon.png) no-repeat 50% 50%;
   background-size: auto;

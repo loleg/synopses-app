@@ -119,7 +119,7 @@
         on-tap="shareThreads"></paper-icon-button>
       <div class="flex"></div>
 
-      <span class="top indent title">{{headerTitle}}</span>
+      <!-- <span class="top indent title">{{headerTitle}}</span> -->
 
       <!--
         <paper-icon-button icon="archive" class="selected-item" on-tap="archiveAll"></paper-icon-button>
@@ -137,6 +137,17 @@
           <paper-item>Report phishing</paper-item>
         </paper-dropdown>
       </paper-menu-button> -->
+
+      <paper-item id="clinicdashboard" class="middle" hidden="{{selectedPatient}}">
+        <span class="layout horizontal center justified">
+          <span class="label patient_name">
+            <b>August 14</b>: today
+            <b>3 appointments</b> scheduled.
+            <b>12 new messages</b> from patients,
+            <b>2 unread</b> lab reports.
+          </span>
+        </span>
+      </paper-item>
 
       <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
         <span class="layout horizontal center justified">
