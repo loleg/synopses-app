@@ -129,6 +129,7 @@ template.runSearch = function(e) {
   if (q.length < 3) {
     template.patientstoday = template.patientstodayLoaded;
     template.threads = template.threadsLoaded;
+    template.hideLoadingSpinner();
     return;
   }
   // Filter people
