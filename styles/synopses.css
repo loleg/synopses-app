@@ -157,4 +157,5 @@ body #loading {
 and (max-width : 375px) {
   #middleBar, #bottomBar { display: none; }
   #mainContainer { top: 50px !important; padding-top: 0px !important; }
+  paper-dialog#dialog { max-width: 100% !important; margin:0 !important; }
 }

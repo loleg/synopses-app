@@ -223,7 +223,7 @@ paper-tab.record-form.iron-selected {
                 <li><a href="#" on-tap="_onSelectMedTerm">[[item]]</a></li>
               </template>
             </ul>
-            <paper-input name="condition" label="For condition" required></paper-input>
+            <paper-input name="dosage" label="Dosage" required></paper-input>
           </div>
         </form>
       </div>
@@ -234,11 +234,12 @@ paper-tab.record-form.iron-selected {
               data-type="LAB" data-typeid="2">
               <input type="hidden" name="label" value="{{caseName}}">
           <div class="vertical layout">
-            <paper-input name="condition" label="Reason for test" required></paper-input>
+            <paper-input name="procedure" label="Type of test" required></paper-input>
             <label>Summary of results:</label>
             <iron-autogrow-textarea name="results" id="ta2" required maxRows="16" rows="6">
               <textarea name="results" id="ta2" rows="6"></textarea>
             </iron-autogrow-textarea>
+            <paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>
             <paper-input name="imageurl" label="Link to image file"></paper-input>
             <label hidden="true">
               <div id="dropzone" on-tap="{{tapSelect}}"
