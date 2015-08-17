@@ -1,16 +1,38 @@
+html body {
+  font-family: sans-serif;
+}
+
 #navheader, #mainheader {
-  background-color: #aaa;
+  background-color: #a90d23;
 }
 
 a.abbr {
   color: green;
 }
 
+.separator {
+  padding: 8px;
+  font-size: 90%;
+}
+
 .patientapp.title {
-  background: url(images/synopses-icon.png) no-repeat top left;
+  background: url(../images/synopses-icon.png) no-repeat top left;
   background-size: auto 100%;
   padding-left: 60px;
   font-style: italic;
+}
+
+.top.title {
+  font-size: 0px;
+  text-indent: -9999px;
+  color: transparent;
+}
+
+body #loading {
+  background: url(../images/synopses-icon.png) no-repeat 50% 50%;
+  background-size: auto;
+  background-color: #fff;
+  z-index: 1000;
 }
 
 #loginscreen {
@@ -94,8 +116,8 @@ a.abbr {
   bottom: 22px; right: 16px;
 }
 
-#navisible { color: #333; }
-#navisible.active { color: #ccc; }
+#navisible { color: #fff; }
+#navisible.active { color: #c99; }
 
 
 #patientdetails {
