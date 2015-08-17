@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1">
-  <title>Patient Synopses</title>
+  <title>My Synopses Alpha</title>
 
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -19,36 +19,40 @@
 
   <link rel="manifest" href="manifest.json">
 
-  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="styles/app.css">
+  <link rel="stylesheet" href="styles/synopses.css">
 
   <!-- Polyfill webcomponents in browsers that don't support it. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
-  <!--
-  <link rel="import" href="vulcanized.html">
-  -->
-  <link rel="import" href="elements.html">
+  <link rel="import" id="bundle" href="elements/elements.html" async>
 </head>
-<body fullbleed>
+<body class="fullbleed loading">
 
-  <!-- <iron-iconset name="my-icons" src="images/pill-24.png" width="24" size="24"
-      icons="pill">
-  </iron-iconset> -->
+<!-- Loading splash outside of Imports + Polymer so 1st paint is always fast. -->
+<div id="loading"></div>
 
 <template id="t" is="dom-bind">
 
-<div id="loginscreen"
-     class$="[[_computeLoginScreenClass(isAuthenticated, 'layout vertical center-center fit')]]"
-     hidden="{{DEBUG}}">
-     <login-polyform on-login="mockLogin" username="demo" password="demo" credentials="{{_user}}">
-      <img avatar src="images/synopses-icon.png"/>
-    </login-polyform>
+<template is="dom-if" if="{{syncing}}">
+  <div id="refresh" class="fit layout vertical center-center">
+    <div id="refresh-spinner-container" class="layout vertical center-center shrink">
+      <paper-spinner active></paper-spinner>
+    </div>
+  </div>
+</template>
+
+<div id="loginscreen" class="fit layout vertical center-center"
+     hidden="[[isAuthenticated]]">
+  <login-polyform on-login="mockLogin" username="demo" password="demo" credentials="{{_user}}">
+    <img avatar src="images/synopses-icon.png"/>
+  </login-polyform>
 </div>
 
-<patient-form ident="addpatient" title="Edit my profile"
+<patient-form id="addpatient" title="Edit my profile"
   on-patient-saved="loadPatients"></patient-form>
 
-<selfcheck-form ident="selfcheck" title="Patient self check"
+<selfcheck-form id="selfcheck" title="Patient self check"
   patientid="{{selectedPatient.id}}"
   on-record-saved="patientSaved"></selfcheck-form>
 
@@ -92,50 +96,60 @@
     </paper-item>
   </div>
   <div content on-thread-archive="onThreadArchive">
-      <template is="dom-if" if="{{_computeShowSpinner(threads, signedIn)}}">
-        <div class="layout vertical center-center" style="height:100%">
-          <paper-spinner active></paper-spinner>
-        </div>
-      </template>
 
-      <!-- TODO: don't pass all messages, users, labels into mail-thread -->
-      <iron-selector id="threadlist" multi activate-event=""
-                     selected-attribute="selected"
-                     selected-items="{{selectedThreads}}"
-                     on-iron-select="_onThreadSelectChange"
-                     on-iron-deselect="_onThreadSelectChange">
-        <template is="dom-repeat" items="[[threads]]">
-          <record-thread messages="[[item.messages]]"
-                       labels="[[labelMap]]" users="[[users]]"
-                       narrow="[[narrow]]"
-                       on-thread-expand="_onThreadExpand"></record-thread>
-        </template>
-      </iron-selector>
-  </div>
+    <!--template is="dom-if" if="[[_computeShowNoResults(threads, syncing)]]">
+      <span class="layout horizontal center-center fit">No results.</span>
+    </template-->
+
+    <!-- TODO: don't pass all messages, users, labels into mail-thread -->
+    <iron-selector id="threadlist" multi activate-event=""
+                   selected-attribute="selected"
+                   selected-items="{{selectedThreads}}"
+                   on-iron-select="_onThreadSelectChange"
+                   on-iron-deselect="_onThreadSelectChange">
+      <template is="dom-repeat" items="[[threads]]">
+        <record-thread messages="[[item.messages]]"
+                     labels="[[labelMap]]" users="[[users]]"
+                     narrow="[[narrow]]"
+                     on-label-tap="_onLabelTap"
+                     on-thread-expand="_onThreadExpand"
+                     on-thread-starred="_onThreadStarred"
+                     on-thread-select="_onThreadTap"></record-thread>
+      </template>
+    </iron-selector>
 
 </div><!-- /.layout vertical -->
-
-
-<paper-toast id="toast" class="layout horizontal justified"
-             duration="10000" text="{{toastMessage}}" visible="{{toastOpened}}"
-             on-paper-overlay-open="onToastOpenClose"
-             on-transitionend="onToastOpenClose">
-  <div on-tap="undoAll" class="undo">Undo</div>
-</paper-toast>
 
 <paper-fab id="fab-selfcheck" icon="accessibility" class="action-icon"
    on-tap="openDialog" data-dialog="selfcheck"></paper-fab>
 
-<!-- Cache data requests. -->
-<!--<iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>-->
-<!--<iron-localstorage name="polymer-mail-labels" value="{{labels}}"></iron-localstorage>-->
-<!--<iron-localstorage name="polymer-mail-threads" value="{{threads}}"></iron-localstorage>-->
-<!--<iron-localstorage name="polymer-mail-users" value="{{users}}"></iron-localstorage>-->
+<!-- Cache data requests. --
+< iron-localstorage name="polymer-mail-user" value="{{user}}"></iron-localstorage>
+< iron-localstorage name="polymer-mail-labels" value="{{labels}}"></iron-localstorage>
+< iron-localstorage name="polymer-mail-threads" value="{{threads}}"
+      on-iron-localstorage-load-empty="_onCachedThreadsEmpty"></iron-localstorage>
+< iron-localstorage name="polymer-mail-users" value="{{users}}"></iron-localstorage>
+-->
 
 </template>
 
-<!--<script src="scripts/polymer_metrics.js"></script>-->
-<script src="app.js"></script>
+<platinum-sw-register skip-waiting clients-claim auto-register>
+  <platinum-sw-cache default-cache-strategy="networkFirst"></platinum-sw-cache>
+  <!-- <platinum-sw-cache default-cache-strategy="networkFirst"
+                     precache-file="precache.json"></platinum-sw-cache> -->
+ <!--  <platinum-sw-fetch origin="https://content\.googleapis\.com"
+                     path="/gmail/v1/users/me/threads(.*)"
+                     handler="networkFirst"></platinum-sw-fetch>
+  <platinum-sw-fetch origin="https://content\.googleapis\.com"
+                     path="/plus/v1/(.*)"
+                     handler="networkFirst"></platinum-sw-fetch -->
+ <!--  <platinum-sw-fetch origin="https://content\.googleapis\.com"
+                     path="/plus/v1/people/me"></platinum-sw-fetch> -->
+</platinum-sw-register>
+
+<!-- <script src="scripts/polymer_metrics.js"></script> -->
+<script src="scripts/bundle.js"></script>
+<script src="scripts/synopses.js"></script>
 <script>
   <!-- analytics -->
 </script>

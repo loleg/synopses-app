@@ -206,7 +206,6 @@ template._onLabelTap = function(e) {
   template.threads = tt;
 };
 
-/*
 template.mockLogin = function() {
   this.isAuthenticated = true;
   if (PATIENT) { template.loadPatientFile(); return; }
@@ -215,7 +214,6 @@ template.mockLogin = function() {
   if (DEBUG) { this.loadPatientsPast(); }
   this.loadRecords();
 };
-*/
 
 template.handleLogin = function(event, data, silentMode) {
   if (PATIENT) { return; } // not supported yet
