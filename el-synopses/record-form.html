@@ -4,6 +4,7 @@
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <link rel="import" href="../bower_components/pikaday-decorator/pikaday-decorator.html">
@@ -143,7 +144,7 @@ paper-tab.record-form.iron-selected {
     <iron-pages selected="{{recordType}}" id="recordform">
 
       <div class="record-DATA">
-        <form is="iron-form" method="post" id="formtypedata"
+        <form is="iron-form" method="post" contentType="application/json" id="formtypedata"
               on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="DATA" data-typeid="0">
               <input type="hidden" name="label" value="{{caseName}}">
@@ -184,7 +185,7 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-NOTE">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" contentType="application/json"
               on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="NOTE" data-typeid="1">
               <input type="hidden" name="label" value="{{caseName}}">
@@ -209,7 +210,7 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-MED">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" contentType="application/json"
               on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="MED" data-typeid="3">
               <input type="hidden" name="label" value="{{caseName}}">
@@ -228,7 +229,7 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-LAB">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" contentType="application/json"
               on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="LAB" data-typeid="2">
               <input type="hidden" name="label" value="{{caseName}}">
@@ -253,7 +254,7 @@ paper-tab.record-form.iron-selected {
       </div>
 
       <div class="record-EVENT">
-        <form is="iron-form" method="post"
+        <form is="iron-form" method="post" contentType="application/json"
               on-iron-form-response="_onSubmitForm" on-iron-form-error="_onSubmitError"
               data-type="EVENT" data-typeid="4">
               <input type="hidden" name="label" value="{{caseName}}">
@@ -360,6 +361,7 @@ paper-tab.record-form.iron-selected {
         '/api/patient/' + this.patientid +
         '/record/' + the_form.dataset.typeid +
         '/save';
+      // console.log(the_form.serialize());
       the_form.submit();
     },
 
