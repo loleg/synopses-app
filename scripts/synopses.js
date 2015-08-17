@@ -88,12 +88,6 @@ template.loadRecords = function() {
   } else {
     ajax.url = '/api/patient/' + template.selectedPatient.id + '/threads';
   }
-  template.threads = [{
-    'messages': [{
-      'subject': 'Please wait, loading ...',
-      'snippet': ''
-    }]
-  }];
   ajax.addEventListener('response', function(e) {
     var threads = e.detail.response.threads;
     threads.forEach(function(t) {
@@ -113,6 +107,7 @@ template.loadRecords = function() {
     template.threads = threads;
     template.threadsLoaded = threads;
     template.dashboardInfo = e.detail.response.intoday;
+    document.body.classList.remove('loading');
   });
   ajax.addEventListener('error', function(e) {
     template.threads = [];
@@ -435,8 +430,24 @@ template._onThreadStarred = function(e) {
 
 template._onThreadSelect = function(e) {
   e.stopPropagation();
-  var idx = template.$.threadlist.items.indexOf(e.detail.thread);
-  template.$.threadlist.select(idx);
+  if (template.selectedThreads.indexOf(e.detail.thread) === -1) {
+    template.selectedThreads.push(e.detail.thread);
+  } else if (!e.detail.thread.selected) {
+    var ts = [];
+    template.selectedThreads.forEach(function(thread) {
+      if (thread !== e.detail.thread) { ts.push(thread); }
+    });
+    template.selectedThreads = ts;
+  }
+  template.headerClass = template._computeMainHeaderClass(
+    template.narrow, template.selectedThreads.length);
+};
+
+template.deselectAll = function(e) {
+  template.selectedThreads.forEach(function(thread) {
+    thread.selected = false;
+  });
+  template.selectedThreads = [];
   template.headerClass = template._computeMainHeaderClass(
     template.narrow, template.selectedThreads.length);
 };

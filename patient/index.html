@@ -101,22 +101,16 @@
       <span class="layout horizontal center-center fit">No results.</span>
     </template-->
 
-    <iron-selector id="threadlist" multi activate-event=""
-                   selected-attribute="selected"
-                   selected-items="{{selectedThreads}}"
-                   on-iron-select="_onThreadSelectChange"
-                   on-iron-deselect="_onThreadSelectChange">
-      <template is="dom-repeat" items="[[threads]]">
-        <record-thread messages="[[item.messages]]"
-                     labels="[[labelMap]]" users="[[users]]"
-                     narrow="[[narrow]]"
-                     on-label-tap="_onLabelTap"
-                     on-thread-expand="_onThreadExpand"
-                     on-thread-starred="_onThreadStarred"
-                     on-thread-select="_onThreadTap"
-                     tabindex="0" data-thread-index$="[[index]]"></record-thread>
-      </template>
-    </iron-selector>
+    <template is="dom-repeat" items="[[threads]]">
+      <record-thread messages="[[item.messages]]"
+                   labels="[[labelMap]]" users="[[users]]"
+                   narrow="[[narrow]]"
+                   on-label-tap="_onLabelTap"
+                   on-thread-expand="_onThreadExpand"
+                   on-thread-starred="_onThreadStarred"
+                   on-thread-select="_onThreadSelect"
+                   tabindex="0" data-thread-index$="[[index]]"></record-thread>
+    </template>
 
 </div><!-- /.layout vertical -->
 

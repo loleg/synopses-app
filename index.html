@@ -231,21 +231,15 @@
         <span class="layout horizontal center-center fit">No results.</span>
       </template-->
 
-      <iron-selector id="threadlist" multi activate-event=""
-                     selected-attribute="selected"
-                     selected-items="{{selectedThreads}}"
-                     on-iron-select="_onThreadSelectChange"
-                     on-iron-deselect="_onThreadSelectChange">
-        <template is="dom-repeat" items="[[threads]]">
-          <record-thread messages="[[item.messages]]"
-                       labels="[[labelMap]]" users="[[users]]"
-                       narrow="[[narrow]]"
-                       on-label-tap="_onLabelTap"
-                       on-thread-expand="_onThreadExpand"
-                       on-thread-starred="_onThreadStarred"
-                       on-thread-select="_onThreadTap"></record-thread>
-        </template>
-      </iron-selector>
+      <template is="dom-repeat" items="[[threads]]">
+        <record-thread messages="[[item.messages]]"
+                     labels="[[labelMap]]" users="[[users]]"
+                     narrow="[[narrow]]"
+                     on-label-tap="_onLabelTap"
+                     on-thread-expand="_onThreadExpand"
+                     on-thread-starred="_onThreadStarred"
+                     on-thread-select="_onThreadSelect"></record-thread>
+      </template>
 
      </div>
   </paper-scroll-header-panel>

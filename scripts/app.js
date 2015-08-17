@@ -77,7 +77,7 @@
         loadData();
       });
 
-      document.body.classList.remove('loading');
+      // document.body.classList.remove('loading');
     };
 
     // crbug.com/504944 - readyState never goes to complete until Chrome 46.
