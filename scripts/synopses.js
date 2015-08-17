@@ -107,15 +107,18 @@ template.loadRecords = function() {
     template.threads = threads;
     template.threadsLoaded = threads;
     template.dashboardInfo = e.detail.response.intoday;
+    template.deselectAll();
     document.body.classList.remove('loading');
   });
   ajax.addEventListener('error', function(e) {
     template.threads = [];
+    template.deselectAll();
   });
 };
 
 template.runSearch = function(e) {
   template.showLoadingSpinner();
+  template.deselectAll();
   var q = e.detail.value.toLowerCase();
   if (template.selectedPatient) {
     template.inboxSelect();
@@ -154,6 +157,7 @@ template.runSearch = function(e) {
 };
 
 template.filterBy = function(e, f, g) {
+  template.deselectAll();
   var qs = this.$.filters.selectedItem.querySelector('iron-icon');
   if (qs === null) { return; }
   var theIcon = qs.icon;
@@ -186,6 +190,7 @@ template._onLabelTap = function(e) {
   this.$.filters.select('' + (this.$.filters.items.length - 2));
   // Filter threads
   var tt = [];
+  template.deselectAll();
   template.threadsLoaded.forEach(function(thread) {
     var hasMatch = false;
     thread.messages.forEach(function(message) {
@@ -406,15 +411,15 @@ template._onThreadExpand = function(e) {
     window.localStorage.setItem(ident, false);
   }
   // Close other threads
-  template.$.threadlist.items.forEach(function(thread) {
-    if (thread.thread === e.detail.thread) { return; }
-    if (thread.showfulltext) {
-      thread.showfulltext = false;
-      thread.$.fulltext.animate([
-        {'max-height': 200}, {'max-height': 0}
-      ], {duration: 50});
-    }
-  });
+  // template.$.threadlist.items.forEach(function(thread) {
+  //   if (thread.thread === e.detail.thread) { return; }
+  //   if (thread.showfulltext) {
+  //     thread.showfulltext = false;
+  //     thread.$.fulltext.animate([
+  //       {'max-height': 200}, {'max-height': 0}
+  //     ], {duration: 50});
+  //   }
+  // });
 };
 
 template._onThreadStarred = function(e) {
@@ -482,7 +487,11 @@ template.shareThreads = function() {
   var messageBody = 'PATIENT RECORD\n------------------------------\n' +
     'STRICTLY CONFIDENTIAL\n------------------------------\n';
   this.selectedThreads.forEach(function(thread) {
-    messageBody += '\n' + thread.querySelector('header').innerText;
+    messageBody += '\n' +
+      thread.$.addressline.innerText +
+      thread.$.subjectline.innerText +
+      thread.$.fullbody.innerText +
+      '\n';
   });
 
   messageBody += '\n\nRecords provided by Synopses.ch - please visit our ' +

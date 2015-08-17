@@ -186,7 +186,7 @@
         <div class="flex layout horizontal">
           <header class="layout vertical flex" on-tap="_onThreadTap"
                   on-down="_onDown" on-up="_onUp">
-            <span class="layout horizontal center justified">
+            <span id="addressline" class="layout horizontal center justified">
               <span class="name">
                 <span>{{thread.from.name}}</span>
                 <span class="messagecount" hidden="{{!showMessageCount}}">{{messages.length}}</span>
