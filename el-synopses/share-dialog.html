@@ -27,8 +27,8 @@
       shareLink: {
         value: ''
       },
-      patient: {
-        value: null,
+      patienthash: {
+        value: '',
         reflectToAttribute: true,
         observer: '_patientChanged'
       },
@@ -43,7 +43,7 @@
     },
 
     _patientChanged: function() {
-      this.shareLink = location.origin + '/patient/?' + this.patient.hash;
+      this.shareLink = location.origin + '/patient/?' + this.patienthash;
     },
 
     linkToEmail: function(e) {
