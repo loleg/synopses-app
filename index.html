@@ -140,10 +140,10 @@
       <paper-item id="clinicdashboard" class="middle" hidden="{{selectedPatient}}">
         <span class="layout horizontal center justified">
           <span class="label patient_name">
-            <b>August 14</b>: today
-            <b>3 appointments</b> scheduled.
-            <b>12 new messages</b> from patients,
-            <b>2 unread</b> lab reports.
+            <b>{{dashboardInfo.date}}</b>: today
+            <b>{{dashboardInfo.appointments}}</b> <b>appointments</b> scheduled.
+            <b>{{dashboardInfo.newmessages}}</b> <b>new messages</b> from patients,
+            <b>{{dashboardInfo.labresults}}</b> <b>unread</b> lab reports.
           </span>
         </span>
       </paper-item>

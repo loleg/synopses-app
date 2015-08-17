@@ -68,6 +68,13 @@ template.loadPatientsPast = function() {
   });
 };
 
+template.dashboardInfo = {
+  date: '-',
+  appointments: '-',
+  newmessages: '-',
+  labresults: '-'
+};
+
 template.loadRecords = function() {
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
@@ -106,6 +113,7 @@ template.loadRecords = function() {
     });
     template.threads = threads;
     template.threadsLoaded = threads;
+    template.dashboardInfo = e.detail.response.intoday;
   });
   ajax.addEventListener('error', function(e) {
     template.threads = [];
