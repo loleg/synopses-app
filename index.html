@@ -41,8 +41,8 @@
   </div>
 </template>
 
-<div id="loginscreen" class="layout vertical center-center fit"
-     hidden="[[_computeHideLogin(isAuthenticated)]]">
+<div id="loginscreen" class="fit layout vertical center-center"
+     hidden="[[isAuthenticated]]">
   <login-polyform on-login="handleLogin" credentials="{{_user}}">
     <img avatar src="images/synopses-icon.png"/>
   </login-polyform>

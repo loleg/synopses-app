@@ -3,6 +3,7 @@
 'use strict';
 
 var template = document.querySelector('#t');
+template.isAuthenticated = false;
 var DEBUG = template.DEBUG;
 
 console.log('Initialising Synopses App');
@@ -226,7 +227,7 @@ template.handleLogin = function(event, data, silentMode) {
     if (r.flag !== 'success') {
       if (!silentMode) {
         // Alert the user
-        window.alert('An error occurred, please try again.');
+        window.alert('Invalid login or service unavailable, please try again.');
       }
       return false;
     }
