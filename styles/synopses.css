@@ -6,6 +6,10 @@ html body {
   background-color: #a90d23;
 }
 
+#bottomBar #tabsContainer {
+  margin-left: 70px;
+}
+
 a.abbr {
   color: green;
 }

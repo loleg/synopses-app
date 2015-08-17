@@ -421,39 +421,39 @@
 
   template.headerClass = template._computeMainHeaderClass(template.narrow, 0);
 
-  template.addEventListener('dom-change', e => {
-    // Force binding updated when narrow has been calculated via binding.
-    template.headerClass = template._computeMainHeaderClass(
-        template.narrow, template.selectedThreads.length);
-
-    var headerEl = document.querySelector('#mainheader');
-    var title = document.querySelector('.title');
-
-    template.$.drawerPanel.addEventListener('paper-header-transform', e => {
-
-      if (!headerEl.classList.contains('tall')) {
-        return;
-      }
-
-      var d = e.detail;
-
-      // If at the top, allow swiping and pull down refresh. When scrolled, set
-      // pan-y so track events don't fire in the y direction.
-      //template.touchAction = d.y == 0 ? 'none' : 'pan-y';
-
-      // d.y: the amount that the header moves up
-      // d.height: the height of the header when it is at its full size
-      // d.condensedHeight: the height of the header when it is condensed
-      //scale header's title
-      var m = d.height - d.condensedHeight;
-      var scale = Math.max(0.5, (m - d.y) / (m / 0.25)  + 0.5);
-      // var scale = Math.max(0.5, (m - d.y) / (m / 0.4)  + 0.5);
-      Polymer.Base.transform('scale(' + scale + ') translateZ(0)', title);
-
-      // Adjust header's color
-      //document.querySelector('#mainheader').style.color = (d.y >= d.height - d.condensedHeight) ? '#fff' : '';
-    });
-  });
+  // template.addEventListener('dom-change', e => {
+  //   // Force binding updated when narrow has been calculated via binding.
+  //   template.headerClass = template._computeMainHeaderClass(
+  //       template.narrow, template.selectedThreads.length);
+  //
+  //   var headerEl = document.querySelector('#mainheader');
+  //   var title = document.querySelector('.title');
+  //
+  //   template.$.drawerPanel.addEventListener('paper-header-transform', e => {
+  //
+  //     if (!headerEl.classList.contains('tall')) {
+  //       return;
+  //     }
+  //
+  //     var d = e.detail;
+  //
+  //     // If at the top, allow swiping and pull down refresh. When scrolled, set
+  //     // pan-y so track events don't fire in the y direction.
+  //     //template.touchAction = d.y == 0 ? 'none' : 'pan-y';
+  //
+  //     // d.y: the amount that the header moves up
+  //     // d.height: the height of the header when it is at its full size
+  //     // d.condensedHeight: the height of the header when it is condensed
+  //     //scale header's title
+  //     var m = d.height - d.condensedHeight;
+  //     var scale = Math.max(0.5, (m - d.y) / (m / 0.25)  + 0.5);
+  //     // var scale = Math.max(0.5, (m - d.y) / (m / 0.4)  + 0.5);
+  //     Polymer.Base.transform('scale(' + scale + ') translateZ(0)', title);
+  //
+  //     // Adjust header's color
+  //     //document.querySelector('#mainheader').style.color = (d.y >= d.height - d.condensedHeight) ? '#fff' : '';
+  //   });
+  // });
 
   var sw = document.querySelector('platinum-sw-register');
   sw.addEventListener('service-worker-installed', e => {
