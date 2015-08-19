@@ -41,6 +41,11 @@ template.actionOpenClose = function() {
   template.actionOpened = !template.actionOpened;
 };
 
+template.isDashboardVisible = false;
+template.openDashboard = function() {
+  template.isDashboardVisible = true;
+};
+
 template.previousSearches = [
   'to: me',
   'alpha',
@@ -153,6 +158,7 @@ template.runSearch = function(e) {
     }
   });
   template.threads = tt;
+  template.isDashboardVisible = false;
   template.hideLoadingSpinner();
 };
 
@@ -376,6 +382,7 @@ template.openDialog = function(e) {
 
 template.inboxSelect = function(e) {
   this.selectedPatient = false;
+  this.isDashboardVisible = false;
   this.headerTitle = this._computeHeaderTitle(0);
   // this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
@@ -387,6 +394,7 @@ template.toggleVisibility = function(e) {
 };
 
 template.patientSelect = function(e) {
+  this.isDashboardVisible = false;
   this.selectedPatient = e.model.item;
   this.headerTitle = '';
   this.headerClass = this._computeMainHeaderClass();

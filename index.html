@@ -72,6 +72,9 @@
       <paper-icon-item id="gotoinbox" role="menuitem" on-tap="inboxSelect">
         <iron-icon icon="mail" item-icon></iron-icon>Inbox
       </paper-icon-item>
+      <paper-icon-item id="gotodashboard" role="menuitem" on-tap="openDashboard">
+        <iron-icon icon="schedule" item-icon></iron-icon>Dashboard
+      </paper-icon-item>
       <!--<paper-icon-item id="gotocalendar" role="menuitem"
         on-tap="openDialog" data-dialog="googlecalendar">
         <iron-icon icon="schedule" item-icon></iron-icon>Schedule
@@ -103,7 +106,7 @@
     </paper-menu>
   </paper-scroll-header-panel>
 
-  <paper-scroll-header-panel id="scrollheader" main
+  <paper-scroll-header-panel id="scrollheader" main hidden="{{isDashboardVisible}}"
       keep-condensed-header condenses="{{!narrow}}" fixed="{{narrow}}">
 
     <paper-toolbar id="mainheader" class$="[[headerClass]]">
@@ -242,6 +245,11 @@
       </template>
 
      </div>
+  </paper-scroll-header-panel>
+
+  <paper-scroll-header-panel id="scrolldashboard" hidden="{{!isDashboardVisible}}"
+      condenses="{{!narrow}}" fixed="{{narrow}}">
+        Dashboard
   </paper-scroll-header-panel>
 
 </paper-drawer-panel>
