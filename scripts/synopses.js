@@ -41,7 +41,7 @@ template.actionOpenClose = function() {
   template.actionOpened = !template.actionOpened;
 };
 
-template.isDashboardVisible = false;
+template.isDashboardVisible = true;
 template.openDashboard = function() {
   template.isDashboardVisible = true;
 };

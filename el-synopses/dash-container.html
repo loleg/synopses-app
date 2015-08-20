@@ -8,7 +8,7 @@
 <style>
   :host {
     color: #757575;
-    top: 50px;
+    top: 20px;
     left: 20px;
     position: relative;
   }
@@ -105,9 +105,82 @@
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      }
-    }
+      },
 
+      d_schedule: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      d_notes: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      d_users: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      d_inbox: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      d_comms: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      d_alert: {
+        type: Array,
+        value: function() { return []; }
+      },
+    },
+
+    ready: function() {
+      var self = this;
+      var ajax = document.createElement('iron-ajax');
+      ajax.auto = true;
+      ajax.url = '/api/threads';
+      ajax.addEventListener('error', function(e) {
+        console.warn(e);
+      });
+      ajax.addEventListener('response', function(e) {
+        // console.log(e.detail.response);
+        e.detail.response.threads.forEach(function(record) {
+          record.messages.forEach(function(message) {
+            if (message.icon == 'event') {
+              self.d_schedule.push({
+                id: message.id, date: message.date,
+                title: message.subject
+              });
+            } else if (message.icon == 'create') {
+              self.d_notes.push({
+                id: message.id, date: message.date,
+                title: message.snippet
+              });
+            } else if (message.icon == 'accessibility') {
+              self.d_inbox.push({
+                id: message.id, date: message.date,
+                from: message.from.name,
+                title: message.snippet
+              });
+            }
+          });
+        });
+      });
+      var ajax = document.createElement('iron-ajax');
+      ajax.auto = true;
+      ajax.url = '/api/users/list';
+      ajax.addEventListener('error', function(e) {
+        console.warn(e);
+      });
+      ajax.addEventListener('response', function(e) {
+        // console.log(e.detail.response);
+        self.d_users = e.detail.response.users;
+      });
+    } // -ready
   });
 </script>
 </dom-module>
