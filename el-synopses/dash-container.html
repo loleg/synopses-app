@@ -57,30 +57,74 @@
   .pink .paper-header {
     background-color: var(--paper-pink-a200);
   }
+
+  .content div.item {
+    margin-top: 3px;
+    padding-top: 3px;
+    border-bottom: 1px solid #ccc;
+  }
+  .schedule span {
+    width: 8em;
+    margin-left: 1em;
+    max-height: 2.4em;
+    max-width: 10em;
+    overflow: hidden;
+    background: #fff;
+  }
+  .schedule date {
+    opacity: 0.8;
+    font-size: 80%;
+  }
 </style>
 <template>
   <paper-header-panel class="blue">
     <div class="paper-header">Schedule</div>
-    <div class="content">
-
+    <div class="content schedule">
+      <div class="flex layout vertical">
+      <template is="dom-repeat" items="[[d_schedule]]">
+        <div class="layout horizontal item">
+          <date>{{item.date}}</date>
+          <span>{{item.title}}</span>
+        </div>
+      </template>
+      </div>
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
     <div class="paper-header">Todo List/Notes</div>
-    <div class="content">
-
+    <div class="content notes">
+      <div class="flex layout vertical">
+      <template is="dom-repeat" items="[[d_notes]]">
+        <div class="layout item">
+          <from>{{item.title}}</from>
+        </div>
+      </template>
+      </div>
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
     <div class="paper-header">Colleagues</div>
-    <div class="content">
-
+    <div class="content users">
+      <div class="flex layout vertical">
+      <template is="dom-repeat" items="[[d_users]]">
+        <div class="layout item">
+          <from>{{item}}</from>
+        </div>
+      </template>
+      </div>
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
     <div class="paper-header">Inbox (Unread)</div>
-    <div class="content">
-
+    <div class="content inbox">
+      <div class="flex layout vertical">
+      <template is="dom-repeat" items="[[d_inbox]]">
+        <div class="layout horizontal item">
+          <from>{{item.from}}</from>
+          <span>{{item.title}}</span>
+        </div>
+      </template>
+      </div>
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
@@ -148,20 +192,21 @@
       });
       ajax.addEventListener('response', function(e) {
         // console.log(e.detail.response);
+        var ds = [], dn = [], dm = [], di = [];
         e.detail.response.threads.forEach(function(record) {
           record.messages.forEach(function(message) {
             if (message.icon == 'event') {
-              self.d_schedule.push({
+              ds.push({
                 id: message.id, date: message.date,
                 title: message.subject
               });
             } else if (message.icon == 'create') {
-              self.d_notes.push({
+              dn.push({
                 id: message.id, date: message.date,
                 title: message.snippet
               });
             } else if (message.icon == 'accessibility') {
-              self.d_inbox.push({
+              di.push({
                 id: message.id, date: message.date,
                 from: message.from.name,
                 title: message.snippet
@@ -169,6 +214,9 @@
             }
           });
         });
+        self.set('d_schedule', ds);
+        self.set('d_notes', dn);
+        self.set('d_inbox', di);
       });
       var ajax = document.createElement('iron-ajax');
       ajax.auto = true;
@@ -178,7 +226,7 @@
       });
       ajax.addEventListener('response', function(e) {
         // console.log(e.detail.response);
-        self.d_users = e.detail.response.users;
+        self.set('d_users', e.detail.response.users);
       });
     } // -ready
   });
