@@ -1,9 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/paper-styles/paper-styles.html">
-<link rel="import" href="../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="dash-item.html">
 
 <dom-module id="dash-container">
 <style>
@@ -93,15 +92,7 @@
     <div class="content inbox">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_inbox]]">
-        <div class="layout item">
-          <paper-icon-item class="doctor" on-tap="">
-            <profile-img item-icon src="{{item.avatar}}"></profile-img>
-            <span class="layout vertical">
-              <span>{{item.from}}</span>
-              <b>{{item.title}}</b>
-            </span>
-          </paper-icon-item>
-        </div>
+        <dash-item record="{{item}}"></dash-item>
       </template>
       </div>
     </div>
@@ -112,7 +103,7 @@
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_users]]">
         <div class="layout item">
-          <paper-icon-item class="doctor" on-tap="">
+          <paper-icon-item class="doctor" data-id="{{item.id}}" on-tap="_goColleague">
             <profile-img item-icon src="{{item.avatar}}"></profile-img>
             <span>{{item.name}}</span>
           </paper-icon-item>
@@ -237,7 +228,20 @@
         // console.log(e.detail.response);
         self.set('d_users', e.detail.response.users);
       });
-    } // -ready
+    }, // -ready
+
+    _goMessage: function(e) {
+      var button = e.target;
+      debugger;
+      while (!button.hasAttribute('itemid') && button !== document.body) {
+        button = button.parentElement;
+      }
+      if (!button.hasAttribute('itemid')) { return; }
+    },
+
+    _goColleague: function(e) {
+      console.log(e);
+    }
   });
 </script>
 </dom-module>

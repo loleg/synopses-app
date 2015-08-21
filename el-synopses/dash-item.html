@@ -1,0 +1,46 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<dom-module id="dash-item">
+<style>
+  :host {
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+  }
+  :host date {
+    opacity: 0.8;
+    font-size: 80%;
+  }
+  :host span {
+    margin-left: 1em;
+    background: #fff;
+  }
+</style>
+<template>
+  <div class="layout vertical item" on-tap="_onItemTap">
+    <div class="layout horizontal">
+      <date>{{record.date}}</date>
+      <span>{{record.from}}</span>
+    </div>
+    <b>{{record.title}}</b>
+  </div>
+</template>
+<script>
+  Polymer({
+    is: 'dash-item',
+
+    properties: {
+     record: {
+       type: Object,
+       value: null,
+       reflectToAttribute: true
+     },
+    },
+
+    _onItemTap: function(e) {
+      console.log(this.record.id);
+    }
+  });
+</script>
+</dom-module>
