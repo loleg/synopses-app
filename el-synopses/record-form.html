@@ -196,6 +196,7 @@ paper-tab.record-form.iron-selected {
               <textarea name="note" id="ta1" rows="6"></textarea>
             </iron-autogrow-textarea>
             <div class="horizontal layout">
+              <paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>
               <paper-button raised on-tap="_onTapSoapForm">
                 Use SOAP form
               </paper-button>
@@ -239,7 +240,9 @@ paper-tab.record-form.iron-selected {
             <iron-autogrow-textarea name="results" id="ta2" required maxRows="16" rows="6">
               <textarea name="results" id="ta2" rows="6"></textarea>
             </iron-autogrow-textarea>
-            <paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>
+            <div class="horizontal layout">
+              <paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>
+            </div>
             <paper-input name="imageurl" label="Link to image file"></paper-input>
             <label hidden="true">
               <div id="dropzone" on-tap="{{tapSelect}}"
@@ -465,7 +468,28 @@ paper-tab.record-form.iron-selected {
         // console.log(text);
         self.medterms = result;
       });
-    }
+    },
+
+    getSpeechInput: function(e) {
+      var recognition = 'SpeechRecognition' in window ? new SpeechRecognition() :
+                        'webkitSpeechRecognition' in window ? new webkitSpeechRecognition() :
+                        null;
+      var target = e.target;
+      while (target.querySelector('textarea') === null && target !== document.body) {
+        target = target.parentElement;
+      }
+      target = target.querySelector('textarea');
+      if (target === null) return;
+      if (recognition) {
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.onresult = function(e) {
+          var result = e.results[0][0].transcript;
+          target.value = result;
+        }.bind(this);
+        recognition.start();
+      }
+    },
 
   });
 </script>
