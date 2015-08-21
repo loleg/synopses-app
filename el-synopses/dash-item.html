@@ -39,7 +39,8 @@
     },
 
     _onItemTap: function(e) {
-      console.log(this.record.id);
+      // console.log(this.record.id);
+      this.fire('record-tap', {record: this.record});
     }
   });
 </script>

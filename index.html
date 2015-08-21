@@ -71,7 +71,7 @@
     <paper-menu selected="0" selectable="paper-icon-item" on-iron-activate="menuSelect">
 
       <paper-icon-item id="gotodashboard" role="menuitem" on-tap="openDashboard">
-        <iron-icon icon="schedule" item-icon></iron-icon>Dashboard
+        <iron-icon icon="icons:maps:map" item-icon></iron-icon>Dashboard
       </paper-icon-item>
       <paper-icon-item id="gotoinbox" role="menuitem" on-tap="inboxSelect">
         <iron-icon icon="mail" item-icon></iron-icon>Inbox
@@ -260,7 +260,8 @@
       <div class="flex"></div>
       <span class="top indent title"><b>Synopses</b> Dashboard</span>
     </paper-toolbar>
-    <dash-container id="dashcontainer" narrow="{{narrow}}"></dash-container>
+    <dash-container id="dashcontainer" narrow="{{narrow}}"
+        on-record-tap="openRecord"></dash-container>
   </paper-scroll-header-panel>
 
 </paper-drawer-panel>

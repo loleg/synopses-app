@@ -58,6 +58,16 @@
     background-color: var(--paper-pink-a200);
   }
 
+  .content {
+    cursor: pointer;
+  }
+  .content a {
+    text-decoration: none;
+    color: inherit;
+  }
+  .content a:hover {
+    text-decoration: underline;
+  }
   .content div.item {
     margin-top: 5px;
     padding-top: 5px;
@@ -79,10 +89,7 @@
     <div class="content schedule">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_schedule]]">
-        <div class="layout horizontal item">
-          <date>{{item.date}}</date>
-          <span>{{item.title}}</span>
-        </div>
+        <dash-item record="{{item}}" on-record-tap="_onItemTap"></dash-item>
       </template>
       </div>
     </div>
@@ -92,7 +99,7 @@
     <div class="content inbox">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_inbox]]">
-        <dash-item record="{{item}}"></dash-item>
+        <dash-item record="{{item}}" on-record-tap="_onItemTap"></dash-item>
       </template>
       </div>
     </div>
@@ -103,10 +110,12 @@
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_users]]">
         <div class="layout item">
-          <paper-icon-item class="doctor" data-id="{{item.id}}" on-tap="_goColleague">
-            <profile-img item-icon src="{{item.avatar}}"></profile-img>
-            <span>{{item.name}}</span>
-          </paper-icon-item>
+          <a href="{{item.mailto}}">
+            <paper-icon-item class="doctor">
+              <profile-img item-icon src="{{item.avatar}}"></profile-img>
+              <span>{{item.name}}</span>
+            </paper-icon-item>
+          </a>
         </div>
       </template>
       </div>
@@ -117,9 +126,7 @@
     <div class="content notes">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_notes]]">
-        <div class="layout item">
-          <from>{{item.title}}</from>
-        </div>
+        <dash-item record="{{item}}" on-record-tap="_onItemTap"></dash-item>
       </template>
       </div>
     </div>
@@ -230,6 +237,11 @@
       });
     }, // -ready
 
+    _onItemTap: function(e) {
+      e.stopPropagation();
+      this.fire('record-tap', {record: e.detail.record});
+    },
+
     _goMessage: function(e) {
       var button = e.target;
       debugger;
@@ -237,10 +249,6 @@
         button = button.parentElement;
       }
       if (!button.hasAttribute('itemid')) { return; }
-    },
-
-    _goColleague: function(e) {
-      console.log(e);
     }
   });
 </script>

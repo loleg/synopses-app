@@ -43,10 +43,30 @@ template.actionOpenClose = function() {
 
 template.isDashboardVisible = true;
 template.openDashboard = function() {
-  template.isDashboardVisible = true;
+  this.isDashboardVisible = true;
 };
 template.refreshDashboard = function() {
-  template.$.dashcontainer.ready();
+  this.$.dashcontainer.ready();
+};
+template.openRecord = function(e) {
+  e.stopPropagation();
+  var record = e.detail.record;
+  // Identify record
+  var targetThread = this.threads.filter(
+    function(t) { return t.messages[0].id === record.id; });
+  if (targetThread.length === 0) { return console.warn('Invalid thread'); }
+  var messageData = targetThread[0].messages[0];
+  // Identify patient
+  var targetPatient = this.patientstoday.filter(
+    function(p) { return p.id === '' + messageData.from.id; });
+  if (targetPatient.length === 0) { return console.warn('Invalid patient'); }
+  // Assign
+  this.selectedPatient = targetPatient[0];
+  // Switch to inbox
+  this.isDashboardVisible = false;
+  this.headerTitle = '';
+  this.headerClass = this._computeMainHeaderClass();
+  this.loadRecords();
 };
 
 template.previousSearches = [
