@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/paper-styles/paper-styles.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
 
 <dom-module id="dash-container">
 <style>
@@ -59,16 +60,13 @@
   }
 
   .content div.item {
-    margin-top: 3px;
-    padding-top: 3px;
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     border-bottom: 1px solid #ccc;
   }
   .schedule span {
-    width: 8em;
     margin-left: 1em;
-    max-height: 2.4em;
-    max-width: 10em;
-    overflow: hidden;
     background: #fff;
   }
   .schedule date {
@@ -91,12 +89,18 @@
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
-    <div class="paper-header">Todo List/Notes</div>
-    <div class="content notes">
+    <div class="paper-header">New messages</div>
+    <div class="content inbox">
       <div class="flex layout vertical">
-      <template is="dom-repeat" items="[[d_notes]]">
+      <template is="dom-repeat" items="[[d_inbox]]">
         <div class="layout item">
-          <from>{{item.title}}</from>
+          <paper-icon-item class="doctor" on-tap="">
+            <profile-img item-icon src="{{item.avatar}}"></profile-img>
+            <span class="layout vertical">
+              <span>{{item.from}}</span>
+              <b>{{item.title}}</b>
+            </span>
+          </paper-icon-item>
         </div>
       </template>
       </div>
@@ -108,20 +112,22 @@
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_users]]">
         <div class="layout item">
-          <from>{{item}}</from>
+          <paper-icon-item class="doctor" on-tap="">
+            <profile-img item-icon src="{{item.avatar}}"></profile-img>
+            <span>{{item.name}}</span>
+          </paper-icon-item>
         </div>
       </template>
       </div>
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
-    <div class="paper-header">Inbox (Unread)</div>
-    <div class="content inbox">
+    <div class="paper-header">Notes &amp; Todo</div>
+    <div class="content notes">
       <div class="flex layout vertical">
-      <template is="dom-repeat" items="[[d_inbox]]">
-        <div class="layout horizontal item">
-          <from>{{item.from}}</from>
-          <span>{{item.title}}</span>
+      <template is="dom-repeat" items="[[d_notes]]">
+        <div class="layout item">
+          <from>{{item.title}}</from>
         </div>
       </template>
       </div>
@@ -195,17 +201,20 @@
         var ds = [], dn = [], dm = [], di = [];
         e.detail.response.threads.forEach(function(record) {
           record.messages.forEach(function(message) {
+            var ident = 'P-' + message.from.id + '-T-' + message.id;
+            var unread = (window.localStorage.getItem(ident + '-unread') !== 'false');
+            var starrd = (window.localStorage.getItem(ident + '-star') === 'true');
             if (message.icon == 'event') {
               ds.push({
                 id: message.id, date: message.date,
-                title: message.subject
+                title: message.from.name
               });
-            } else if (message.icon == 'create') {
+            } else if (message.icon == 'create' && starrd) {
               dn.push({
                 id: message.id, date: message.date,
                 title: message.snippet
               });
-            } else if (message.icon == 'accessibility') {
+            } else if (message.icon == 'accessibility' && unread) {
               di.push({
                 id: message.id, date: message.date,
                 from: message.from.name,

@@ -45,6 +45,9 @@ template.isDashboardVisible = true;
 template.openDashboard = function() {
   template.isDashboardVisible = true;
 };
+template.refreshDashboard = function() {
+  template.$.dashcontainer.ready();
+};
 
 template.previousSearches = [
   'to: me',
@@ -431,13 +434,11 @@ template._onThreadExpand = function(e) {
 };
 
 template._onThreadStarred = function(e) {
-  var threadId = e.detail.thread.id;
-  var patientId = e.detail.thread.from.id;
-  var starredValue = e.detail.thread.starred;
+  var thread = e.detail.thread.thread;
   // Store starred status
-  if (threadId >= 0) {
-    var ident = 'P-' + patientId + '-T-' + threadId + '-star';
-    window.localStorage.setItem(ident, starredValue);
+  if (thread.id >= 0) {
+    var ident = 'P-' + thread.from.id + '-T-' + thread.id + '-star';
+    window.localStorage.setItem(ident, thread.starred);
   }
 };
 

@@ -423,6 +423,7 @@
       e.stopPropagation();
       this.thread.starred = !this.thread.starred;
       this._setThreadIsStarred(this.thread.starred);
+      this.fire('thread-starred', {thread: this});
     },
 
     _onMailAction: function(e) {

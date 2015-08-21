@@ -255,10 +255,12 @@
       <paper-icon-button id="navisible" class$="[[drawerToggleClass]]"
         icon="visibility" hidden="{{narrow}}"
         on-tap="toggleVisibility"></paper-icon-button>
+      <paper-icon-button id="navrefresh" icon="refresh"
+        on-tap="refreshDashboard"></paper-icon-button>
       <div class="flex"></div>
       <span class="top indent title"><b>Synopses</b> Dashboard</span>
     </paper-toolbar>
-    <dash-container narrow="{{narrow}}"></dash-container>
+    <dash-container id="dashcontainer" narrow="{{narrow}}"></dash-container>
   </paper-scroll-header-panel>
 
 </paper-drawer-panel>
