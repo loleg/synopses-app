@@ -147,9 +147,18 @@ body #loading {
   background: #eee !important;
 }
 
+#filters {
+  margin-left: 64px;
+  margin-right: 110px;
+}
+
 #filters iron-icon {
   left: -6px;
   color: #ccc;
+}
+
+#mainContainer {
+  padding-top: 64px !important;
 }
 
 /* Smartphones (portrait) ----------- */
@@ -157,5 +166,6 @@ body #loading {
 and (max-width : 375px) {
   #middleBar, #bottomBar { display: none; }
   #mainContainer { top: 50px !important; padding-top: 0px !important; }
+  #filters { display: none; }
   paper-dialog#dialog { max-width: 100% !important; margin:0 !important; }
 }

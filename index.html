@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <title>Synopses Alpha</title>
 
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -107,10 +107,8 @@
     </paper-menu>
   </paper-scroll-header-panel>
 
-  <paper-scroll-header-panel id="scrollheader" main hidden="{{isDashboardVisible}}"
-      keep-condensed-header condenses="{{!narrow}}" fixed="{{narrow}}">
-
-    <paper-toolbar id="mainheader" class$="[[headerClass]]">
+  <paper-scroll-header-panel id="scrollheader" main hidden="{{isDashboardVisible}}">
+    <paper-toolbar id="mainheader">
       <paper-icon-button icon="arrow-back" class="selected-item"
         on-tap="deselectAll"></paper-icon-button>
       <paper-icon-button id="navicon" icon="menu"
@@ -141,41 +139,6 @@
         </paper-dropdown>
       </paper-menu-button> -->
 
-      <paper-item id="clinicdashboard" class="middle" hidden="{{selectedPatient}}">
-        <span class="layout horizontal center justified">
-          <span class="label patient_name">
-            <b>{{dashboardInfo.date}}</b>: today
-            <b>{{dashboardInfo.appointments}}</b> <b>appointments</b> scheduled.
-            <b>{{dashboardInfo.newmessages}}</b> <b>new messages</b> from patients,
-            <b>{{dashboardInfo.labresults}}</b> <b>unread</b> lab reports.
-          </span>
-        </span>
-      </paper-item>
-
-      <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
-        <span class="layout horizontal center justified">
-          <span class="label patient_name">
-            <b>{{selectedPatient.name}}</b>
-          </span>
-          <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
-            Born:
-            <time>{{selectedPatient.record.date_birth}}</time>
-          </span>
-          <span class="label" hidden="{{!selectedPatient.gender}}">
-            Gender:
-            <span>{{selectedPatient.gender}}</span>
-          </span>
-          <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
-            B.G.:
-            <span>{{selectedPatient.record.blood_group}}</span>
-          </span>
-          <span class="label">
-            Last visit:
-            <time>{{selectedPatient.updated}}</time>
-          </span>
-        </span>
-      </paper-item>
-
       <paper-fab id="editpatient" mini icon="create" class="icon-create"
          on-tap="openDialog" data-dialog="addpatient"
          hidden="{{!selectedPatient}}"></paper-fab>
@@ -198,7 +161,7 @@
         <iron-dropdown horizontal-align="right" vertical-align="top">
       -->
 
-      <paper-tabs id="filters" class="bottom fit layout horizontal center-center"
+      <paper-tabs id="filters" class="fit layout horizontal center-center"
                   selected="8" hidden="{{!filtersEnabled}}" on-iron-select="filterBy">
         <paper-tab>
           <iron-icon icon="event"></iron-icon>
@@ -234,6 +197,40 @@
       <!--template is="dom-if" if="[[_computeShowNoResults(threads, syncing)]]">
         <span class="layout horizontal center-center fit">No results.</span>
       </template-->
+      <paper-item id="clinicdashboard" class="middle" hidden="{{selectedPatient}}">
+        <span class="layout horizontal center justified">
+          <span class="label patient_name">
+            <b>{{dashboardInfo.date}}</b>: today
+            <b>{{dashboardInfo.appointments}}</b> <b>appointments</b> scheduled.
+            <b>{{dashboardInfo.newmessages}}</b> <b>new messages</b> from patients,
+            <b>{{dashboardInfo.labresults}}</b> <b>unread</b> lab reports.
+          </span>
+        </span>
+      </paper-item>
+
+      <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
+        <span class="layout horizontal center justified">
+          <span class="label patient_name">
+            <b>{{selectedPatient.name}}</b>
+          </span>
+          <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
+            Born:
+            <time>{{selectedPatient.record.date_birth}}</time>
+          </span>
+          <span class="label" hidden="{{!selectedPatient.gender}}">
+            Gender:
+            <span>{{selectedPatient.gender}}</span>
+          </span>
+          <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
+            B.G.:
+            <span>{{selectedPatient.record.blood_group}}</span>
+          </span>
+          <span class="label">
+            Last visit:
+            <time>{{selectedPatient.updated}}</time>
+          </span>
+        </span>
+      </paper-item>
 
       <template is="dom-repeat" items="[[threads]]">
         <record-thread messages="[[item.messages]]"
