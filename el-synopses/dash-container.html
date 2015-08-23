@@ -58,6 +58,16 @@
     background-color: var(--paper-pink-a200);
   }
 
+  .welcome {
+    padding: 1em;
+    margin: -20px 0 20px -20px;
+    background-color: var(--paper-yellow-100);
+  }
+  .welcome .who {
+    color: black;
+    margin-left: 0.5em;
+  }
+
   .content {
     cursor: pointer;
   }
@@ -84,6 +94,13 @@
   }
 </style>
 <template>
+  <paper-material elevation="2" class="welcome">
+    <span class="layout horizontal center">
+      <span>{{d_me.timeofday}}</span>,
+      <span class="who">{{d_me.name}}</span>.
+      You have no urgent notifications right now.
+    </span>
+  </paper-material>
   <paper-header-panel class="blue">
     <div class="paper-header">Schedule</div>
     <div class="content schedule">
@@ -170,6 +187,11 @@
         value: function() { return []; }
       },
 
+      d_me: {
+        type: Object,
+        value: function() { return {}; }
+      },
+
       d_inbox: {
         type: Array,
         value: function() { return []; }
@@ -234,6 +256,13 @@
       ajax.addEventListener('response', function(e) {
         // console.log(e.detail.response);
         self.set('d_users', e.detail.response.users);
+
+        var medata = e.detail.response.me;
+        var myDate = new Date();
+        medata.timeofday = (myDate.getHours() < 12) ?
+          "Good morning" : (myDate.getHours() > 17) ?
+          "Good evening" : "Hello";
+        self.set('d_me', medata);
       });
     }, // -ready
 
