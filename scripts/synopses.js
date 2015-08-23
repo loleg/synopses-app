@@ -382,21 +382,6 @@ template.openDialog = function(e) {
 
     } else {
 
-      //   // Reset any forms
-      //   theForm = dialog.querySelector('form');
-      //   theForm.reset();
-      //   if (theForm.id === "patientform") {
-      //     theForm.action = "/api/patient/save";
-      //     var all_fields = theForm.querySelectorAll(
-      //       'input[type="text"],gold-email-input,paper-input'
-      //     );
-      //     for (var i = 0; i < all_fields.length; i++) {
-      //       all_fields[i].value = "";
-      //     }
-      //   }
-      //   dialog.open();
-      //
-      // } else {
       dialog.open();
 
     }
