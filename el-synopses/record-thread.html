@@ -512,6 +512,11 @@
         this.set('thread.unread', false);
         this.fire('thread-expand', {thread: this.thread});
       }
+    },
+
+    _onLabelTap: function(e) {
+      e.stopPropagation();
+      this.fire('label-tap', {label: e.target.innerText});
     }
 
   });
