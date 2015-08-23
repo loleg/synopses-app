@@ -49,11 +49,11 @@
 </div>
 
 <patient-form id="addpatient"
-  on-patient-saved="loadPatients"></patient-form>
+  on-patient-saved="patientProfileSaved"></patient-form>
 
 <record-form id="addrecord" title="New record"
   patientid="{{selectedPatient.id}}"
-  on-record-saved="patientSaved"></record-form>
+  on-record-saved="patientRecordSaved"></record-form>
 
 <share-dialog id="sharelink" title="Share patient link"
   patienthash$="{{selectedPatient.hash}}"></share-dialog>

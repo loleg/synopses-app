@@ -471,7 +471,13 @@ template.deselectAll = function(e) {
     template.narrow, template.selectedThreads.length);
 };
 
-template.patientSaved = function(e) {
+template.patientProfileSaved = function(e) {
+  // TODO: propagate patient_id from API and select
+  // console.log(e);
+  template.loadPatients();
+};
+
+template.patientRecordSaved = function(e) {
   template.loadPatients();
   setTimeout(function() {
     template.loadRecords();

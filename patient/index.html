@@ -50,11 +50,11 @@
 </div>
 
 <patient-form id="addpatient" title="Edit my profile"
-  on-patient-saved="loadPatients"></patient-form>
+  on-patient-saved="patientProfileSaved"></patient-form>
 
 <selfcheck-form id="selfcheck" title="Patient self check"
   patientid="{{selectedPatient.id}}"
-  on-record-saved="patientSaved"></selfcheck-form>
+  on-record-saved="patientRecordSaved"></selfcheck-form>
 
 <div class="layout vertical shadowbox">
   <div>
