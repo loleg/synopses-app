@@ -6,7 +6,7 @@ var template = document.querySelector('#t');
 template.isAuthenticated = false;
 var DEBUG = template.DEBUG;
 
-console.log('Initialising Synopses App');
+// console.log('Initialising Synopses App');
 
 var PATIENT = location.pathname === '/patient/';
 
@@ -46,7 +46,7 @@ template.openDashboard = function() {
   this.isDashboardVisible = true;
 };
 template.refreshDashboard = function() {
-  this.$.dashcontainer.ready();
+  this.$.dashcontainer.init();
 };
 template.openRecord = function(e) {
   e.stopPropagation();
@@ -246,7 +246,7 @@ template.mockLogin = function() {
 
 template.handleLogin = function(event, data, silentMode) {
   if (PATIENT) { return; } // not supported yet
-  console.log('Loading patients');
+  // console.log('handleLogin started');
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
   ajax.url = '/api/login';
@@ -266,9 +266,11 @@ template.handleLogin = function(event, data, silentMode) {
       }
       return false;
     }
+    // Initialise the application
     template.isAuthenticated = true;
     template.loadPatients();
     template.loadRecords();
+    template.$.dashcontainer.init();
   });
   ajax.addEventListener('error', function(e) {
     console.warn(e);

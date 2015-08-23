@@ -97,7 +97,7 @@
   <paper-material elevation="2" class="welcome">
     <span class="layout horizontal center">
       <span>{{d_me.timeofday}}</span>,
-      <span class="who">{{d_me.name}}</span>.
+      <a class="who" on-tap="_logMeOut">{{d_me.name}}</a>.
       You have no urgent notifications right now.
     </span>
   </paper-material>
@@ -208,7 +208,7 @@
       },
     },
 
-    ready: function() {
+    init: function() {
       var self = this;
       var ajax = document.createElement('iron-ajax');
       ajax.auto = true;
@@ -218,6 +218,7 @@
       });
       ajax.addEventListener('response', function(e) {
         // console.log(e.detail.response);
+        if (e.detail.response.flag === 'fail') return;
         var ds = [], dn = [], dm = [], di = [];
         e.detail.response.threads.forEach(function(record) {
           record.messages.forEach(function(message) {
@@ -255,6 +256,7 @@
       });
       ajax.addEventListener('response', function(e) {
         // console.log(e.detail.response);
+        if (e.detail.response.flag === 'fail') return;
         self.set('d_users', e.detail.response.users);
 
         var medata = e.detail.response.me;
@@ -264,7 +266,19 @@
           "Good evening" : "Hello";
         self.set('d_me', medata);
       });
-    }, // -ready
+    }, // -init
+
+    _logMeOut: function() {
+      var ajax = document.createElement('iron-ajax');
+      ajax.auto = true;
+      ajax.url = '/api/logout';
+      ajax.addEventListener('error', function(e) {
+        console.warn(e);
+      });
+      ajax.addEventListener('response', function(e) {
+        window.location.reload();
+      });
+    },
 
     _onItemTap: function(e) {
       e.stopPropagation();
