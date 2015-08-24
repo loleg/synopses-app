@@ -151,13 +151,21 @@
   <paper-header-panel class="blue">
     <div class="paper-header">Patient Map</div>
     <div class="content">
-
+      <div class="flex layout vertical">
+      <template is="dom-repeat" items="[[d_cases]]">
+        <dash-item record="{{item}}"></dash-item>
+      </template>
+      </div>
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
     <div class="paper-header">Health Alerts</div>
     <div class="content">
-
+      <div class="flex layout vertical">
+      <template is="dom-repeat" items="[[d_alerts]]">
+        <dash-item record="{{item}}" on-record-tap="_onItemTap"></dash-item>
+      </template>
+      </div>
     </div>
   </paper-header-panel>
 </template>
@@ -197,12 +205,12 @@
         value: function() { return []; }
       },
 
-      d_comms: {
+      d_cases: {
         type: Array,
         value: function() { return []; }
       },
 
-      d_alert: {
+      d_alerts: {
         type: Array,
         value: function() { return []; }
       },
@@ -219,35 +227,36 @@
       ajax.addEventListener('response', function(e) {
         // console.log(e.detail.response);
         if (e.detail.response.flag === 'fail') return;
-        var ds = [], dn = [], dm = [], di = [];
+        var ds = [], dn = [], dm = [], di = [], da = [];
         e.detail.response.threads.forEach(function(record) {
           record.messages.forEach(function(message) {
             var ident = 'P-' + message.from.id + '-T-' + message.id;
             var unread = (window.localStorage.getItem(ident + '-unread') !== 'false');
             var starrd = (window.localStorage.getItem(ident + '-star') === 'true');
+            var msgobj = {
+              id: message.id, date: message.date,
+              title: message.from.name
+            };
             if (message.icon == 'event') {
-              ds.push({
-                id: message.id, date: message.date,
-                title: message.from.name
-              });
+              ds.push(msgobj);
             } else if (message.icon == 'create' && starrd) {
-              dn.push({
-                id: message.id, date: message.date,
-                title: message.snippet
-              });
+              msgobj.title = message.snippet;
+              dn.push(msgobj);
             } else if (message.icon == 'accessibility' && unread) {
-              di.push({
-                id: message.id, date: message.date,
-                from: message.from.name,
-                title: message.snippet
-              });
+              msgobj.title = message.snippet;
+              di.push(msgobj);
+              if (message.subject.indexOf("'worse'")>0) {
+                da.push(msgobj);
+              }
             }
           });
         });
         self.set('d_schedule', ds);
         self.set('d_notes', dn);
         self.set('d_inbox', di);
+        self.set('d_alerts', da);
       });
+
       var ajax = document.createElement('iron-ajax');
       ajax.auto = true;
       ajax.url = '/api/users/list';
@@ -265,6 +274,18 @@
           "Good morning" : (myDate.getHours() > 17) ?
           "Good evening" : "Hello";
         self.set('d_me', medata);
+      });
+
+      var ajax = document.createElement('iron-ajax');
+      ajax.auto = true;
+      ajax.url = '/api/assist/cases';
+      ajax.addEventListener('error', function(e) {
+        console.warn(e);
+      });
+      ajax.addEventListener('response', function(e) {
+        console.log(e.detail.response);
+        if (e.detail.response.flag === 'fail') return;
+        self.set('d_cases', e.detail.response.cases);
       });
     }, // -init
 
