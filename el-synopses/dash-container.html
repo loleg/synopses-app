@@ -159,8 +159,18 @@
       </div>
     </div>
   </paper-header-panel>
-  <paper-header-panel style="background-color:#EEFFB8">
-    <div class="paper-header" on-tap="_onTapHeader" style="color:#333">Case Map</div>
+  <paper-header-panel style="background-color:#CC3946">
+    <div class="paper-header" on-tap="_onTapHeader">Health Alerts</div>
+    <div class="content">
+      <div class="flex layout vertical">
+      <template is="dom-repeat" items="[[d_alerts]]">
+        <dash-item record="{{item}}" on-record-tap="_onItemTap"></dash-item>
+      </template>
+      </div>
+    </div>
+  </paper-header-panel>
+  <paper-header-panel style="background-color:#999999">
+    <div class="paper-header" on-tap="_onTapHeader">Case Map</div>
     <div class="content">
       <div class="layout vertical" style="text-align:left">
       <template is="dom-repeat" items="[[d_cases]]">
@@ -168,16 +178,6 @@
           <profile-img letter="{{item.count}}"></profile-img>
           <span>{{item.label}}</span>
         </paper-icon-item>
-      </template>
-      </div>
-    </div>
-  </paper-header-panel>
-  <paper-header-panel style="background-color:#999999">
-    <div class="paper-header" on-tap="_onTapHeader" style="color:#333">Health Alerts</div>
-    <div class="content">
-      <div class="flex layout vertical">
-      <template is="dom-repeat" items="[[d_alerts]]">
-        <dash-item record="{{item}}" on-record-tap="_onItemTap"></dash-item>
       </template>
       </div>
     </div>
