@@ -345,7 +345,7 @@ paper-tab.record-form.iron-selected {
         var terms = e.detail.response.cases;
         var result = "";
         for (var i = 0; i < terms.length; i++) {
-          result = result + '<option value="' + terms[i] + '"></option>';
+          result = result + '<option value="' + terms[i].label + '"></option>';
         }
         $obj.innerHTML = result;
       });

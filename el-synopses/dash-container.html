@@ -149,11 +149,14 @@
     </div>
   </paper-header-panel>
   <paper-header-panel class="blue">
-    <div class="paper-header">Patient Map</div>
+    <div class="paper-header">Case Map</div>
     <div class="content">
-      <div class="flex layout vertical">
+      <div class="layout vertical" style="text-align:left">
       <template is="dom-repeat" items="[[d_cases]]">
-        <dash-item record="{{item}}"></dash-item>
+        <paper-icon-item class="case">
+          <profile-img letter="{{item.count}}"></profile-img>
+          <span>{{item.label}}</span>
+        </paper-icon-item>
       </template>
       </div>
     </div>

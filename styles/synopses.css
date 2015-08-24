@@ -23,7 +23,9 @@ a.abbr {
   background: url(../images/synopses-icon.png) no-repeat top left;
   background-size: auto 100%;
   padding-left: 60px;
-  font-style: italic;
+  margin-left: 0px !important;
+  font-size: 35px !important;
+  font-family: 'Leto', sans-serif;
 }
 
 body #loading {
