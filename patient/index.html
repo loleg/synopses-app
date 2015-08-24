@@ -28,10 +28,6 @@
   <link rel="import" id="bundle" href="elements/elements.html" async>
 
   <style type="text/css">
-  .welcome {
-    background-color: #e52;
-    padding: 0.5em;
-  }
   .welcome .who {
     margin: 0 0.5em;
   }
@@ -40,6 +36,10 @@
   }
   .welcome .who b:first-child::before {
     content: ''
+  }
+  .welcome paper-fab {
+    zoom: 0.5;
+    margin: 0 0.5em;
   }
   </style>
 </head>
@@ -68,7 +68,7 @@
 <patient-form id="addpatient" title="Edit my profile"
   on-patient-saved="patientProfileSaved"></patient-form>
 
-<selfcheck-form id="selfcheck" title="Patient self check"
+<selfcheck-form id="selfcheck" title="Selfcheck"
   patientid="{{selectedPatient.id}}"
   on-record-saved="patientRecordSaved"></selfcheck-form>
 
@@ -111,7 +111,7 @@
       </span>
     </paper-item>
 
-    <paper-material elevation="2" class="bottom welcome">
+    <paper-item class="bottom welcome">
       <span class="layout horizontal center welcome">
         You have no urgent notifications from
         <span class="who">
@@ -119,9 +119,11 @@
             <b>{{item}}</b>
           </template>
         </span>
-        at this time. Use the button below to send in a self-check.
+        at this time. Use the
+        <paper-fab icon="accessibility"></paper-fab>
+        button to send in a selfcheck.
       </span>
-    </paper-material>
+    </paper-item>
   </div>
   <div content on-thread-archive="onThreadArchive">
 

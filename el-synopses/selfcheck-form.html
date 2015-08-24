@@ -110,6 +110,10 @@ paper-radio-button.orange {
 pikaday-decorator {
   margin-bottom: 2em;
 }
+
+h2 {
+  text-align: center;
+}
 </style>
 <template>
   <paper-dialog id="dialog" modal>
@@ -123,9 +127,9 @@ pikaday-decorator {
           <div class="horizontal-section">
             <input type="hidden" name="selfcheck" id="selfcheck" value="">
             <paper-radio-group on-change="_onSetSelfCheck">
-              <paper-radio-button class="green" name="better">Better</paper-radio-button>
-              <paper-radio-button class="blue" name="same">The same</paper-radio-button>
-              <paper-radio-button class="orange" name="worse">Worsening</paper-radio-button>
+              <paper-radio-button class="green" name="better">Better!</paper-radio-button>
+              <paper-radio-button class="blue" name="same">About the same</paper-radio-button>
+              <paper-radio-button class="orange" name="worse">Worse..</paper-radio-button>
             </paper-radio-group>
           </div>
 
@@ -160,7 +164,7 @@ pikaday-decorator {
 
     properties: {
       title: {
-        value: "New self check",
+        value: "Selfcheck",
         reflectToAttribute: true
       },
       recordType: {
