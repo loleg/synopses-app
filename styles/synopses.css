@@ -157,15 +157,17 @@ body #loading {
   color: #ccc;
 }
 
-#mainContainer {
+#dashheader > #mainContainer {
   padding-top: 64px !important;
 }
+
+#gotodashboard { z-index: 20; }
 
 /* Smartphones (portrait) ----------- */
 @media only screen
 and (max-width : 375px) {
   #middleBar, #bottomBar { display: none; }
-  #mainContainer { top: 50px !important; padding-top: 0px !important; }
+  #dashheader > #mainContainer { top: 50px !important; padding-top: 0px !important; }
   #filters { display: none; }
   paper-dialog#dialog { max-width: 100% !important; margin:0 !important; }
 }
