@@ -26,6 +26,22 @@
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
 
   <link rel="import" id="bundle" href="elements/elements.html" async>
+
+  <style type="text/css">
+  .welcome {
+    background-color: #e52;
+    padding: 0.5em;
+  }
+  .welcome .who {
+    margin: 0 0.5em;
+  }
+  .welcome .who b::before {
+    content: ', '
+  }
+  .welcome .who b:first-child::before {
+    content: ''
+  }
+  </style>
 </head>
 <body class="fullbleed loading">
 
@@ -94,6 +110,18 @@
            hidden="{{!selectedPatient}}"></paper-fab>
       </span>
     </paper-item>
+
+    <paper-material elevation="2" class="bottom welcome">
+      <span class="layout horizontal center welcome">
+        You have no urgent notifications from
+        <span class="who">
+          <template is="dom-repeat" items="[[selectedPatient.doctors]]">
+            <b>{{item}}</b>
+          </template>
+        </span>
+        at this time. Use the button below to send in a self-check.
+      </span>
+    </paper-material>
   </div>
   <div content on-thread-archive="onThreadArchive">
 
