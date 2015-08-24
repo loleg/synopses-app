@@ -107,7 +107,7 @@
     </paper-menu>
   </paper-scroll-header-panel>
 
-  <paper-scroll-header-panel id="scrollheader" main hidden="{{isDashboardVisible}}">
+  <paper-scroll-header-panel id="scrollheader" main fixed hidden="{{isDashboardVisible}}">
     <paper-toolbar id="mainheader">
       <paper-icon-button icon="arrow-back" class="selected-item"
         on-tap="deselectAll"></paper-icon-button>
@@ -198,14 +198,12 @@
         <span class="layout horizontal center-center fit">No results.</span>
       </template-->
       <paper-item id="clinicdashboard" class="middle" hidden="{{selectedPatient}}">
-        <span class="layout horizontal center justified">
-          <span class="label patient_name">
-            <b>{{dashboardInfo.date}}</b>: today
-            <b>{{dashboardInfo.appointments}}</b> <b>appointments</b> scheduled.
-            <b>{{dashboardInfo.newmessages}}</b> <b>new messages</b> from patients,
-            <b>{{dashboardInfo.labresults}}</b> <b>unread</b> lab reports.
-          </span>
-        </span>
+        <p class="label patient_name">
+          <b>{{dashboardInfo.date}}</b>: today
+          <b>{{dashboardInfo.appointments}}</b> <b>appointments</b> scheduled.
+          <b>{{dashboardInfo.newmessages}}</b> <b>new messages</b> from patients,
+          <b>{{dashboardInfo.labresults}}</b> <b>unread</b> lab reports.
+        </p>
       </paper-item>
 
       <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
@@ -213,15 +211,15 @@
           <span class="label patient_name">
             <b>{{selectedPatient.name}}</b>
           </span>
-          <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
+          <span class="label hint" hidden="{{!selectedPatient.record.date_birth}}">
             Born:
             <time>{{selectedPatient.record.date_birth}}</time>
           </span>
-          <span class="label" hidden="{{!selectedPatient.gender}}">
+          <span class="label hint" hidden="{{!selectedPatient.gender}}">
             Gender:
             <span>{{selectedPatient.gender}}</span>
           </span>
-          <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
+          <span class="label hint" hidden="{{!selectedPatient.record.blood_group}}">
             B.G.:
             <span>{{selectedPatient.record.blood_group}}</span>
           </span>
@@ -245,7 +243,7 @@
      </div>
   </paper-scroll-header-panel>
 
-  <paper-scroll-header-panel id="dashheader" main hidden="{{!isDashboardVisible}}">
+  <paper-scroll-header-panel id="dashheader" main fixed hidden="{{!isDashboardVisible}}">
     <paper-toolbar id="mainheader">
       <paper-icon-button id="navicon" icon="menu"
         paper-drawer-toggle></paper-icon-button>
@@ -255,7 +253,7 @@
       <paper-icon-button id="navrefresh" icon="refresh"
         on-tap="refreshDashboard"></paper-icon-button>
       <div class="flex"></div>
-      <span class="top indent title"><b>Synopses</b> Dashboard</span>
+      <span class="top indent title hint"><b>Synopses</b> Dashboard</span>
     </paper-toolbar>
     <dash-container id="dashcontainer" narrow="{{narrow}}"
         on-record-tap="openRecord"></dash-container>

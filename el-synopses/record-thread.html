@@ -176,6 +176,9 @@
     :host paper-fab {
       background-color: #eda !important;
     }
+    @media only screen and (max-width : 375px) {
+      .hint { display: none; }
+    }
   </style>
   <template>
     <div id="container">
@@ -195,7 +198,10 @@
                 <iron-icon id="star" icon="[[starredIcon]]"
                            on-tap="_onHighlightStar" starred$="{{thread.starred}}"></iron-icon>
                 <iron-icon id="attachments" icon="icons:attachment" hidden="{{!thread.imageurl}}"></iron-icon>
-                <time>{{thread.date}}</time>
+                <time>
+                  <span class="date">{{thread.date}}</span>
+                  <span class="time hint">{{thread.time}}</span>
+                </time>
               </span>
             </span>
             <span id="subjectline" class="layout horizontal center justified">

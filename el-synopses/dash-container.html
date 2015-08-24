@@ -92,17 +92,28 @@
     opacity: 0.8;
     font-size: 80%;
   }
+  @media only screen and (max-width : 375px) {
+    :host { top:0px; left:0px; width: 100%; }
+    .welcome { margin: 0px; }
+    :host paper-header-panel {
+      width: 92%; min-width: auto; padding: 0px;
+    }
+    :host paper-header-panel { height: auto; }
+    :host paper-header-panel #mainPanel.paper-header-panel { display: none; }
+    :host paper-header-panel.active { height: 300px; }
+    :host paper-header-panel.active #mainPanel.paper-header-panel { display: flex; }
+  }
 </style>
 <template>
   <paper-material elevation="2" class="welcome">
-    <span class="layout horizontal center">
+    <p>
       <span>{{d_me.timeofday}}</span>,
       <a class="who" on-tap="_logMeOut">{{d_me.name}}</a>.
       You have no urgent notifications right now.
-    </span>
+    </p>
   </paper-material>
   <paper-header-panel class="blue">
-    <div class="paper-header">Schedule</div>
+    <div class="paper-header" on-tap="_onTapHeader">Schedule</div>
     <div class="content schedule">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_schedule]]">
@@ -111,8 +122,8 @@
       </div>
     </div>
   </paper-header-panel>
-  <paper-header-panel class="blue">
-    <div class="paper-header">New messages</div>
+  <paper-header-panel class="orange">
+    <div class="paper-header" on-tap="_onTapHeader">New messages</div>
     <div class="content inbox">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_inbox]]">
@@ -121,8 +132,8 @@
       </div>
     </div>
   </paper-header-panel>
-  <paper-header-panel class="blue">
-    <div class="paper-header">Colleagues</div>
+  <paper-header-panel class="lime">
+    <div class="paper-header" on-tap="_onTapHeader">Colleagues</div>
     <div class="content users">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_users]]">
@@ -138,8 +149,8 @@
       </div>
     </div>
   </paper-header-panel>
-  <paper-header-panel class="blue">
-    <div class="paper-header">Notes &amp; Todo</div>
+  <paper-header-panel class="green">
+    <div class="paper-header" on-tap="_onTapHeader">Notes &amp; Todo</div>
     <div class="content notes">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_notes]]">
@@ -148,8 +159,8 @@
       </div>
     </div>
   </paper-header-panel>
-  <paper-header-panel class="blue">
-    <div class="paper-header">Case Map</div>
+  <paper-header-panel class="cyan">
+    <div class="paper-header" on-tap="_onTapHeader">Case Map</div>
     <div class="content">
       <div class="layout vertical" style="text-align:left">
       <template is="dom-repeat" items="[[d_cases]]">
@@ -161,8 +172,8 @@
       </div>
     </div>
   </paper-header-panel>
-  <paper-header-panel class="blue">
-    <div class="paper-header">Health Alerts</div>
+  <paper-header-panel class="pink">
+    <div class="paper-header" on-tap="_onTapHeader">Health Alerts</div>
     <div class="content">
       <div class="flex layout vertical">
       <template is="dom-repeat" items="[[d_alerts]]">
@@ -286,7 +297,7 @@
         console.warn(e);
       });
       ajax.addEventListener('response', function(e) {
-        console.log(e.detail.response);
+        // console.log(e.detail.response);
         if (e.detail.response.flag === 'fail') return;
         self.set('d_cases', e.detail.response.cases);
       });
@@ -309,9 +320,18 @@
       this.fire('record-tap', {record: e.detail.record});
     },
 
+    _onTapHeader: function(e) {
+      console.log(e.target);
+      var obj = e.target;
+      while (!obj.classList.contains('paper-header-panel-0') && obj !== document.body) {
+        obj = obj.parentElement;
+      }
+      if (!obj.classList.contains('paper-header-panel-0')) { return; }
+      obj.classList.toggle('active');
+    },
+
     _goMessage: function(e) {
       var button = e.target;
-      debugger;
       while (!button.hasAttribute('itemid') && button !== document.body) {
         button = button.parentElement;
       }

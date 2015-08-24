@@ -159,8 +159,7 @@ body #loading {
   color: #ccc;
 }
 
-#scrollheader > #mainContainer,
-#dashheader > #mainContainer {
+#scrollheader > #mainContainer {
   padding-top: 64px !important;
 }
 
@@ -169,9 +168,9 @@ body #loading {
 /* Smartphones (portrait) ----------- */
 @media only screen
 and (max-width : 375px) {
-  #middleBar, #bottomBar { display: none; }
+  #middleBar, #bottomBar, .hint { display: none; }
   #scrollheader > #mainContainer,
-  #dashheader > #mainContainer { top: 50px !important; padding-top: 0px !important; }
+  #dashheader > #mainContainer { top: 56px !important; padding-top: 0px !important; }
   #filters { display: none; }
   paper-dialog#dialog { max-width: 100% !important; margin:0 !important; }
 }

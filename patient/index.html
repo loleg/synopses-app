@@ -28,9 +28,6 @@
   <link rel="import" id="bundle" href="elements/elements.html" async>
 
   <style type="text/css">
-  .welcome .who {
-    margin: 0 0.5em;
-  }
   .welcome .who b::before {
     content: ', '
   }
@@ -86,18 +83,18 @@
       <span class="layout horizontal center justified">
         <profile-img id="profileimage" item-icon
                      src="{{item.photo}}"></profile-img>
-        <span class="label patient_name">
+        <span class="label patient_name hint">
           <b>{{selectedPatient.name}}</b>
         </span>
-        <span class="label" hidden="{{!selectedPatient.record.date_birth}}">
+        <span class="label hint" hidden="{{!selectedPatient.record.date_birth}}">
           Born:
           <time>{{selectedPatient.record.date_birth}}</time>
         </span>
-        <span class="label" hidden="{{!selectedPatient.gender}}">
+        <span class="label hint" hidden="{{!selectedPatient.gender}}">
           Gender:
           <span>{{selectedPatient.gender}}</span>
         </span>
-        <span class="label" hidden="{{!selectedPatient.record.blood_group}}">
+        <span class="label hint" hidden="{{!selectedPatient.record.blood_group}}">
           B.G.:
           <span>{{selectedPatient.record.blood_group}}</span>
         </span>
@@ -112,17 +109,20 @@
     </paper-item>
 
     <paper-item class="bottom welcome">
-      <span class="layout horizontal center welcome">
-        You have no urgent notifications from
+      <p>
+        I have no urgent notifications from
         <span class="who">
           <template is="dom-repeat" items="[[selectedPatient.doctors]]">
             <b>{{item}}</b>
           </template>
         </span>
-        at this time. Use the
-        <paper-fab icon="accessibility"></paper-fab>
-        button to send in a selfcheck.
-      </span>
+        at this time.
+        <span class="hint">
+          Use the
+          <paper-fab icon="accessibility"></paper-fab>
+          button to send in a selfcheck.
+        </span>
+      </p>
     </paper-item>
   </div>
   <div content on-thread-archive="onThreadArchive">
