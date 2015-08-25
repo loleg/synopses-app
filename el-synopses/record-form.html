@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/ajax-form/ajax-form.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
@@ -243,17 +244,13 @@ paper-tab.record-form.iron-selected {
             <div class="horizontal layout">
               <paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>
             </div>
-            <paper-input name="imageurl" label="Link to image file"></paper-input>
-            <label hidden="true">
-              <div id="dropzone" on-tap="{{tapSelect}}"
-                on-dragover="{{handleDragOver}}"
-                on-drop="{{handleFileSelect}}">
-                Drag files to upload
-                <input type="file" id="files" name="files[]"
-                  on-change="{{handleFilePick}}" multiple>
-              </div>
-            </label>
+            <input type="hidden" name="imageurl">
           </div>
+        </form>
+        <form is="ajax-form" method="post" class="fileupload" enctype="multipart/form-data"
+              on-submitted="_onSubmitUpload" on-invalid="_onSubmitError">
+          <label>Attach image file:</label>
+          <input type="file" name="file">
         </form>
       </div>
 
@@ -361,12 +358,18 @@ paper-tab.record-form.iron-selected {
         return;
       }
       var the_form = this.$.recordform.selectedItem.firstElementChild;
-      the_form.action =
-        '/api/patient/' + this.patientid +
-        '/record/' + the_form.dataset.typeid +
-        '/save';
-      // console.log(the_form.serialize());
-      the_form.submit();
+      var base_url = '/api/patient/' + this.patientid +
+                     '/record/' + the_form.dataset.typeid;
+      the_form.action = base_url + '/save';
+      var upl_form = the_form.parentElement.querySelector('.fileupload');
+      if (upl_form !== null) {
+        upl_form.action = base_url + '/upload';
+        upl_form.enctype = "multipart/form-data";
+        upl_form.submit();
+      } else {
+        // console.log(the_form.serialize());
+        the_form.submit();
+      }
     },
 
     _onSubmitError: function(e) {
@@ -374,6 +377,21 @@ paper-tab.record-form.iron-selected {
         'An error has occurred while saving your record! ' +
         'Please check your network connection, and ' +
         'click SAVE to try again.');
+    },
+
+    _onSubmitUpload: function(e) {
+      var upl_form = e.target;
+      var jsondata = JSON.parse(e.detail.response);
+      if (jsondata.flag !== 'success') {
+        window.alert(jsondata.msg +
+          '\nPlease check your network connection, and ' +
+          'click SAVE to try again.');
+        return;
+      }
+      upl_form.reset();
+      var the_form = this.$.recordform.selectedItem.firstElementChild;
+      the_form.querySelector('[name="imageurl"]').value = jsondata.filespec;
+      the_form.submit();
     },
 
     _onSubmitForm: function(e) {

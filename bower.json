@@ -38,5 +38,8 @@
   "resolutions": {
     "polymer": "^1.0.0",
     "webcomponentsjs": "^0.7.2"
+  },
+  "devDependencies": {
+    "ajax-form": "~2.0.2"
   }
 }
