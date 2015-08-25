@@ -238,10 +238,10 @@ paper-tab.record-form.iron-selected {
           <div class="vertical layout">
             <paper-input name="procedure" label="Type of test" required></paper-input>
             <label>Summary of results:</label>
-            <iron-autogrow-textarea name="results" id="ta2" required maxRows="16" rows="6">
-              <textarea name="results" id="ta2" rows="6"></textarea>
-            </iron-autogrow-textarea>
             <div class="horizontal layout">
+              <iron-autogrow-textarea name="results" id="ta2" required maxRows="16" rows="6">
+                <textarea name="results" id="ta2" rows="6"></textarea>
+              </iron-autogrow-textarea>
               <paper-icon-button icon="av:mic" on-tap="getSpeechInput"></paper-icon-button>
             </div>
             <input type="hidden" name="imageurl">
@@ -249,7 +249,7 @@ paper-tab.record-form.iron-selected {
         </form>
         <form is="ajax-form" method="post" class="fileupload" enctype="multipart/form-data"
               on-submitted="_onSubmitUpload" on-invalid="_onSubmitError">
-          <label>Attach image file:</label>
+          <label>Attach an image:</label>
           <input type="file" name="file">
         </form>
       </div>
@@ -274,7 +274,7 @@ paper-tab.record-form.iron-selected {
 
     </iron-pages>
 
-    <div class="layout vertical">
+    <div class="layout vertical" style="margin-top:0">
       <paper-input-container id="casename">
         <label>Select or enter a new case</label>
         <input list="caselist" is="iron-input" bind-value="{{caseName}}">

@@ -5,6 +5,7 @@
 <link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/ajax-form/ajax-form.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-autogrow-textarea/iron-autogrow-textarea.html">
 <link rel="import" href="../bower_components/pikaday-decorator/pikaday-decorator.html">
@@ -137,18 +138,13 @@ h2 {
           <iron-autogrow-textarea id="ta1" name="note" label="Note" required maxRows="16" rows="8">
           </iron-autogrow-textarea>
 
-          <paper-input name="imageurl" label="Link to image file"></paper-input>
-          <label hidden="true">
-            <div id="dropzone" on-tap="{{tapSelect}}"
-              on-dragover="{{handleDragOver}}"
-              on-drop="{{handleFileSelect}}">
-              Drag files to upload
-              <input type="file" id="files" name="files[]"
-                on-change="{{handleFilePick}}" multiple>
-            </div>
-          </label>
-
+          <input type="hidden" name="imageurl">
         </div>
+      </form>
+      <form is="ajax-form" method="post" class="fileupload" enctype="multipart/form-data"
+            on-submitted="_onSubmitUpload" on-invalid="_onSubmitError">
+        <label>Attach an image:</label>
+        <input type="file" name="file">
       </form>
     </div>
 
@@ -180,12 +176,8 @@ h2 {
       this.$.recordform.selfcheck.value = e.target.getAttribute('name');
     },
 
-    saveDialog: function(e) {
+    submitForm: function() {
       var the_form = this.$.recordform;
-      the_form.action =
-        '/api/patient/' + this.patientHash +
-        '/record' + // single type
-        '/save';
       the_form.submit();
       the_form.reset();
       var all_fields = the_form.querySelectorAll(
@@ -198,6 +190,44 @@ h2 {
       }
       this.fire('record-saved');
       this.$.dialog.close();
+    },
+
+    saveDialog: function(e) {
+      var the_form = this.$.recordform;
+      var base_url =
+        '/api/patient/' + this.patientHash +
+        '/record'; // single type
+      the_form.action = base_url + '/save';
+      var upl_form = the_form.parentElement.querySelector('.fileupload');
+      if (upl_form !== null) {
+        upl_form.action = base_url + '/upload';
+        upl_form.enctype = "multipart/form-data";
+        upl_form.submit();
+      } else {
+        this.submitForm();
+      }
+    },
+
+    _onSubmitError: function(e) {
+      window.alert(
+        'An error has occurred while saving your record! ' +
+        'Please check your network connection, and ' +
+        'click SAVE to try again.');
+    },
+
+    _onSubmitUpload: function(e) {
+      var upl_form = e.target;
+      var jsondata = JSON.parse(e.detail.response);
+      if (jsondata.flag !== 'success') {
+        window.alert(jsondata.msg +
+          '\nPlease check your network connection, and ' +
+          'click SAVE to try again.');
+        return;
+      }
+      upl_form.reset();
+      var the_form = this.$.recordform;
+      the_form.querySelector('[name="imageurl"]').value = jsondata.filespec;
+      this.submitForm();
     }
 
   });
