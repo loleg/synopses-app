@@ -96,13 +96,9 @@
           </p>
 
           <h4>Current Cases</h4>
-          <p>Lower Backpain</p>
-
-          <h4>Closed Cases</h4>
-          <p>Sprain</p>
-          <p>Infection</p>
-          <p>Flu</p>
-          <p>Cold</p>
+          <template is="dom-repeat" items="[[details.cases]]">
+            <span>{{item}}</span><br>
+          </template>
 
           <h4>Notes</h4>
           <textarea></textarea>
@@ -114,23 +110,28 @@
             Height: <span>{{patient.record.height}}</span> |
             Weight: <span>{{patient.record.weight}}</span> kg
             <br>
-            Age: <span>{{patient.record.age}}</span> |
-            BMI: <span>{{patient.record.bmi}}</span>
-            <br>
-            Allergies: <span>{{patient.record.allergies}}</span>
+            Age: <span>{{details.age}}</span> |
+            BMI: <span>{{details.bmi}}</span>
+            <!--<br>
+            Allergies: <span>{{patient.record.allergies}}</span>-->
             <br>
             Blood group: <span>{{patient.record.blood_group}}</span>
           </p>
 
-          <h4>Current Medication</h4>
+          <!--<h4>Current Medication</h4>
           <p>Tylenol T4</p>
 
-          <h4>Family History</h4>
+          <h4>Family History</h4>-->
 
-          <h4>Current Therapies</h4>
+          <h4>Current Therapists</h4>
+          <template is="dom-repeat" items="[[patient.doctors]]">
+            <span>{{item}}</span><br>
+          </template>
 
           <h4>Files</h4>
-          <p>Report from Dr. Martin Hubert</p>
+          <template is="dom-repeat" items="[[details.files]]">
+            <span>{{item}}</span><br>
+          </template>
         </div>
       </div>
     </paper-dialog-scrollable>
@@ -150,6 +151,12 @@
       },
 
       patient: {
+        type: Object,
+        value: function() { return {}; },
+        reflectToAttribute: false
+      },
+
+      details: {
         type: Object,
         value: function() { return {}; },
         reflectToAttribute: false

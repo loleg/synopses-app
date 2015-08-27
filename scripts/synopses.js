@@ -404,8 +404,18 @@ template.openDialog = function(e) {
 };
 
 template.openPatientView = function(e) {
-  this.$.addpatient.patient = this.selectedPatient;
-  this.$.addpatient.$.dialogView.open();
+  var self = this;
+  var ajax = document.createElement('iron-ajax');
+  ajax.auto = true;
+  ajax.url = '/api/patient/' + template.selectedPatient.id + '/details';
+  ajax.addEventListener('error', function(e) {
+    // console.warn(e);
+  });
+  ajax.addEventListener('response', function(e) {
+    self.$.addpatient.details = e.detail.response.details;
+    self.$.addpatient.patient = self.selectedPatient;
+    self.$.addpatient.$.dialogView.open();
+  });
 };
 
 template.inboxSelect = function(e) {
