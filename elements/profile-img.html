@@ -42,6 +42,11 @@
       left: 20%;
       opacity: 0;
     }
+
+    :host([large]) .profile {
+      width: 80px;
+      height: 80px;
+    }
   </style>
   <template>
     <div class="profile">
@@ -63,6 +68,12 @@
         reflectToAttribute: true
       },
 
+      large: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
       src: {
         type: String,
         value: null
@@ -77,4 +88,3 @@
   });
 </script>
 </dom-module>
-

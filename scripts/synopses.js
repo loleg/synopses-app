@@ -403,6 +403,11 @@ template.openDialog = function(e) {
   }
 };
 
+template.openPatientView = function(e) {
+  this.$.addpatient.patient = this.selectedPatient;
+  this.$.addpatient.$.dialogView.open();
+};
+
 template.inboxSelect = function(e) {
   this.selectedPatient = false;
   this.isDashboardVisible = false;

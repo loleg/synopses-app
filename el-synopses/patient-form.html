@@ -18,6 +18,10 @@
 :host .column {
   margin-right: 10px;
 }
+
+.imagecolumn {
+  padding: 0 30px 0 10px;
+}
 </style>
 <template>
   <paper-dialog id="dialog" modal>
@@ -62,6 +66,78 @@
       </div>
     </form>
   </paper-dialog>
+
+  <paper-dialog id="dialogView" modal>
+    <paper-dialog-scrollable>
+      <div class="horizontal layout">
+        <div class="column imagecolumn">
+          <profile-img id="profileimage" item-icon large
+                       src="{{patient.photo}}"></profile-img>
+        </div>
+        <div class="column">
+          <h2>
+            <span>{{patient.first_name}}</span>
+            <span>{{patient.last_name}}</span>
+          </h2>
+
+          <p style="min-height: 7em;">
+            <span>{{patient.address1}}</span>
+            <span>{{patient.address2}}</span> |
+            <span>{{patient.postal}}</span>
+            <span>{{patient.city}}</span> |
+            <span>{{patient.country}}</span>
+            <br>
+            <span>{{patient.phone1}}</span>
+            <br>
+            <span>{{patient.email}}</span>
+            <br>
+            <span>{{patient.insurance}}</span>
+            <span>{{patient.policyno}}</span>
+          </p>
+
+          <h4>Current Cases</h4>
+          <p>Lower Backpain</p>
+
+          <h4>Closed Cases</h4>
+          <p>Sprain</p>
+          <p>Infection</p>
+          <p>Flu</p>
+          <p>Cold</p>
+
+          <h4>Notes</h4>
+          <textarea></textarea>
+
+        </div><div class="column">
+          <h2>&nbsp;</h2>
+
+          <p style="min-height: 7em;">
+            Height: <span>{{patient.record.height}}</span> |
+            Weight: <span>{{patient.record.weight}}</span> kg
+            <br>
+            Age: <span>{{patient.record.age}}</span> |
+            BMI: <span>{{patient.record.bmi}}</span>
+            <br>
+            Allergies: <span>{{patient.record.allergies}}</span>
+            <br>
+            Blood group: <span>{{patient.record.blood_group}}</span>
+          </p>
+
+          <h4>Current Medication</h4>
+          <p>Tylenol T4</p>
+
+          <h4>Family History</h4>
+
+          <h4>Current Therapies</h4>
+
+          <h4>Files</h4>
+          <p>Report from Dr. Martin Hubert</p>
+        </div>
+      </div>
+    </paper-dialog-scrollable>
+    <div class="buttons">
+      <paper-button dialog-dismiss>Close</paper-button>
+    </div>
+  </paper-dialog>
 </template>
 <script>
   Polymer({
@@ -69,8 +145,14 @@
 
     properties: {
       title: {
-        value: "Patient file",
+        value: "Patient file (edit)",
         reflectToAttribute: true
+      },
+
+      patient: {
+        type: Object,
+        value: function() { return {}; },
+        reflectToAttribute: false
       }
     },
 

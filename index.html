@@ -196,16 +196,18 @@
       <!--template is="dom-if" if="[[_computeShowNoResults(threads, syncing)]]">
         <span class="layout horizontal center-center fit">No results.</span>
       </template-->
-      <paper-item id="clinicdashboard" hidden="{{selectedPatient}}">
+      <paper-material id="clinicdashboard" hidden="{{selectedPatient}}"
+        elevation="2" class="welcome">
         <p class="label patient_name">
           <b>{{dashboardInfo.date}}</b>: today
           <b>{{dashboardInfo.appointments}}</b> <b>appointments</b> scheduled.
           <b>{{dashboardInfo.newmessages}}</b> <b>new messages</b> from patients,
           <b>{{dashboardInfo.labresults}}</b> <b>unread</b> lab reports.
         </p>
-      </paper-item>
+      </paper-material>
 
-      <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
+      <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}"
+        on-tap="openPatientView" style="cursor:pointer">
         <span class="layout horizontal center justified">
           <span class="label patient_name">
             <b>{{selectedPatient.name}}</b>

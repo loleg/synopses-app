@@ -62,6 +62,12 @@ body #loading {
   box-shadow: none !important;
 }
 
+.welcome {
+  padding: 0.1em 1em;
+  background-color: #fff9c4;
+  color: #444;
+  z-index: 1;
+}
 
 .action-menu, .action-icon {
   position: fixed;
