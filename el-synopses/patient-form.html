@@ -69,77 +69,80 @@
     </form>
   </paper-dialog>
 
-  <paper-dialog id="dialogView" modal>
-    <paper-dialog-scrollable>
-      <div class="horizontal layout">
-        <div class="column imagecolumn">
-          <profile-img id="profileimage" item-icon large hascave="{{hascave}}"
-                       src="{{patient.photo}}"></profile-img>
+  <paper-dialog id="dialogView" modal hascave="{{hascave}}">
+    <form is="iron-form" id="detailsform"
+          method="post" action="/api/patient/save">
+      <paper-dialog-scrollable>
+        <div class="horizontal layout">
+          <div class="column imagecolumn">
+            <profile-img id="profileimage" item-icon large
+                         src="{{patient.photo}}"></profile-img>
+          </div>
+          <div class="column">
+            <h2>
+              <span>{{patient.first_name}}</span>
+              <span>{{patient.last_name}}</span>
+            </h2>
+
+            <p style="min-height: 7em;">
+              <span>{{patient.address1}}</span>
+              <span>{{patient.address2}}</span> |
+              <span>{{patient.postal}}</span>
+              <span>{{patient.city}}</span> |
+              <span>{{patient.country}}</span>
+              <br>
+              <span>{{patient.phone1}}</span>
+              <br>
+              <span>{{patient.email}}</span>
+              <br>
+              <span>{{patient.insurance}}</span>
+              <span>{{patient.policyno}}</span>
+            </p>
+
+            <h4>Current Cases</h4>
+            <template is="dom-repeat" items="[[details.cases]]">
+              <span>{{item}}</span><br>
+            </template>
+
+            <h4>Notes</h4>
+            <textarea name="sharednotes" style="border:none" on-change="_onChangeNotes">{{patient.sharednotes}}</textarea>
+
+          </div><div class="column">
+            <h2>&nbsp;</h2>
+
+            <p style="min-height: 7em;">
+              Height: <span>{{patient.record.height}}</span> cm |
+              Weight: <span>{{patient.record.weight}}</span> kg
+              <br>
+              Age: <span>{{details.age}}</span> |
+              BMI: <span>{{details.bmi}}</span>
+              <!--<br>
+              Allergies: <span>{{patient.record.allergies}}</span>-->
+              <br>
+              Blood group: <span>{{patient.record.blood_group}}</span>
+            </p>
+
+            <!--<h4>Current Medication</h4>
+            <p>Tylenol T4</p>
+
+            <h4>Family History</h4>-->
+
+            <h4>Current Therapists</h4>
+            <template is="dom-repeat" items="[[patient.doctors]]">
+              <span>{{item}}</span><br>
+            </template>
+
+            <h4>Files</h4>
+            <template is="dom-repeat" items="[[details.files]]">
+              <span>{{item}}</span><br>
+            </template>
+          </div>
         </div>
-        <div class="column">
-          <h2>
-            <span>{{patient.first_name}}</span>
-            <span>{{patient.last_name}}</span>
-          </h2>
-
-          <p style="min-height: 7em;">
-            <span>{{patient.address1}}</span>
-            <span>{{patient.address2}}</span> |
-            <span>{{patient.postal}}</span>
-            <span>{{patient.city}}</span> |
-            <span>{{patient.country}}</span>
-            <br>
-            <span>{{patient.phone1}}</span>
-            <br>
-            <span>{{patient.email}}</span>
-            <br>
-            <span>{{patient.insurance}}</span>
-            <span>{{patient.policyno}}</span>
-          </p>
-
-          <h4>Current Cases</h4>
-          <template is="dom-repeat" items="[[details.cases]]">
-            <span>{{item}}</span><br>
-          </template>
-
-          <h4>Notes</h4>
-          <textarea style="border:none" on-change="_onChangeNotes">{{details.notes}}</textarea>
-
-        </div><div class="column">
-          <h2>&nbsp;</h2>
-
-          <p style="min-height: 7em;">
-            Height: <span>{{patient.record.height}}</span> cm |
-            Weight: <span>{{patient.record.weight}}</span> kg
-            <br>
-            Age: <span>{{details.age}}</span> |
-            BMI: <span>{{details.bmi}}</span>
-            <!--<br>
-            Allergies: <span>{{patient.record.allergies}}</span>-->
-            <br>
-            Blood group: <span>{{patient.record.blood_group}}</span>
-          </p>
-
-          <!--<h4>Current Medication</h4>
-          <p>Tylenol T4</p>
-
-          <h4>Family History</h4>-->
-
-          <h4>Current Therapists</h4>
-          <template is="dom-repeat" items="[[patient.doctors]]">
-            <span>{{item}}</span><br>
-          </template>
-
-          <h4>Files</h4>
-          <template is="dom-repeat" items="[[details.files]]">
-            <span>{{item}}</span><br>
-          </template>
-        </div>
+      </paper-dialog-scrollable>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Close</paper-button>
       </div>
-    </paper-dialog-scrollable>
-    <div class="buttons">
-      <paper-button dialog-dismiss>Close</paper-button>
-    </div>
+    </form>
   </paper-dialog>
 </template>
 <script>
@@ -186,7 +189,7 @@
     },
 
     _onChangeNotes: function(e) {
-      console.log(e.target.value);
+      this.$.detailsform.submit();
     }
 
   });
