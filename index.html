@@ -232,7 +232,7 @@
       <template is="dom-repeat" items="[[threads]]">
         <record-thread messages="[[item.messages]]"
                      labels="[[labelMap]]" users="[[users]]"
-                     narrow="[[narrow]]"
+                     narrow="[[narrow]]" condensed="{{selectedPatient}}"
                      on-label-tap="_onLabelTap"
                      on-thread-expand="_onThreadExpand"
                      on-thread-starred="_onThreadStarred"

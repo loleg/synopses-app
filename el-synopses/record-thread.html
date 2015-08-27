@@ -160,6 +160,13 @@
 
 /* -- SYNOPSES */
 
+    :host([condensed]) #addressline {
+      position: absolute;
+      right: 20px;
+    }
+    :host([condensed]) #addressline .name {
+      display: none;
+    }
     .labels.record-thread label.casename {
       background-color: orange;
       font-size: 110%;
@@ -308,6 +315,15 @@
        * True if the thread should show its undo UI.
        */
       undo: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
+      /**
+       * Names hidden when a patient is selected
+       */
+      condensed: {
         type: Boolean,
         value: false,
         reflectToAttribute: true
