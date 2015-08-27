@@ -414,8 +414,6 @@ template.openPatientView = function(e) {
   ajax.addEventListener('response', function(e) {
     self.$.addpatient.details = e.detail.response.details;
     self.$.addpatient.patient = self.selectedPatient;
-    self.$.addpatient.$.detailsform.action =
-      '/api/patient/' + self.selectedPatient.id + '/save';
     self.$.addpatient.$.dialogView.open();
   });
 };

@@ -19,19 +19,20 @@
   margin-right: 10px;
 }
 
-:host([hascave]) textarea {
-  border-color: red;
-}
-
 .imagecolumn {
   padding: 0 30px 0 10px;
+}
+
+textarea[name='sharednotes'] {
+  border: none;
+  color: red;
+  width: 100%;
 }
 </style>
 <template>
   <paper-dialog id="dialog" modal>
     <h2>{{ title }}</h2>
-    <form is="iron-form" id="patientform"
-          method="post" action="/api/patient/save">
+    <form is="iron-form" id="patientform" method="post">
       <paper-dialog-scrollable>
         <div class="horizontal layout">
           <div class="column">
@@ -74,79 +75,83 @@
   </paper-dialog>
 
   <paper-dialog id="dialogView" modal>
-    <form is="iron-form" id="detailsform"
-          method="post" action="/api/patient/save">
-      <paper-dialog-scrollable>
-        <div class="horizontal layout">
-          <div class="column imagecolumn">
+    <paper-dialog-scrollable>
+      <div class="horizontal layout">
+        <div class="column imagecolumn">
+          <form is="ajax-form" id="photoform" method="post" class="fileupload" enctype="multipart/form-data"
+                on-submitted="_onSubmitUpload" on-invalid="_onSubmitError">
             <profile-img id="profileimage" item-icon large
-                         src="{{patient.photo}}"></profile-img>
-          </div>
-          <div class="column">
-            <h2>
-              <span>{{patient.first_name}}</span>
-              <span>{{patient.last_name}}</span>
-            </h2>
-
-            <p style="min-height: 7em;">
-              <span>{{patient.address1}}</span>
-              <span>{{patient.address2}}</span> |
-              <span>{{patient.postal}}</span>
-              <span>{{patient.city}}</span> |
-              <span>{{patient.country}}</span>
-              <br>
-              <span>{{patient.phone1}}</span>
-              <br>
-              <span>{{patient.email}}</span>
-              <br>
-              <span>{{patient.insurance}}</span>
-              <span>{{patient.policyno}}</span>
-            </p>
-
-            <h4>Current Cases</h4>
-            <template is="dom-repeat" items="[[details.cases]]">
-              <span>{{item}}</span><br>
-            </template>
-
-            <h4>Notes</h4>
-            <textarea name="sharednotes" style="border:none" on-change="_onChangeNotes">{{patient.sharednotes}}</textarea>
-
-          </div><div class="column">
-            <h2>&nbsp;</h2>
-
-            <p style="min-height: 7em;">
-              Height: <span>{{patient.record.height}}</span> cm |
-              Weight: <span>{{patient.record.weight}}</span> kg
-              <br>
-              Age: <span>{{details.age}}</span> |
-              BMI: <span>{{details.bmi}}</span>
-              <!--<br>
-              Allergies: <span>{{patient.record.allergies}}</span>-->
-              <br>
-              Blood group: <span>{{patient.record.blood_group}}</span>
-            </p>
-
-            <!--<h4>Current Medication</h4>
-            <p>Tylenol T4</p>
-
-            <h4>Family History</h4>-->
-
-            <h4>Current Therapists</h4>
-            <template is="dom-repeat" items="[[patient.doctors]]">
-              <span>{{item}}</span><br>
-            </template>
-
-            <h4>Files</h4>
-            <template is="dom-repeat" items="[[details.files]]">
-              <span>{{item}}</span><br>
-            </template>
-          </div>
+                src="{{patient.photo}}" on-tap="_onTapProfileImage"></profile-img>
+            <input id="profilefile" type="file" name="file"
+                hidden on-change="_onChangePhoto">
+          </form>
         </div>
-      </paper-dialog-scrollable>
-      <div class="buttons">
-        <paper-button dialog-dismiss>Close</paper-button>
+        <div class="column">
+          <h2>
+            <span>{{patient.first_name}}</span>
+            <span>{{patient.last_name}}</span>
+          </h2>
+
+          <p style="min-height: 7em;">
+            <span>{{patient.address1}}</span>
+            <span>{{patient.address2}}</span> |
+            <span>{{patient.postal}}</span>
+            <span>{{patient.city}}</span> |
+            <span>{{patient.country}}</span>
+            <br>
+            <span>{{patient.phone1}}</span>
+            <br>
+            <span>{{patient.email}}</span>
+            <br>
+            <span>{{patient.insurance}}</span>
+            <span>{{patient.policyno}}</span>
+          </p>
+
+          <h4>Current Cases</h4>
+          <template is="dom-repeat" items="[[details.cases]]">
+            <span>{{item}}</span><br>
+          </template>
+
+          <h4>Notes</h4>
+          <form is="iron-form" id="detailsform" method="post">
+            <textarea name="sharednotes" on-change="_onChangeNotes">{{patient.sharednotes}}</textarea>
+          </form>
+
+        </div><div class="column">
+          <h2>&nbsp;</h2>
+
+          <p style="min-height: 7em;">
+            Height: <span>{{patient.record.height}}</span> cm |
+            Weight: <span>{{patient.record.weight}}</span> kg
+            <br>
+            Age: <span>{{details.age}}</span> |
+            BMI: <span>{{details.bmi}}</span>
+            <!--<br>
+            Allergies: <span>{{patient.record.allergies}}</span>-->
+            <br>
+            Blood group: <span>{{patient.record.blood_group}}</span>
+          </p>
+
+          <!--<h4>Current Medication</h4>
+          <p>Tylenol T4</p>
+
+          <h4>Family History</h4>-->
+
+          <h4>Current Therapists</h4>
+          <template is="dom-repeat" items="[[patient.doctors]]">
+            <span>{{item}}</span><br>
+          </template>
+
+          <h4>Files</h4>
+          <template is="dom-repeat" items="[[details.files]]">
+            <span>{{item}}</span><br>
+          </template>
+        </div>
       </div>
-    </form>
+    </paper-dialog-scrollable>
+    <div class="buttons">
+      <paper-button dialog-dismiss>Close</paper-button>
+    </div>
   </paper-dialog>
 </template>
 <script>
@@ -170,11 +175,6 @@
         type: Object,
         value: function() { return {}; },
         reflectToAttribute: false
-      },
-
-      hascave: {
-        type: Boolean,
-        value: false
       }
     },
 
@@ -190,8 +190,10 @@
     },
 
     _patientChanged: function() {
-      if (typeof this.patient.sharednotes === 'undefined') return;
-      this.hascave = (this.patient.sharednotes.length > 1);
+      var forms = this.querySelectorAll('form');
+      for (var i = 0; i < forms.length; i++) {
+        forms[i].action = '/api/patient/' + this.patient.id + '/save';
+      }
     },
 
     _onChangeDropdown: function(e) {
@@ -200,6 +202,32 @@
 
     _onChangeNotes: function(e) {
       this.$.detailsform.submit();
+    },
+
+    _onTapProfileImage: function() {
+      this.$.profilefile.click();
+    },
+
+    _onChangeNotes: function(e) {
+      this.$.detailsform.submit();
+    },
+
+    _onChangePhoto: function(e) {
+      this.$.photoform.submit();
+    },
+
+    _onSubmitUpload: function(e) {
+      var jsondata = JSON.parse(e.detail.response);
+      if (jsondata.flag !== 'success') {
+        return window.alert(jsondata.msg);
+      }
+      if (typeof jsondata.filespec !== 'undefined') {
+        this.$.profileimage.src = jsondata.filespec;
+      }
+    },
+
+    _onSubmitError: function(e) {
+      window.alert("Error saving profile, please try again");
     }
 
   });
