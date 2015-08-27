@@ -143,10 +143,13 @@ body #loading {
 }
 
 #togglefilters {
-  background: #aaa !important;
+  background: #fff !important;
+  color: #000;
 }
+
 #togglefilters.active {
-  background: #eee !important;
+  background: transparent !important;
+  color: #fff;
 }
 
 #filters {
@@ -156,7 +159,7 @@ body #loading {
 
 #filters iron-icon {
   left: -6px;
-  color: #ccc;
+  color: #eee;
 }
 
 #scrollheader > #mainContainer {

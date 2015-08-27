@@ -185,6 +185,19 @@ template.runSearch = function(e) {
   template.hideLoadingSpinner();
 };
 
+template.filtersEnabled = false;
+template.filterToggleClass = 'x-scope paper-fab-0';
+template.toggleFilters = function() {
+  this.filtersEnabled = !this.filtersEnabled;
+  this.filterToggleClass = 'x-scope paper-fab-0' +
+    (this.filtersEnabled ? ' active' : '');
+};
+
+template._computeMainHeaderClass = function(narrow, numSelectedThreads) {
+  return (narrow ? 'core-narrow' : '') + ' ' +
+         (numSelectedThreads ? 'selected-threads' : '');
+};
+
 template.filterBy = function(e, f, g) {
   template.deselectAll();
   var qs = this.$.filters.selectedItem.querySelector('iron-icon');
