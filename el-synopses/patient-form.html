@@ -50,13 +50,15 @@
             <paper-input name="address2" label="Address 2"></paper-input>
             <paper-input name="city" label="City"></paper-input>
             <paper-input name="postal" label="Postal code"></paper-input>
-            <paper-input-container on-click="_onChangeDropdown">
+            <paper-input name="socialsecurity" label="AHV number"></paper-input>
+            <input type="hidden" name="country" value="Switzerland">
+            <!--< paper-input-container on-click="_onChangeDropdown">
               <input list="country-list" is="core-input" name="country">
               <datalist id="country-list">
-                <option value="Switzerland"></option><option value="Germany"></option><option value="France"></option><option value="United States"></option>
+                <option value="Switzerland"></option>
               </datalist>
             </paper-input-container>
-            <label>Country</label>
+            <label>Country</label>-->
           </div>
         </div>
       </paper-dialog-scrollable>
@@ -71,7 +73,7 @@
     <paper-dialog-scrollable>
       <div class="horizontal layout">
         <div class="column imagecolumn">
-          <profile-img id="profileimage" item-icon large
+          <profile-img id="profileimage" item-icon large hascave="{{hascave}}"
                        src="{{patient.photo}}"></profile-img>
         </div>
         <div class="column">
@@ -101,13 +103,13 @@
           </template>
 
           <h4>Notes</h4>
-          <textarea></textarea>
+          <textarea style="border:none" on-change="_onChangeNotes">{{details.notes}}</textarea>
 
         </div><div class="column">
           <h2>&nbsp;</h2>
 
           <p style="min-height: 7em;">
-            Height: <span>{{patient.record.height}}</span> |
+            Height: <span>{{patient.record.height}}</span> cm |
             Weight: <span>{{patient.record.weight}}</span> kg
             <br>
             Age: <span>{{details.age}}</span> |
@@ -160,6 +162,11 @@
         type: Object,
         value: function() { return {}; },
         reflectToAttribute: false
+      },
+
+      hascave: {
+        type: Boolean,
+        value: false
       }
     },
 
@@ -176,6 +183,10 @@
 
     _onChangeDropdown: function(e) {
       Polymer.dom(e).localTarget.blur();
+    },
+
+    _onChangeNotes: function(e) {
+      console.log(e.target.value);
     }
 
   });

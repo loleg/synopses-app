@@ -407,7 +407,7 @@ template.openPatientView = function(e) {
   var self = this;
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
-  ajax.url = '/api/patient/' + template.selectedPatient.id + '/details';
+  ajax.url = '/api/patient/' + template.selectedPatient.id + '/profile?details=true';
   ajax.addEventListener('error', function(e) {
     // console.warn(e);
   });
