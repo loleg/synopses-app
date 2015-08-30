@@ -97,7 +97,7 @@ gulp.task('jsbundle', function() {
 
   var dest = isProd ? 'dist' : '';
 
-  return buildBundle('./scripts/app.js')
+  return buildBundle(['./scripts/app.js', './scripts/synopses.js'])
     .pipe(source('bundle.js'))
     .pipe($.streamify($.uglify()))
     .pipe($.license('Apache', {
