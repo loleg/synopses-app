@@ -428,6 +428,7 @@ template.openPatientView = function(e) {
 template.inboxSelect = function(e) {
   this.selectedPatient = false;
   this.isDashboardVisible = false;
+  if (this.filtersEnabled) { this.toggleFilters(); }
   this.headerTitle = this._computeHeaderTitle(0);
   // this.headerClass = this._computeMainHeaderClass();
   this.loadRecords();
@@ -443,6 +444,7 @@ template.patientSelect = function(e) {
   this.selectedPatient = e.model.item;
   this.headerTitle = '';
   this.headerClass = this._computeMainHeaderClass();
+  if (this.filtersEnabled) { this.toggleFilters(); }
   this.loadRecords();
 };
 
