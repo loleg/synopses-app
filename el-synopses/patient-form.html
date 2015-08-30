@@ -45,8 +45,8 @@ paper-dropdown-menu paper-menu {
       <paper-dialog-scrollable>
         <div class="horizontal layout">
           <div class="column">
-            <paper-input name="first_name" label="First name" value$="[[patient.first_name]]" required autofocus></paper-input>
-            <paper-input name="last_name" label="Last name" value$="[[patient.last_name]]" required></paper-input>
+            <paper-input name="first_name" label="First name" value$="[[patient.first_name]]" auto-validate required autofocus></paper-input>
+            <paper-input name="last_name" label="Last name" value$="[[patient.last_name]]" auto-validate required></paper-input>
             <paper-input name="address1" label="Address" value$="[[patient.address1]]"></paper-input>
             <paper-input name="address2" label="Address 2" value$="[[patient.address2]]"></paper-input>
             <paper-input name="city" label="City" value$="[[patient.city]]"></paper-input>
@@ -221,6 +221,7 @@ paper-dropdown-menu paper-menu {
         this.$.dialog.close();
         return true;
       } else {
+        window.alert('Please make sure to complete all required fields.');
         return false;
       }
     },
