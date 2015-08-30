@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-input/paper-input-container.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -28,6 +29,14 @@ textarea[name='sharednotes'] {
   color: red;
   width: 100%;
 }
+
+paper-dropdown-menu {
+  margin: -8px;
+}
+
+paper-dropdown-menu paper-menu {
+  max-height: 18em;
+}
 </style>
 <template>
   <paper-dialog id="dialog" modal>
@@ -38,24 +47,10 @@ textarea[name='sharednotes'] {
           <div class="column">
             <paper-input name="first_name" label="First name" required autofocus></paper-input>
             <paper-input name="last_name" label="Last name" required></paper-input>
-            <paper-input name="phone1" label="Phone number"></paper-input>
-            <paper-input name="phone2" label="Mobile number"></paper-input>
-            <paper-input name="policyno" label="Policy number"></paper-input>
-            <paper-input-container on-click="_onChangeDropdown">
-              <input list="insurance-list" is="core-input" name="insurance">
-              <datalist id="insurance-list">
-                <!-- Datasource: http://www.priminfo.ch/praemien/index.php?sprache=d -->
-                <option value="Agrisano Brugg"></option><option value="AMB Le Châble"></option><option value="Aquilana Baden"></option><option value="Arcosana Luzern"></option><option value="ASSURA Pully"></option><option value="Atupri Bern"></option><option value="Avanex Zürich"></option><option value="Avenir Martigny"></option><option value="BKKE Einsiedeln"></option><option value="CMVEO Orsières"></option><option value="Compact Zürich"></option><option value="CONCORDIA Luzern"></option><option value="CSS Luzern"></option><option value="Easy Sana Martigny"></option><option value="EGK Laufen"></option><option value="GALENOS Zürich"></option><option value="GLKV Elm"></option><option value="Helsana Zürich"></option><option value="indivo Zürich"></option><option value="Intras Luzern"></option><option value="KK Birchmeier Künten"></option><option value="KK Ingenbohl Brunnen"></option><option value="KK Simplon"></option><option value="KK Steffisburg"></option><option value="KK Stoffel Mels"></option><option value="KK Turbenthal"></option><option value="KK Wädenswil"></option><option value="KkLH Zell"></option><option value="KKV Visperterminen"></option><option value="KKZ Zeneggen"></option><option value="KLuG Zug"></option><option value="kmu Winterthur"></option><option value="Kolping Dübendorf"></option><option value="KPT Bern"></option><option value="KVF Bülach"></option><option value="Lumneziana Vella"></option><option value="maxi.ch Zürich"></option><option value="Moove Sympany Basel"></option><option value="Mutuel Martigny"></option><option value="ÖKK Landquart"></option><option value="Philos Martigny"></option><option value="Progrès Zürich"></option><option value="Provita Winterthur"></option><option value="rhenusana Heerbrugg"></option><option value="sana24 Bern"></option><option value="Sanagate Luzern"></option><option value="sanavals Vals"></option><option value="Sanitas Zürich"></option><option value="Sansan Zürich"></option><option value="SLKK Zürich"></option><option value="sodalis Visp"></option><option value="Sumiswalder Sumiswald"></option><option value="SUPRA Lausanne"></option><option value="SWICA Winterthur"></option><option value="Visana Bern"></option><option value="vita surselva Ilanz"></option><option value="vivacare Bern"></option><option value="Vivao Sympany Basel"></option><option value="Wincare Zürich"></option>
-              </datalist>
-            </paper-input-container>
-            <label>Health insurance</label>
-          </div><div class="column">
-            <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
             <paper-input name="address1" label="Address"></paper-input>
             <paper-input name="address2" label="Address 2"></paper-input>
             <paper-input name="city" label="City"></paper-input>
             <paper-input name="postal" label="Postal code"></paper-input>
-            <paper-input name="socialsecurity" label="AHV number"></paper-input>
             <input type="hidden" name="country" value="Switzerland">
             <!--< paper-input-container on-click="_onChangeDropdown">
               <input list="country-list" is="core-input" name="country">
@@ -64,6 +59,21 @@ textarea[name='sharednotes'] {
               </datalist>
             </paper-input-container>
             <label>Country</label>-->
+          </div><div class="column">
+            <paper-dropdown-menu label="Health insurance"
+              selected-item-label="{{selectedInsurance}}">
+              <paper-menu class="dropdown-content">
+                <template is="dom-repeat" items="[[insuranceList]]">
+                  <paper-item>{{item}}</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+            <input is="iron-input" type="hidden" name="insurance" value$="[[selectedInsurance]]">
+            <paper-input name="policyno" label="Insurance number"></paper-input>
+            <paper-input name="socialsecurity" label="Social security (AHV)"></paper-input>
+            <paper-input name="phone1" label="Telephone"></paper-input>
+            <paper-input name="phone2" label="Mobile phone"></paper-input>
+            <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
           </div>
         </div>
       </paper-dialog-scrollable>
@@ -174,6 +184,16 @@ textarea[name='sharednotes'] {
       details: {
         type: Object,
         value: function() { return {}; },
+        reflectToAttribute: false
+      },
+
+      insuranceList: {
+        type: Array,
+        value: function() {
+          // Datasource: http://www.priminfo.ch/praemien/index.php?sprache=d
+          a = 'Agrisano Brugg;AMB Le Châble;Aquilana Baden;Arcosana Luzern;ASSURA Pully;Atupri Bern;Avanex Zürich;Avenir Martigny;BKKE Einsiedeln;CMVEO Orsières;Compact Zürich;CONCORDIA Luzern;CSS Luzern;Easy Sana Martigny;EGK Laufen;GALENOS Zürich;GLKV Elm;Helsana Zürich;indivo Zürich;Intras Luzern;KK Birchmeier Künten;KK Ingenbohl Brunnen;KK Simplon;KK Steffisburg;KK Stoffel Mels;KK Turbenthal;KK Wädenswil;KkLH Zell;KKV Visperterminen;KKZ Zeneggen;KLuG Zug;kmu Winterthur;Kolping Dübendorf;KPT Bern;KVF Bülach;Lumneziana Vella;maxi.ch Zürich;Moove Sympany Basel;Mutuel Martigny;ÖKK Landquart;Philos Martigny;Progrès Zürich;Provita Winterthur;rhenusana Heerbrugg;sana24 Bern;Sanagate Luzern;sanavals Vals;Sanitas Zürich;Sansan Zürich;SLKK Zürich;sodalis Visp;Sumiswalder Sumiswald;SUPRA Lausanne;SWICA Winterthur;Visana Bern;vita surselva Ilanz;vivacare Bern;Vivao Sympany Basel;Wincare Zürich';
+          return a.split(';');
+        },
         reflectToAttribute: false
       }
     },
