@@ -215,8 +215,7 @@
                 </time>
               </span>
             </span>
-            <span id="subjectline" class="layout horizontal center justified">
-              <span class="subject">{{thread.subject}}</span>
+            <span id="subjectline" class="layout horizontal center">
               <span class="labels">
                 <label class="casename" hidden="{{!thread.label}}" on-tap="_onLabelTap">{{thread.label}}</label>
                 <template is="dom-repeat" items="[[thread.labelIds]]" as="id">
@@ -224,6 +223,7 @@
                          class$="[[_objectItem('labels', id, 'color')]]">[[_objectItem('labels', id, 'name')]]</label>
                 </template>
               </span>
+              <span class="subject">{{thread.subject}}</span>
             </span>
             <span id="lastline" class="layout horizontal center justified" hidden="{{showfulltext}}">
               <span class="snippet flex">[[_decodeHTMLEntities(thread.snippet)]]</span>
