@@ -8,7 +8,9 @@ var DEBUG = template.DEBUG;
 
 // console.log('Initialising Synopses App');
 
-var PATIENT = location.pathname === '/patient/';
+var PATIENT =
+  (location.pathname === '/patient/' ||
+   location.pathname.search('-patient.') > 0);
 
 var link = document.querySelector('#bundle');
 link.addEventListener('load', function(e) {

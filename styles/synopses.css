@@ -6,6 +6,11 @@ html body {
   background-color: #a90d23;
 }
 
+.patientapp #mainheader .title {
+  height: 1.1em;
+  padding-top: 0.15em;
+}
+
 #bottomBar {
   margin-left: 120px;
 }
@@ -139,6 +144,10 @@ body #loading {
 
 #patientdetails {
   background: white;
+}
+
+.patientapp #patientdetails {
+  padding: 16px;
 }
 
 #patientdetails .justified .label {

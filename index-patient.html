@@ -25,7 +25,7 @@
 
   <link rel="import" id="bundle" href="elements/elements.html" async>
 </head>
-<body class="fullbleed loading">
+<body class="fullbleed loading patientapp">
 
 <!-- Loading splash outside of Imports + Polymer so 1st paint is always fast. -->
 <div id="loading"></div>
@@ -62,9 +62,28 @@
     <paper-icon-button id="shareitems" icon="icons:mail" class="selected-item"
       on-tap="shareThreads"></paper-icon-button>
 
-    <span class="top indent title patientapp">My Synopses</span>
+    <span class="indent title patientapp">My Synopses</span>
 
-    <paper-item id="patientdetails" class="middle" hidden="{{!selectedPatient}}">
+  </div>
+  <div content on-thread-archive="onThreadArchive">
+
+    <paper-item class="welcome">
+      <p>
+        <!-- Notifications from
+        <span class="who">
+          <template is="dom-repeat" items="[[selectedPatient.doctors]]">
+            <b>{{item}}</b>
+          </template>
+        </span>
+        at this time: 1. -->
+        <span class="hint">
+          <b>Tip:</b>
+          use the pink button below to send in a Selfcheck.
+        </span>
+      </p>
+    </paper-item>
+
+    <paper-item id="patientdetails">
       <span class="layout horizontal center justified">
         <profile-img id="profileimage" item-icon
                      src="{{item.photo}}"></profile-img>
@@ -93,25 +112,6 @@
       </span>
     </paper-item>
 
-    <paper-item class="bottom welcome">
-      <p>
-        I have no urgent notifications from
-        <span class="who">
-          <template is="dom-repeat" items="[[selectedPatient.doctors]]">
-            <b>{{item}}</b>
-          </template>
-        </span>
-        at this time.
-        <span class="hint">
-          Use the
-          <paper-fab icon="accessibility"></paper-fab>
-          button to send in a selfcheck.
-        </span>
-      </p>
-    </paper-item>
-  </div>
-  <div content on-thread-archive="onThreadArchive">
-
     <!--template is="dom-if" if="[[_computeShowNoResults(threads, syncing)]]">
       <span class="layout horizontal center-center fit">No results.</span>
     </template-->
@@ -119,7 +119,7 @@
     <template is="dom-repeat" items="[[threads]]">
       <record-thread messages="[[item.messages]]"
                    labels="[[labelMap]]" users="[[users]]"
-                   narrow="[[narrow]]"
+                   narrow="[[narrow]]" condensed
                    on-label-tap="_onLabelTap"
                    on-thread-expand="_onThreadExpand"
                    on-thread-starred="_onThreadStarred"
