@@ -96,9 +96,10 @@
       font-weight: 400;
       letter-spacing: 1px;
     }
-    /*iron-icon[starred] {
-      color: var(--paper-yellow-700);
-    }*/
+    iron-icon[starred] {
+      /*color: var(--paper-yellow-700);*/
+      color: #444 !important;
+    }
     .undo {
       @apply(--gmail-undo-action);
       cursor: pointer;
@@ -165,7 +166,10 @@
       right: 20px;
     }*/
     :host([condensed]) #addressline .name {
-      display: none;
+      visibility: hidden;
+    }
+    :host([condensed]) #subjectline {
+      margin-top: -2em;
     }
     .labels.record-thread label.casename {
       background-color: orange;
