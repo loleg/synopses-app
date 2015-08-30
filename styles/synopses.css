@@ -68,6 +68,16 @@ body #loading {
   color: #444;
   z-index: 1;
 }
+.welcome .who b::before {
+  content: ', '
+}
+.welcome .who b:first-child::before {
+  content: ''
+}
+.welcome paper-fab {
+  zoom: 0.5;
+  margin: 0 0.5em;
+}
 
 .action-menu, .action-icon {
   position: fixed;

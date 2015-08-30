@@ -283,7 +283,9 @@ template.handleLogin = function(event, data, silentMode) {
     template.isAuthenticated = true;
     template.loadPatients();
     template.loadRecords();
-    template.$.dashcontainer.init();
+    if (typeof template.$.dashcontainer !== 'undefined') {
+      template.$.dashcontainer.init();
+    }
   });
   ajax.addEventListener('error', function(e) {
     console.warn(e);
