@@ -332,28 +332,28 @@ function populateRecord(record, button) {
   }
 }
 
-function populateProfile(profile, button, dialog) {
-  var theForm = dialog.querySelector('form#patientform');
-  if (!profile) { return false; }
-  // Populate forms
-  for (var key in profile) {
-    // console.log(key, profile[key]);
-    var theInput =
-    theForm.querySelector('paper-input[name="' + key + '"]') ||
-    theForm.querySelector('gold-email-input[name="' + key + '"]') ||
-    theForm.querySelector('input[name="' + key + '"]');
-    if (theInput !== null) {
-      theInput.value = profile[key];
-      theInput = theForm.querySelector('input[name="' + key + '"]');
-      if (theInput !== null) {
-        theInput.value = profile[key];
-      }
-    }
-  }
-  theForm.parentElement.$.title = 'Edit patient file';
-  theForm.action = '/api/patient/' + profile.id + '/save';
-  return true;
-}
+// function populateProfile(profile, button, dialog) {
+//   var theForm = dialog.querySelector('form#patientform');
+//   if (!profile) { return false; }
+//   // Populate forms
+//   for (var key in profile) {
+//     // console.log(key, profile[key]);
+//     var theInput =
+//     theForm.querySelector('paper-input[name="' + key + '"]') ||
+//     theForm.querySelector('gold-email-input[name="' + key + '"]') ||
+//     theForm.querySelector('input[name="' + key + '"]');
+//     if (theInput !== null) {
+//       theInput.value = profile[key];
+//       theInput = theForm.querySelector('input[name="' + key + '"]');
+//       if (theInput !== null) {
+//         theInput.value = profile[key];
+//       }
+//     }
+//   }
+//   theForm.parentElement.$.title = 'Edit patient file';
+//   theForm.action = '/api/patient/' + profile.id + '/save';
+//   return true;
+// }
 
 template.openDialog = function(e) {
   this.actionOpened = false;
@@ -414,7 +414,8 @@ template.openPatientView = function(e) {
   var self = this;
   var ajax = document.createElement('iron-ajax');
   ajax.auto = true;
-  ajax.url = '/api/patient/' + template.selectedPatient.id + '/profile?details=true';
+  ajax.url = '/api/patient/' + template.selectedPatient.id +
+             '/profile?details=true';
   ajax.addEventListener('error', function(e) {
     // console.warn(e);
   });
