@@ -356,7 +356,8 @@ function populateProfile(profile, button, dialog) {
 }
 
 template.openDialog = function(e) {
-  template.actionOpened = false;
+  this.actionOpened = false;
+  var self = this;
   var button = e.target;
   while (!button.hasAttribute('data-dialog') && button !== document.body) {
     button = button.parentElement;
@@ -390,7 +391,8 @@ template.openDialog = function(e) {
         // console.warn(e);
       });
       ajax2.addEventListener('response', function(e) {
-        populateProfile(e.detail.response.profile, button, dialog);
+        //populateProfile(e.detail.response.profile, button, dialog);
+        self.$.addpatient.patient = e.detail.response.profile;
 
         dialog.open();
       });

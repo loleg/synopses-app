@@ -41,16 +41,16 @@ paper-dropdown-menu paper-menu {
 <template>
   <paper-dialog id="dialog" modal>
     <h2>{{ title }}</h2>
-    <form is="iron-form" id="patientform" method="post">
+    <form is="iron-form" id="patientform" method="post" action="/api/patient/save" on-invalid="_onSubmitError">
       <paper-dialog-scrollable>
         <div class="horizontal layout">
           <div class="column">
-            <paper-input name="first_name" label="First name" required autofocus></paper-input>
-            <paper-input name="last_name" label="Last name" required></paper-input>
-            <paper-input name="address1" label="Address"></paper-input>
-            <paper-input name="address2" label="Address 2"></paper-input>
-            <paper-input name="city" label="City"></paper-input>
-            <paper-input name="postal" label="Postal code"></paper-input>
+            <paper-input name="first_name" label="First name" value$="[[patient.first_name]]" required autofocus></paper-input>
+            <paper-input name="last_name" label="Last name" value$="[[patient.last_name]]" required></paper-input>
+            <paper-input name="address1" label="Address" value$="[[patient.address1]]"></paper-input>
+            <paper-input name="address2" label="Address 2" value$="[[patient.address2]]"></paper-input>
+            <paper-input name="city" label="City" value$="[[patient.city]]"></paper-input>
+            <paper-input name="postal" label="Postal code" value$="[[patient.postal]]"></paper-input>
             <input type="hidden" name="country" value="Switzerland">
             <!--< paper-input-container on-click="_onChangeDropdown">
               <input list="country-list" is="core-input" name="country">
@@ -60,20 +60,21 @@ paper-dropdown-menu paper-menu {
             </paper-input-container>
             <label>Country</label>-->
           </div><div class="column">
-            <paper-dropdown-menu label="Health insurance"
-              selected-item-label="{{selectedInsurance}}">
+            <paper-dropdown-menu data-label="Health insurance"
+              label="{{patient.insurance}}"
+              selected-item-label="{{patient.insurance}}">
               <paper-menu class="dropdown-content">
                 <template is="dom-repeat" items="[[insuranceList]]">
                   <paper-item>{{item}}</paper-item>
                 </template>
               </paper-menu>
             </paper-dropdown-menu>
-            <input is="iron-input" type="hidden" name="insurance" value$="[[selectedInsurance]]">
-            <paper-input name="policyno" label="Insurance number"></paper-input>
-            <paper-input name="socialsecurity" label="Social security (AHV)"></paper-input>
-            <paper-input name="phone1" label="Telephone"></paper-input>
-            <paper-input name="phone2" label="Mobile phone"></paper-input>
-            <gold-email-input name="email" label="Email address" auto-validate></gold-email-input>
+            <input is="iron-input" type="hidden" name="insurance" value$="[[patient.insurance]]">
+            <paper-input name="policyno" label="Insurance number" value$="[[patient.policyno]]"></paper-input>
+            <paper-input name="socialsecurity" label="Social security (AHV)" value$="[[patient.socialsecurity]]"></paper-input>
+            <paper-input name="phone1" label="Telephone" value$="[[patient.phone1]]"></paper-input>
+            <paper-input name="phone2" label="Mobile phone" value$="[[patient.phone2]]"></paper-input>
+            <gold-email-input name="email" label="Email address" auto-validate value$="[[patient.email]]"></gold-email-input>
           </div>
         </div>
       </paper-dialog-scrollable>
@@ -187,6 +188,10 @@ paper-dropdown-menu paper-menu {
         reflectToAttribute: false
       },
 
+      selectedInsurance: {
+        type: String
+      },
+
       insuranceList: {
         type: Array,
         value: function() {
@@ -211,13 +216,20 @@ paper-dropdown-menu paper-menu {
 
     _patientChanged: function() {
       var forms = this.querySelectorAll('form');
+      var pid = (typeof this.patient.id === 'undefined') ?
+                '' : '/' + this.patient.id;
+      var save_url = '/api/patient' + pid;
       for (var i = 0; i < forms.length; i++) {
-        forms[i].action = '/api/patient/' + this.patient.id + '/save';
+        forms[i].action = save_url +
+          (forms[i].classList.contains('fileupload') ? '/upload' : '/save');
+        console.log(forms[i].action);
       }
     },
 
     _onChangeDropdown: function(e) {
-      Polymer.dom(e).localTarget.blur();
+      // Polymer.dom(e).localTarget.blur();
+      debugger;
+      // e.target.label = 'Health insurance';
     },
 
     _onChangeNotes: function(e) {
