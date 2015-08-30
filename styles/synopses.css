@@ -187,6 +187,7 @@ body #loading {
   color: #eee;
 }
 
+#scrollheader > div,
 #scrollheader > #mainContainer {
   padding-top: 64px !important;
 }

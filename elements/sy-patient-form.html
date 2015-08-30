@@ -92,6 +92,7 @@ paper-dropdown-menu paper-menu {
           <form is="ajax-form" id="photoform" method="post" class="fileupload" enctype="multipart/form-data"
                 on-submitted="_onSubmitUpload" on-invalid="_onSubmitError">
             <profile-img id="profileimage" item-icon large
+                letter$="[[patient.initials]]"
                 src="{{patient.photo}}" on-tap="_onTapProfileImage"></profile-img>
             <input id="profilefile" type="file" name="file"
                 hidden on-change="_onChangePhoto">

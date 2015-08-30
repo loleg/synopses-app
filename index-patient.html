@@ -86,6 +86,7 @@
     <paper-item id="patientdetails">
       <span class="layout horizontal center justified">
         <profile-img id="profileimage" item-icon
+                     letter$="[[selectedPatient.initials]]"
                      src="{{item.photo}}"></profile-img>
         <span class="label patient_name hint">
           <b>{{selectedPatient.name}}</b>

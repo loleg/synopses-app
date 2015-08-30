@@ -90,14 +90,7 @@
         </div>
         <paper-icon-item class="patient" on-tap="patientSelect">
           <profile-img id="profileimage" item-icon
-                       src="{{item.photo}}"></profile-img>
-          <span>{{item.name}}</span>
-        </paper-icon-item>
-      </template>
-
-      <template is="dom-repeat" items="{{patientspast}}">
-        <paper-icon-item class="patient" on-tap="patientSelect">
-          <profile-img id="profileimage" item-icon
+                       letter="[[item.initials]]"
                        src="{{item.photo}}"></profile-img>
           <span>{{item.name}}</span>
         </paper-icon-item>
