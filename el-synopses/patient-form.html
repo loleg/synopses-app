@@ -60,16 +60,16 @@ paper-dropdown-menu paper-menu {
             </paper-input-container>
             <label>Country</label>-->
           </div><div class="column">
-            <paper-dropdown-menu data-label="Health insurance"
-              label="{{patient.insurance}}"
+            <!-- < paper-dropdown-menu label="Change of insurance" hidden
               selected-item-label="{{patient.insurance}}">
-              <paper-menu class="dropdown-content">
+              <paper-menu class="dropdown-content" id="menuInsurance">
                 <template is="dom-repeat" items="[[insuranceList]]">
                   <paper-item>{{item}}</paper-item>
                 </template>
               </paper-menu>
-            </paper-dropdown-menu>
-            <input is="iron-input" type="hidden" name="insurance" value$="[[patient.insurance]]">
+            </paper-dropdown-menu> -->
+            <!-- < input is="iron-input" type="hidden" name="insurance" value$="[[patient.insurance]]"> -->
+            <paper-input name="insurance" label="Health insurance" value$="[[patient.insurance]]"></paper-input>
             <paper-input name="policyno" label="Insurance number" value$="[[patient.policyno]]"></paper-input>
             <paper-input name="socialsecurity" label="Social security (AHV)" value$="[[patient.socialsecurity]]"></paper-input>
             <paper-input name="phone1" label="Telephone" value$="[[patient.phone1]]"></paper-input>
@@ -166,6 +166,17 @@ paper-dropdown-menu paper-menu {
   </paper-dialog>
 </template>
 <script>
+  function getParentByAttr(attrName, startElement) {
+    var obj = startElement;
+    while (!obj.hasAttribute(attrName) && obj !== document.body) {
+      obj = obj.parentElement;
+    }
+    if (!obj.hasAttribute(attrName)) {
+      return null;
+    }
+    return obj;
+  }
+
   Polymer({
     is: 'patient-form',
 
@@ -222,15 +233,16 @@ paper-dropdown-menu paper-menu {
       for (var i = 0; i < forms.length; i++) {
         forms[i].action = save_url +
           (forms[i].classList.contains('fileupload') ? '/upload' : '/save');
-        console.log(forms[i].action);
       }
     },
 
-    _onChangeDropdown: function(e) {
-      // Polymer.dom(e).localTarget.blur();
-      debugger;
-      // e.target.label = 'Health insurance';
-    },
+    // _onTapDropdown: function(e) {
+    //   var obj = getParentByAttr('data-label', e.target);
+    //   if (typeof obj.selectedItem !== 'undefined') {
+    //     obj.label = obj.dataset['label'];
+    //   }
+    //   // Polymer.dom(e).localTarget.blur();
+    // },
 
     _onChangeNotes: function(e) {
       this.$.detailsform.submit();

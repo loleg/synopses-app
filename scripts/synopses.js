@@ -397,6 +397,11 @@ template.openDialog = function(e) {
         dialog.open();
       });
 
+    } else if (button.id === 'newpatient') {
+
+      self.$.addpatient.patient = {};
+      dialog.open();
+
     } else {
 
       dialog.open();
