@@ -184,8 +184,12 @@ body #loading {
   color: #eee;
 }
 
+#scrollheader #mainContainer.paper-scroll-header-panel {
+    top: 64px !important;
+}
+
 #scrollheader > div {
-  padding-top: 64px !important;
+/*  padding-top: 64px !important; */
 }
 
 #gotodashboard { z-index: 20; }
