@@ -33,11 +33,12 @@
     "iron-iconset": "PolymerElements/iron-iconset#^1.0.0",
     "pikaday-decorator": "*",
     "iron-image": "PolymerElements/iron-image#^1.0.0",
-    "iron-dropdown": "PolymerElements/iron-dropdown#^1.0.0"
+    "iron-dropdown": "PolymerElements/iron-dropdown#^1.0.0",
+    "webcomponentsjs": "~0.7.12"
   },
   "resolutions": {
     "polymer": "^1.0.0",
-    "webcomponentsjs": "^0.7.2"
+    "webcomponentsjs": "^0.7.12"
   },
   "devDependencies": {
     "ajax-form": "~2.0.2"
