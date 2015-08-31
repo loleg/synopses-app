@@ -122,10 +122,10 @@ pikaday-decorator {
   border-bottom: 1px dashed blue;
 }
 /* Workaround for not saving before switching tabs */
-paper-tab.record-form:not(.iron-selected) {
+:host paper-tab:not(.iron-selected) {
   visibility: hidden;
 }
-paper-tab.record-form.iron-selected {
+:host paper-tab.iron-selected {
   position: absolute;
   left: 0px;
 }
@@ -507,7 +507,7 @@ paper-tab.record-form.iron-selected {
         }.bind(this);
         recognition.start();
       }
-    },
+    }
 
   });
 </script>
