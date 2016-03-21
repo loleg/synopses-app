@@ -1,6 +1,10 @@
-# Synopses app
+# Synopses App
 
-Based on Polymer framework.
+Mobile frontend for the Synopses electronic patient file project, optimised for Android tablets, based on Polymer Framework.
+
+Backend project: https://bitbucket.org/loleg/synopses-base
+
+See [LICENSE](LICENSE) file in the root folder.
 
 #### Building
 
